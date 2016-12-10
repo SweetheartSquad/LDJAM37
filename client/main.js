@@ -51,8 +51,11 @@ function init(){
 
 	genLevel();
 
-	scene.addChild(player1.graphics);
-	scene.addChild(player2.graphics);
+	scene.addChild(player1.body);
+	scene.addChild(player1.head);
+	scene.addChild(player1.footL);
+	scene.addChild(player1.footR);
+	scene.addChild(player1.arms);
 
 	// setup resize
 	window.onresize = onResize;
