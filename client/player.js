@@ -6,6 +6,9 @@ function Player(){
 
 	this.px = size.x/2;
 	this.py = size.y/2;
+
+	this.dampingx = 0.05;
+	this.dampingy = 0.05;
 	
 
 	this.points = [];
@@ -16,6 +19,9 @@ Player.prototype.update = function(){
 	// integrate velocity by acceleration
 	this.vx += this.ax;
 	this.vy += this.ay;
+
+	this.vx *= 1.0 - this.dampingx;
+	this.vy *= 1.0 - this.dampingy;
 
 	// integrate position by velocity
 	this.px += this.vx;
