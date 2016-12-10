@@ -2,12 +2,26 @@
 function LevelPiece(){
 
 	this.graphics = new PIXI.Graphics();
+	this.px;
+	this.py;
+	this.rad;
+	this.color;
+	this.shapeDirty = true;
 
 	this.init = function(x, y, rad, color){
+		this.px = x;
+		this.py = y;
+		this.rad = rad;
+		this.color = color;	
+	}
+
+	this.renderShape = function(){
+		this.graphics.clear();
 		this.graphics.lineStyle(0);
-		this.graphics.beginFill(color);
-		this.graphics.drawCircle(x, y, rad);
-		this.graphics.endFill();			
+		this.graphics.beginFill(this.color);
+		this.graphics.drawCircle(this.px, this.py, this.rad);
+		this.graphics.endFill();
+		this.shapeDirty = false;
 	}
 
 	this.update = function(){
@@ -15,7 +29,9 @@ function LevelPiece(){
 	};
 
 	this.draw =  function(){	
-
+		if(this.shapeDirty){
+			this.renderShape();
+		}
 	}
 
 	this.compress = function(x, y){

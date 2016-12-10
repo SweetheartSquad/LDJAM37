@@ -15,7 +15,8 @@ function main(){
 function init(){
 	player1 = new Player();
 	player2 = new Player();
-	levelPieces = [];
+	levelPiecesVert = [];
+	levelPiecesHorz = [];
 
 
 	// initialize input managers
@@ -88,6 +89,8 @@ function update(){
 	player1.update();
 	player2.update();
 
+	getPieceForPlayer(player1);
+
 	// update input managers
 	gamepads.update();
 	keys.update();
@@ -100,6 +103,14 @@ function render(){
 
 	player1.draw();
 	player2.draw();
+
+	for( var i = 0; i < levelPiecesHorz.length; i++ ){
+		levelPiecesHorz[i].draw();
+	}
+
+	for( var i = 0; i < levelPiecesVert.length; i++ ){
+		levelPiecesVert[i].draw();
+	}
 
 	renderer.render(scene,renderTexture);
 	try{
@@ -156,7 +167,7 @@ function genWallHorz(y, rad){
 	while( x < size.x + rad ){
 		var pc = new LevelPiece();
 		pc.init(x, y +  rad * 0.5  * ( y > 0 ? 1 : -1), rad, colors[c]);
-		levelPieces.push(pc);
+		levelPiecesHorz.push(pc);
 		scene.addChild(pc.graphics);
 		x += rad;
 
@@ -169,17 +180,85 @@ function genWallVert(x, rad){
 	while( y < size.y ){
 		var pc = new LevelPiece();
 		pc.init( x +  rad * 0.5  * ( x > 0 ? 1 : -1), y, rad, colors[c]);
-		levelPieces.push(pc);
+		levelPiecesVert.push(pc);
 		scene.addChild(pc.graphics);
 		y += rad;
 	}
 }
 
+var rad = 200;
+
 function genLevel(){
-	var rad = 200;
-	genWallVert(size.x, rad);	
 	genWallVert(0, rad);	
+	genWallVert(size.x, rad);	
 	genWallHorz(0, rad);	
 	genWallHorz(size.y, rad);	
+}
+
+function getPieceForPlayer(player){
+
+	var offsetY = player.px > size.x / 2 ? levelPiecesVert.length / 2  : 0;
+	var offsetX = player.py > size.y / 2 ? levelPiecesHorz.length / 2  : 0;
+
+	var horzIdx1 = Math.ceil(player.px/rad) + offsetX;
+	var horzIdx2;
+	if(horzIdx1 + offsetX < 0){	
+		horzIdx1 = 0 + offsetX;
+	}
+	if(player.px < (horzIdx1 + offsetX) * rad && horzIdx1 > 0){
+		horzIdx2 = horzIdx1 - 1;
+	}else{
+		horzIdx2 =  horzIdx1 + 1;
+	}
+	if( horzIdx1 + offsetX >= levelPiecesHorz.length / 2  ){
+		horzIdx1 = levelPiecesHorz.length / 2 - 1 + offsetX;
+		console.log("Dfd");
+		horzIdx2 = horzIdx1 - 1;
+	}	
+
+	var vertIdx1 = Math.ceil(player.py/rad) + offsetY;
+	var vertIdx2;
+	if(vertIdx1 < 0){	
+		vertIdx1 = 0 + offsetY;
+	}
+	if(player.py < ( vertIdx1 + offsetY ) * rad && vertIdx1 > 0){
+		vertIdx2 = vertIdx1 - 1;
+	}else{
+		vertIdx2 = vertIdx1 + 1;
+	}
+	if( vertIdx1  >= levelPiecesVert.length + offsetY ){
+		vertIdx1 = levelPiecesVert.length / 2 - 1 + offsetY;
+		vertIdx2 = vertIdx1 - 1;
+	}
+
+	var res = {	
+		x : [horzIdx1, horzIdx2],
+		y : [vertIdx1, vertIdx2]
+	}
+
+	console.log(vertIdx1);
+
+	for( var i = 0; i < levelPiecesHorz.length; i++ ){
+		levelPiecesHorz[i].color = 0xff0000; 
+		levelPiecesHorz[i].shapeDirty = true; 
+	}
+
+	for( var i = 0; i < levelPiecesVert.length; i++ ){
+		levelPiecesVert[i].color = 0xff0000; 
+		levelPiecesVert[i].shapeDirty = true; 
+	}
+
+	levelPiecesHorz[horzIdx1].color = 0x00ff00; 
+	levelPiecesHorz[horzIdx2].color = 0x00ff00; 
+	levelPiecesVert[vertIdx1].color = 0x00ff00; 
+	levelPiecesVert[vertIdx2].color = 0x00ff00; 
+
+
+	levelPiecesHorz[horzIdx1].shapeDirty = true; 
+	levelPiecesHorz[horzIdx2].shapeDirty = true; 
+	levelPiecesVert[vertIdx1].shapeDirty = true; 
+	levelPiecesVert[vertIdx2].shapeDirty = true; 
+
+	return res;
 }
 
