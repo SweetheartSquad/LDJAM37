@@ -37,6 +37,8 @@ Player.prototype.draw = function(){
 	// set a fill and line style
 	g.beginFill(0xFF3300);
 	g.lineStyle(10, 0xffd900, 1);
+
+	g.drawCircle(0,0,10);
 	// draw character
 	g.moveTo(50,50);
 	g.lineTo(250, 50);
