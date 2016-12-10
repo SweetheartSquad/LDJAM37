@@ -10,11 +10,11 @@ try{
 }
 var resizeTimeout=null;
 
-var size={x:400,y:300};
+var size={x:1980,y:1080};
 
 var sounds=[];
 
-var scaleMode = 0;
+var scaleMode = 1;
 var scaleMultiplier = 1;
 
 $(document).ready(function(){

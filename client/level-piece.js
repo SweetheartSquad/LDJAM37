@@ -18,4 +18,9 @@ function LevelPiece(){
 
 	}
 
+	this.compress = function(x, y){
+		this.graphics.scale.x = x;
+		this.graphics.scale.y = y;
+	}
+
 }
