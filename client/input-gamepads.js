@@ -59,7 +59,6 @@ var gamepads={
 
 	pollconnections:function(event){
 		this.connected=false;
-
     	var gps=navigator.getGamepads();
     	for(var i=0; i < gps.length; ++i){
     		var gp=gps[i];

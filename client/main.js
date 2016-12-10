@@ -1,5 +1,7 @@
 
 
+var player = new Player();
+
 function main(){
 	curTime=Date.now()-startTime;
 	deltaTime=curTime-lastTime;
@@ -24,8 +26,6 @@ function init(){
 	scene = new PIXI.Container();
 	game.addChild(scene);
 
-
-
 	// setup screen filter
 	screen_filter = new CustomFilter(PIXI.loader.resources.screen_shader.data);
 	screen_filter.padding=0;
@@ -46,6 +46,7 @@ function init(){
 	g.drawCircle(size.x/2, size.y/2, Math.min(size.x,size.y)/3);
 	g.endFill();
 
+	scene.addChild(player.graphics);
 
 	// setup resize
 	window.onresize = onResize;
@@ -71,7 +72,7 @@ function update(){
 		fullscreen.toggleFullscreen();
 	}
 
-
+	player.update();
 
 	// update game
 	// TODO
@@ -86,6 +87,8 @@ function update(){
 
 function render(){
 	screen_filter.uniforms["time"]=curTime/1000;
+
+	player.draw();
 
 	renderer.render(scene,renderTexture);
 	try{
