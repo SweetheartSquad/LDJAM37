@@ -10,6 +10,10 @@ function Player(){
 	this.dampingx = 0.05;
 	this.dampingy = 0.05;
 	
+	this.touchingWall = false;
+	this.touchingFloor = false;
+	this.touchingCeil = false;
+	this.flipped = false;
 
 	this.points = [];
 	this.graphics = new PIXI.Graphics();
@@ -30,6 +34,8 @@ Player.prototype.update = function(){
 	// update actual graphics
 	this.graphics.x = this.px;
 	this.graphics.y = this.py;
+
+	this.graphics.scale.x = (this.flipped ? -1 : 1) * Math.abs(this.graphics.scale.x);
 
 	// reset acceleration for next frame
 	this.ax = 0;
@@ -56,5 +62,9 @@ Player.prototype.draw = function(){
 };
 
 Player.prototype.canJump = function(){
-	return true;
+	return this.touchingFloor || this.touchingWall;
+};
+
+Player.prototype.canWallJump = function(){
+	return this.touchingWall && !this.touchingFloor;
 };

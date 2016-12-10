@@ -77,17 +77,33 @@ function update(){
 	input = getInput(0);
 	if(input.fullscreen){ fullscreen.toggleFullscreen(); }
 	player1.ax += input.x;
+
+	if(Math.abs(input.x) > 0){
+		player1.flipped = input.x < 0;
+	}
 	//player1.ay += input.y;
 	if(input.jump && player1.canJump()){
 		player1.ay += -40;
+
+		if(player1.canWallJump()){
+			player1.ax += -40 * (player1.flipped ? -1 : 1)
+		}
 	}
 
 	// player 2
 	input = getInput(1);
 	player2.ax += input.x;
+
+	if(Math.abs(input.x) > 0){
+		player2.flipped = input.x < 0;
+	}
 	//player2.ay += input.y;
 	if(input.jump && player2.canJump()){
 		player2.ay += -40;
+
+		if(player2.canWallJump()){
+			player2.ax += -40 * (player2.flipped ? -1 : 1)
+		}
 	}
 
 	// gravity
@@ -103,15 +119,22 @@ function update(){
 
 	var boundaryForce = 0.1;
 	var boundaryPadding = 35;
+
+	player1.touchingWall = player1.touchingFloor = player1.touchingCeil = false;
+
 	if(player1.px < boundaryPadding){
 		player1.ax += (boundaryPadding-player1.px) * boundaryForce;
+		player1.touchingWall = true;
 	}if(player1.px > size.x - boundaryPadding){
 		player1.ax -= (player1.px - (size.x - boundaryPadding)) * boundaryForce;
+		player1.touchingWall = true;
 	}
 	if(player1.py < boundaryPadding){
 		player1.ay += (boundaryPadding-player1.py) * boundaryForce;
+		player1.touchingCeil = true;
 	}if(player1.py > size.y - boundaryPadding){
 		player1.ay -= (player1.py - (size.y - boundaryPadding)) * boundaryForce;
+		player1.touchingFloor = true;
 	}
 
 	// update input managers
