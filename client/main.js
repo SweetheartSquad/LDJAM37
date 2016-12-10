@@ -1,7 +1,5 @@
 
 
-var player = new Player();
-
 function main(){
 	curTime=Date.now()-startTime;
 	deltaTime=curTime-lastTime;
@@ -16,6 +14,9 @@ function main(){
 }
 
 function init(){
+	player = new Player();
+
+
 	// initialize input managers
 	mouse.init("#display canvas");
 	gamepads.init();
