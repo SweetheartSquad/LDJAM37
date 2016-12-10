@@ -2,6 +2,8 @@
 
 var player = new Player();
 
+var levelPieces = [];
+
 function main(){
 	curTime=Date.now()-startTime;
 	deltaTime=curTime-lastTime;
@@ -45,6 +47,8 @@ function init(){
 	g.beginFill(0x000000);
 	g.drawCircle(size.x/2, size.y/2, Math.min(size.x,size.y)/3);
 	g.endFill();
+
+	genLevel();
 
 	scene.addChild(player.graphics);
 
@@ -105,3 +109,35 @@ function getInput(){
 		fullscreen: keys.isJustDown(keys.F)
 	};
 }
+
+
+function genWallHorz(y, rad){
+	var x = 0;
+	while( x < size.x + rad ){
+		var pc = new LevelPiece();
+		pc.init(x, y, rad);
+		levelPieces.push(pc);
+		scene.addChild(pc.graphics);
+		x += rad;
+	}
+}
+	
+function genWallVert(x, rad){
+	var y = 0;
+	while( y < size.y + rad ){
+		var pc = new LevelPiece();
+		pc.init(x, y, rad);
+		levelPieces.push(pc);
+		scene.addChild(pc.graphics);
+		y += rad;
+	}
+}
+
+function genLevel(){
+	console.log("ssd");
+	genWallHorz(0, 20);	
+	genWallHorz(size.y, 20);	
+	genWallVert(0, 20);	
+	genWallVert(size.x, 20);	
+}
+
