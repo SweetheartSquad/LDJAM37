@@ -88,6 +88,22 @@ function update(){
 	player1.update();
 	player2.update();
 
+	// update collisions
+	
+
+	var boundaryForce = 0.1;
+	var boundaryPadding = 35;
+	if(player1.px < boundaryPadding){
+		player1.ax += (boundaryPadding-player1.px) * boundaryForce;
+	}if(player1.px > size.x - boundaryPadding){
+		player1.ax -= (player1.px - (size.x - boundaryPadding)) * boundaryForce;
+	}
+	if(player1.py < boundaryPadding){
+		player1.ay += (boundaryPadding-player1.py) * boundaryForce;
+	}if(player1.py > size.y - boundaryPadding){
+		player1.ay -= (player1.py - (size.y - boundaryPadding)) * boundaryForce;
+	}
+
 	// update input managers
 	gamepads.update();
 	keys.update();
