@@ -221,7 +221,7 @@ var colors = [0xff0000, 0xffff00, 0x0000ff];
 function genWallHorz(y, rad){
 	var x = 0;
 	var c = 0;
-	while( x < size.x ){
+	while( x < size.x + rad){
 		var pc = new LevelPiece();
 		pc.init(x, y +  rad * 0.5  * ( y > 0 ? 1 : -1), rad, colors[c]);
 		levelPiecesHorz.push(pc);
@@ -234,7 +234,7 @@ function genWallHorz(y, rad){
 function genWallVert(x, rad){
 	var y = 0;
 	var c = 0;
-	while( y < size.y ){
+	while( y < size.y + rad){
 		var pc = new LevelPiece();
 		pc.init( x +  rad * 0.5  * ( x > 0 ? 1 : -1), y, rad, colors[c]);
 		levelPiecesVert.push(pc);
