@@ -15,8 +15,9 @@ function main(){
 function init(){
 	player1 = new Player();
 	player2 = new Player();
-	levelPiecesVert = [];
+	vert = [];
 	levelPiecesHorz = [];
+	levelPiecesVert = [];
 
 
 	// initialize input managers
@@ -93,7 +94,7 @@ function update(){
 	}
 	//player1.ay += input.y;
 	if(input.jump && player1.canJump()){
-		player1.ay += -40;
+		player1.ay += -60;
 
 		if(player1.canWallJump()){
 			player1.ax += -40 * (player1.flipped ? -1 : 1)
@@ -125,7 +126,7 @@ function update(){
 	player2.update();
 
 
-	getPieceForPlayer(player1);
+	debugPieces(getPieceForPlayer(player1));
 
 	// update collisions
 	
@@ -255,59 +256,57 @@ function genLevel(){
 }
 
 function getPieceForPlayer(player){
-
 	var px = player.px;
 	var py = player.py;
-	if(px < 0){
-		px = 0;
-	}
-	if(px > size.x){
-		px = size.x;
-	}
-	if(py < 0){
-		py = 0;
-	}
-	if(py > size.y){
-		py = size.y;
-	}
+	if(px < 0){ px = 0 }
+	if(px > size.x){ px = size.x }
+	if(py < 0){ py = 0 }
+	if(py > size.y){ py = size.y }
 
-	var offsetY = Math.round(px > size.x / 2 ? levelPiecesVert.length / 2 : 0);
-	var offsetX = Math.round(py > size.y / 2 ? levelPiecesHorz.length / 2 : 0);
+	var horz = py < (size.y / 2) ? levelPiecesHorz.slice(0, levelPiecesHorz.length / 2) 
+								: levelPiecesHorz.slice(levelPiecesHorz.length / 2, levelPiecesHorz.length);
+	var vert = px < (size.x / 2) ? levelPiecesVert.slice(0, levelPiecesVert.length / 2)
+								: levelPiecesVert.slice(levelPiecesVert.length / 2, levelPiecesVert.length);
+	
+	var offsetHorz = py < size.y / 2 ? 0 : levelPiecesHorz.length / 2;
+	var offsetVert = px < size.x / 2 ? 0 : levelPiecesVert.length / 2;
 
-	var horzIdx1 = Math.ceil(px/rad) + offsetX;
-	var horzIdx2;
-	if(horzIdx1 + offsetX < 0){	
-		horzIdx1 = 0 + offsetX;
-	}
-	if(px <= horzIdx1 * rad + rad && horzIdx1 > 0){
-		horzIdx2 = horzIdx1 - 1;
-	}else {
-		horzIdx2 =  horzIdx1 + 1;
-	}
-	if( horzIdx1 >= levelPiecesHorz.length ){
-		horzIdx1 = levelPiecesHorz.length / 2 + offsetX;
-		horzIdx2 = horzIdx1 - 1;
-	}	
+	var horzIdxs = getPiecesForArr(horz, px, 'ceil'); 
+	horzIdxs[0] += offsetHorz;
+	horzIdxs[1] += offsetHorz;
 
-	var vertIdx1 = Math.ceil(py/rad) + offsetY;
-	var vertIdx2;
-	if(vertIdx1 < 0){	
-		vertIdx1 = 0 + offsetY;
-	}
-	if(py  <= vertIdx1  * rad + rad  && vertIdx1 > 0){
-		vertIdx2 = vertIdx1 - 1;
-	}else{
-		vertIdx2 = vertIdx1 + 1;
-	}
-	if( vertIdx1  >= levelPiecesVert.length ){
-		vertIdx1 = levelPiecesVert.length / 2 - 1 + offsetY;
-		vertIdx2 = vertIdx1 - 1;
-	}
+	var verIdxs = getPiecesForArr(vert, py, 'floor'); 
+	verIdxs[0] += offsetVert;
+	verIdxs[1] += offsetVert;
 
 	var res = {	
-		x : [horzIdx1, horzIdx2],
-		y : [vertIdx1, vertIdx2]
+		x : horzIdxs,
+		y : verIdxs
 	}
+
+	return res;
+}
+
+function getPiecesForArr(arr, playerAxisVal, roundFunc){
+	var idx1 = Math[roundFunc](playerAxisVal/rad);
+	var idx2;
+	if(idx1 < 0){	
+		idx1 = 0;
+	}
+	if(playerAxisVal <= idx1 * rad + rad && idx1 > 0){
+		idx2 = idx1 - 1;
+	}else {
+		idx2 =  idx1 + 1;
+	}
+	if( idx1 >= arr.length ){
+		idx1 = arr.length / 2;
+		idx2 = idx1 - 1;
+	}	
+	return [idx1, idx2];
+}
+
+
+function debugPieces(res){
 
 	for( var i = 0; i < levelPiecesHorz.length; i++ ){
 		levelPiecesHorz[i].color = 0xff0000; 
@@ -319,17 +318,8 @@ function getPieceForPlayer(player){
 		levelPiecesVert[i].shapeDirty = true; 
 	}
 
-	levelPiecesHorz[horzIdx1].color = 0x00ff00; 
-	levelPiecesHorz[horzIdx2].color = 0x00ff00; 
-	levelPiecesVert[vertIdx1].color = 0x00ff00; 
-	levelPiecesVert[vertIdx2].color = 0x00ff00; 
-
-
-	levelPiecesHorz[horzIdx1].shapeDirty = true; 
-	levelPiecesHorz[horzIdx2].shapeDirty = true; 
-	levelPiecesVert[vertIdx1].shapeDirty = true; 
-	levelPiecesVert[vertIdx2].shapeDirty = true; 
-
-	return res;
+	levelPiecesHorz[res.x[0]].color = 0x00ff00; 
+	levelPiecesHorz[res.x[1]].color = 0x00ff00; 
+	levelPiecesVert[res.y[0]].color = 0x00ff00; 
+	levelPiecesVert[res.y[1]].color = 0x00ff00; 
 }
-
