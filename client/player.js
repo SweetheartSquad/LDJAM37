@@ -54,3 +54,7 @@ Player.prototype.draw = function(){
 	g.lineTo(50, 50);
 	g.endFill();
 };
+
+Player.prototype.canJump = function(){
+	return true;
+};

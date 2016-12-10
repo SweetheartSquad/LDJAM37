@@ -77,12 +77,22 @@ function update(){
 	input = getInput(0);
 	if(input.fullscreen){ fullscreen.toggleFullscreen(); }
 	player1.ax += input.x;
-	player1.ay += input.y;
+	//player1.ay += input.y;
+	if(input.jump && player1.canJump()){
+		player1.ay += -40;
+	}
 
 	// player 2
 	input = getInput(1);
 	player2.ax += input.x;
-	player2.ay += input.y;
+	//player2.ay += input.y;
+	if(input.jump && player2.canJump()){
+		player2.ay += -40;
+	}
+
+	// gravity
+	player1.ay += 1;
+	player2.ay += 1;
 
 	// update players
 	player1.update();
