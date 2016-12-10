@@ -73,11 +73,12 @@ function update(){
 		fullscreen.toggleFullscreen();
 	}
 
-	player.update();
 
 	// update game
 	// TODO
-
+	player.ax += input.move.x;
+	player.ay += input.move.y;
+	player.update();
 
 	// update input managers
 	gamepads.update();
@@ -102,7 +103,27 @@ function render(){
 
 
 function getInput(){
-	return {
-		fullscreen: keys.isJustDown(keys.F)
+	var res = {
+		fullscreen: keys.isJustDown(keys.F),
+
+		move:{
+			x: 0,
+			y: 0
+		}
 	};
+	
+
+	if(keys.isDown(keys.A)){
+		res.move.x -= 1;
+	}if(keys.isDown(keys.D)){
+		res.move.x += 1;
+	}
+
+	if(keys.isDown(keys.W)){
+		res.move.y -= 1;
+	}if(keys.isDown(keys.S)){
+		res.move.y += 1;
+	}
+	
+	return res;
 }
