@@ -57,6 +57,12 @@ function init(){
 	scene.addChild(player1.footR);
 	scene.addChild(player1.arms);
 
+	scene.addChild(player2.body);
+	scene.addChild(player2.head);
+	scene.addChild(player2.footL);
+	scene.addChild(player2.footR);
+	scene.addChild(player2.arms);
+
 	// setup resize
 	window.onresize = onResize;
 	onResize();
@@ -154,8 +160,8 @@ function update(){
 function render(){
 	screen_filter.uniforms["time"]=curTime/1000;
 
-	player1.draw();
-	player2.draw();
+	//player1.draw();
+	//player2.draw();
 
 	for( var i = 0; i < levelPiecesHorz.length; i++ ){
 		levelPiecesHorz[i].draw();

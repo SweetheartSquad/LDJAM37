@@ -118,8 +118,8 @@ Player.prototype.renderSVG = function(g, input){
 	var inputs = input.split(/[A-z]/g);
 	inputs.shift();
 
-	console.log(inputs);
-	console.log(instructions);
+	//console.log(inputs);
+	//console.log(instructions);
 
 	var start={x:0,y:0};
 	var current={x:0,y:0};
@@ -132,7 +132,7 @@ Player.prototype.renderSVG = function(g, input){
 		var data=inputs[i].split(",");
 
 		var relative = false;
-		console.log(instructions[i]);
+		//console.log(instructions[i]);
 		switch(instructions[i]){
 			case "m":
 			case "M":
