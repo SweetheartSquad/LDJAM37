@@ -19,13 +19,21 @@ function LevelPiece(){
 		this.graphics.clear();
 		this.graphics.lineStyle(0);
 		this.graphics.beginFill(this.color);
-		this.graphics.drawCircle(this.px, this.py, this.rad);
+		this.graphics.drawCircle(0, 0, this.rad);
 		this.graphics.endFill();
 		this.shapeDirty = false;
 	}
 
 	this.update = function(){
-		this.graphics.position.x += 0.1;
+		console.log(this.px);
+		this.graphics.position.x = this.px;
+		this.graphics.position.y = this.py;
+		if(this.graphics.scale.x < 1){
+			Math.min(this.graphics.scale.x += 0.075, 1.0 - this.graphics.scale.x);
+		}
+		if(this.graphics.scale.y < 1){
+			Math.min(this.graphics.scale.y += 0.075, 1.0 - this.graphics.scale.y);
+		}
 	};
 
 	this.draw =  function(){	

@@ -124,12 +124,9 @@ function update(){
 	// update players
 	player1.update();
 	player2.update();
-
-
-	debugPieces(getPieceForPlayer(player1));
-
 	// update collisions
 	
+	updateLevel();	
 
 	var boundaryForce = 0.1;
 	var boundaryPadding = 35;
@@ -224,7 +221,7 @@ var colors = [0xff0000, 0xffff00, 0x0000ff];
 function genWallHorz(y, rad){
 	var x = 0;
 	var c = 0;
-	while( x < size.x + rad ){
+	while( x < size.x ){
 		var pc = new LevelPiece();
 		pc.init(x, y +  rad * 0.5  * ( y > 0 ? 1 : -1), rad, colors[c]);
 		levelPiecesHorz.push(pc);
@@ -248,6 +245,29 @@ function genWallVert(x, rad){
 
 var rad = 200;
 
+function updateLevel(){
+	
+	for( var i = 0; i < levelPiecesHorz.length; i++ ){
+		levelPiecesHorz[i].update();
+	}
+
+	for( var i = 0; i < levelPiecesVert.length; i++ ){
+		levelPiecesVert[i].update();
+	}
+
+	var player1Pieces = getPieceForPlayer(player1);
+	player1Pieces.x[0].compress(1, 0.7);
+	player1Pieces.x[1].compress(1, 0.8);
+	player1Pieces.y[0].compress(0.7, 1);
+	player1Pieces.y[1].compress(0.8, 1);
+
+	var player2pieces = getPieceForPlayer(player2);
+	player2pieces.x[0].compress(1, 0.7);
+	player2pieces.x[1].compress(1, 0.8);
+	player2pieces.y[0].compress(0.7, 1);
+	player2pieces.y[1].compress(0.8, 1);
+}
+
 function genLevel(){
 	genWallVert(0, rad);	
 	genWallVert(size.x, rad);	
@@ -267,21 +287,9 @@ function getPieceForPlayer(player){
 								: levelPiecesHorz.slice(levelPiecesHorz.length / 2, levelPiecesHorz.length);
 	var vert = px < (size.x / 2) ? levelPiecesVert.slice(0, levelPiecesVert.length / 2)
 								: levelPiecesVert.slice(levelPiecesVert.length / 2, levelPiecesVert.length);
-	
-	var offsetHorz = py < size.y / 2 ? 0 : levelPiecesHorz.length / 2;
-	var offsetVert = px < size.x / 2 ? 0 : levelPiecesVert.length / 2;
-
-	var horzIdxs = getPiecesForArr(horz, px, 'ceil'); 
-	horzIdxs[0] += offsetHorz;
-	horzIdxs[1] += offsetHorz;
-
-	var verIdxs = getPiecesForArr(vert, py, 'floor'); 
-	verIdxs[0] += offsetVert;
-	verIdxs[1] += offsetVert;
-
 	var res = {	
-		x : horzIdxs,
-		y : verIdxs
+		x : getPiecesForArr(horz, px, 'ceil'),
+		y : getPiecesForArr(vert, py, 'floor')
 	}
 
 	return res;
@@ -302,7 +310,7 @@ function getPiecesForArr(arr, playerAxisVal, roundFunc){
 		idx1 = arr.length / 2;
 		idx2 = idx1 - 1;
 	}	
-	return [idx1, idx2];
+	return [arr[idx1], arr[idx2]];
 }
 
 
@@ -318,8 +326,8 @@ function debugPieces(res){
 		levelPiecesVert[i].shapeDirty = true; 
 	}
 
-	levelPiecesHorz[res.x[0]].color = 0x00ff00; 
-	levelPiecesHorz[res.x[1]].color = 0x00ff00; 
-	levelPiecesVert[res.y[0]].color = 0x00ff00; 
-	levelPiecesVert[res.y[1]].color = 0x00ff00; 
+	res.x[0].color = 0x00ff00; 
+	res.x[1].color = 0x00ff00; 
+	res.y[0].color = 0x00ff00; 
+	res.y[1].color = 0x00ff00; 
 }
