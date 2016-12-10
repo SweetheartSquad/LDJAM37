@@ -1,9 +1,4 @@
 
-
-var player = new Player();
-
-var levelPieces = [];
-
 function main(){
 	curTime=Date.now()-startTime;
 	deltaTime=curTime-lastTime;
@@ -13,11 +8,16 @@ function main(){
 
 	lastTime=curTime;
 
-	// request another frame to keep the loop going
+	// request another frame to keeps the loop going
 	requestAnimationFrame(main);
 }
 
 function init(){
+	player1 = new Player();
+	player2 = new Player();
+	levelPieces = [];
+
+
 	// initialize input managers
 	mouse.init("#display canvas");
 	gamepads.init();
@@ -50,7 +50,8 @@ function init(){
 
 	genLevel();
 
-	scene.addChild(player.graphics);
+	scene.addChild(player1.graphics);
+	scene.addChild(player2.graphics);
 
 	// setup resize
 	window.onresize = onResize;
@@ -69,18 +70,23 @@ function onResize() {
 }
 
 function update(){
-	// get input
-	var input = getInput();
-
-	if(input.fullscreen){
-		fullscreen.toggleFullscreen();
-	}
-
-	player.update();
-
 	// update game
-	// TODO
+	var input;
 
+	// player 1
+	input = getInput(0);
+	if(input.fullscreen){ fullscreen.toggleFullscreen(); }
+	player1.ax += input.x;
+	player1.ay += input.y;
+
+	// player 2
+	input = getInput(1);
+	player2.ax += input.x;
+	player2.ay += input.y;
+
+	// update players
+	player1.update();
+	player2.update();
 
 	// update input managers
 	gamepads.update();
@@ -92,7 +98,8 @@ function update(){
 function render(){
 	screen_filter.uniforms["time"]=curTime/1000;
 
-	player.draw();
+	player1.draw();
+	player2.draw();
 
 	renderer.render(scene,renderTexture);
 	try{
@@ -104,10 +111,41 @@ function render(){
 }
 
 
-function getInput(){
-	return {
-		fullscreen: keys.isJustDown(keys.F)
+function getInput(_playerId){
+	var res = {
+		fullscreen: false,
+		
+		x: 0,
+		y: 0,
+
+		jump: false,
+		shoot: false
 	};
+	switch(_playerId){
+		case 0:
+		res.fullscreen = keys.isJustDown(keys.F);
+		res.jump = keys.isJustDown(keys.E);
+		res.shoot = keys.isJustDown(keys.R);
+
+		if(keys.isDown(keys.A)){ res.x -= 1; }
+		if(keys.isDown(keys.D)){ res.x += 1; }
+		if(keys.isDown(keys.W)){ res.y -= 1; }
+		if(keys.isDown(keys.S)){ res.y += 1; }
+		break;
+		
+		case 1:
+		
+		res.jump = keys.isJustDown(keys.O);
+		res.shoot = keys.isJustDown(keys.P);
+
+		if(keys.isDown(keys.J)){ res.x -= 1; }
+		if(keys.isDown(keys.L)){ res.x += 1; }
+		if(keys.isDown(keys.I)){ res.y -= 1; }
+		if(keys.isDown(keys.K)){ res.y += 1; }
+		break;
+	}
+	
+	return res;
 }
 
 
@@ -134,7 +172,6 @@ function genWallVert(x, rad){
 }
 
 function genLevel(){
-	console.log("ssd");
 	genWallHorz(0, 20);	
 	genWallHorz(size.y, 20);	
 	genWallVert(0, 20);	
