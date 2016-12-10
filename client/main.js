@@ -266,6 +266,8 @@ function updateLevel(){
 	player2pieces.x[1].compress(1, 0.8);
 	player2pieces.y[0].compress(0.7, 1);
 	player2pieces.y[1].compress(0.8, 1);
+
+	debugPieces(player1Pieces);
 }
 
 function genLevel(){

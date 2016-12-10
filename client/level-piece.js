@@ -25,7 +25,6 @@ function LevelPiece(){
 	}
 
 	this.update = function(){
-		console.log(this.px);
 		this.graphics.position.x = this.px;
 		this.graphics.position.y = this.py;
 		if(this.graphics.scale.x < 1){
@@ -46,5 +45,4 @@ function LevelPiece(){
 		this.graphics.scale.x = x;
 		this.graphics.scale.y = y;
 	}
-
 }
