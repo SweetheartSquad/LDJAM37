@@ -148,23 +148,27 @@ function getInput(_playerId){
 	return res;
 }
 
+var colors = [0xff0000, 0xffff00, 0x0000ff];
 
 function genWallHorz(y, rad){
 	var x = 0;
+	var c = 0;
 	while( x < size.x + rad ){
 		var pc = new LevelPiece();
-		pc.init(x, y, rad);
+		pc.init(x, y +  rad * 0.5  * ( y > 0 ? 1 : -1), rad, colors[c]);
 		levelPieces.push(pc);
 		scene.addChild(pc.graphics);
 		x += rad;
+
 	}
 }
 	
 function genWallVert(x, rad){
 	var y = 0;
-	while( y < size.y + rad ){
+	var c = 0;
+	while( y < size.y ){
 		var pc = new LevelPiece();
-		pc.init(x, y, rad);
+		pc.init( x +  rad * 0.5  * ( x > 0 ? 1 : -1), y, rad, colors[c]);
 		levelPieces.push(pc);
 		scene.addChild(pc.graphics);
 		y += rad;
@@ -172,9 +176,10 @@ function genWallVert(x, rad){
 }
 
 function genLevel(){
-	genWallHorz(0, 20);	
-	genWallHorz(size.y, 20);	
-	genWallVert(0, 20);	
-	genWallVert(size.x, 20);	
+	var rad = 200;
+	genWallVert(size.x, rad);	
+	genWallVert(0, rad);	
+	genWallHorz(0, rad);	
+	genWallHorz(size.y, rad);	
 }
 

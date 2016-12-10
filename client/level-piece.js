@@ -3,9 +3,9 @@ function LevelPiece(){
 
 	this.graphics = new PIXI.Graphics();
 
-	this.init = function(x, y, rad){
-		this.graphics.lineStyle(4, 0x000);
-		this.graphics.beginFill(0xFFFF0B);
+	this.init = function(x, y, rad, color){
+		this.graphics.lineStyle(0);
+		this.graphics.beginFill(color);
 		this.graphics.drawCircle(x, y, rad);
 		this.graphics.endFill();			
 	}
