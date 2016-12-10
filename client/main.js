@@ -246,22 +246,21 @@ function genLevel(){
 }
 
 function getPieceForPlayer(player){
-
-	var offsetY = player.px > size.x / 2 ? levelPiecesVert.length / 2  - 1 : 0;
-	var offsetX = player.py > size.y / 2 ? levelPiecesHorz.length / 2  - 1: 0;
+	var offsetY = Math.round(player.px > size.x / 2 ? levelPiecesVert.length / 2 : 0);
+	var offsetX = Math.round(player.py > size.y / 2 ? levelPiecesHorz.length / 2 : 0);
 
 	var horzIdx1 = Math.ceil(player.px/rad) + offsetX;
 	var horzIdx2;
 	if(horzIdx1 + offsetX < 0){	
 		horzIdx1 = 0 + offsetX;
 	}
-	if(player.px < (horzIdx1 + offsetX) * rad && horzIdx1 > 0){
+	if(player.px <= horzIdx1 * rad + rad && horzIdx1 > 0){
 		horzIdx2 = horzIdx1 - 1;
-	}else{
+	}else {
 		horzIdx2 =  horzIdx1 + 1;
 	}
-	if( horzIdx1 + offsetX >= levelPiecesHorz.length / 2  ){
-		horzIdx1 = levelPiecesHorz.length / 2 - 1 + offsetX;
+	if( horzIdx1 >= levelPiecesHorz.length ){
+		horzIdx1 = levelPiecesHorz.length / 2 + offsetX;
 		horzIdx2 = horzIdx1 - 1;
 	}	
 
@@ -270,12 +269,12 @@ function getPieceForPlayer(player){
 	if(vertIdx1 < 0){	
 		vertIdx1 = 0 + offsetY;
 	}
-	if(player.py < ( vertIdx1 + offsetY ) * rad && vertIdx1 > 0){
+	if(player.py  <= vertIdx1  * rad + rad  && vertIdx1 > 0){
 		vertIdx2 = vertIdx1 - 1;
 	}else{
 		vertIdx2 = vertIdx1 + 1;
 	}
-	if( vertIdx1  >= levelPiecesVert.length + offsetY ){
+	if( vertIdx1  >= levelPiecesVert.length ){
 		vertIdx1 = levelPiecesVert.length / 2 - 1 + offsetY;
 		vertIdx2 = vertIdx1 - 1;
 	}
@@ -284,7 +283,6 @@ function getPieceForPlayer(player){
 		x : [horzIdx1, horzIdx2],
 		y : [vertIdx1, vertIdx2]
 	}
-
 
 	for( var i = 0; i < levelPiecesHorz.length; i++ ){
 		levelPiecesHorz[i].color = 0xff0000; 
