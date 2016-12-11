@@ -183,6 +183,9 @@ function update(){
 		var player = players[i];
 		player.update();
 	}
+
+	rayDebug.clear();
+
 	// update bullets
 	for(var i = bullets.length-1; i >= 0; --i){
 		var b = bullets[i];
