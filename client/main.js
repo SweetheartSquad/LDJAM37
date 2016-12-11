@@ -184,24 +184,26 @@ function render(){
 
 
 	debugDraw.clear();
-	debugDraw.lineStyle(4, 0x000000);
+	for(var d = 0; d < 2; ++d){
+		debugDraw.lineStyle(10-d*5, d == 0 ? 0 : 0xFFFFFF);
 
-	for(var i = 0; i < players.length; ++i){
-		var player = players[i];
-		debugDraw.drawCircle(player.px, player.py, player.radius);
-		debugDraw.moveTo(player.px, player.py);
-		debugDraw.lineTo(player.px + player.aimx*player.radius, player.py + player.aimy*player.radius);
+		for(var i = 0; i < players.length; ++i){
+			var player = players[i];
+			debugDraw.drawCircle(player.px, player.py, player.radius);
+			debugDraw.moveTo(player.px, player.py);
+			debugDraw.lineTo(player.px + player.aimx*player.radius, player.py + player.aimy*player.radius);
+		}
+
+		debugDraw.moveTo(0, boundaryPadding);
+		debugDraw.lineTo(size.x, boundaryPadding);
+		debugDraw.moveTo(0, size.y-boundaryPadding);
+		debugDraw.lineTo(size.x, size.y-boundaryPadding);
+		debugDraw.moveTo(boundaryPadding, 0);
+		debugDraw.lineTo(boundaryPadding, size.y);
+		debugDraw.moveTo(size.x-boundaryPadding, 0);
+		debugDraw.lineTo(size.x-boundaryPadding, size.y);
+		debugDraw.endFill();
 	}
-
-	debugDraw.moveTo(0, boundaryPadding);
-	debugDraw.lineTo(size.x, boundaryPadding);
-	debugDraw.moveTo(0, size.y-boundaryPadding);
-	debugDraw.lineTo(size.x, size.y-boundaryPadding);
-	debugDraw.moveTo(boundaryPadding, 0);
-	debugDraw.lineTo(boundaryPadding, size.y);
-	debugDraw.moveTo(size.x-boundaryPadding, 0);
-	debugDraw.lineTo(size.x-boundaryPadding, size.y);
-	debugDraw.endFill();
 
 
 	renderer.render(scene,renderTexture);
