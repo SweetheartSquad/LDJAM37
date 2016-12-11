@@ -1,4 +1,7 @@
 function Bullet(){
+
+	this.debug = new PIXI.Graphics();
+
 	this.px = 0;
 	this.py = 0;
 
@@ -26,3 +29,5 @@ Bullet.prototype.draw = function(){
 	this.graphics.drawCircle(0,0, this.radius);
 	this.graphics.endFill();
 };
+
+

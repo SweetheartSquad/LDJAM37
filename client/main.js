@@ -17,7 +17,6 @@ function init(){
 	players.push(player1 = new Player());
 	players.push(player2 = new Player());
 
-
 	powerups=[];
 	
 	bullets=[];
@@ -25,6 +24,8 @@ function init(){
 	vert = [];
 	levelPiecesHorz = [];
 	levelPiecesVert = [];
+
+
 
 
 	// initialize input managers
@@ -85,6 +86,8 @@ function init(){
 	debugDraw = new PIXI.Graphics();
 	scene.addChild(debugDraw);
 
+	rayDebug = new PIXI.Graphics();
+	scene.addChild(rayDebug);
 
 	// setup resize
 	window.onresize = onResize;
@@ -166,10 +169,13 @@ function update(){
 		player.update();
 	}
 
+	rayDebug.clear();
+
 	// update bullets
 	for(var i = bullets.length-1; i >= 0; --i){
 		var b = bullets[i];
 		b.update();
+		castRay(b.px, b.py, b.vx, b.vy);
 	}
 
 	// update powerups
@@ -179,8 +185,8 @@ function update(){
 	}
 
 	// update collisions
-	
-	updateLevel();	
+
+	updateLevel();
 
 	boundaryForce = 0.1;
 	boundaryPadding = 35;
@@ -250,14 +256,18 @@ function render(){
 			debugDraw.drawCircle(p.px, p.py, p.radius);
 		}
 
-		debugDraw.moveTo(0, boundaryPadding);
-		debugDraw.lineTo(size.x, boundaryPadding);
-		debugDraw.moveTo(0, size.y-boundaryPadding);
-		debugDraw.lineTo(size.x, size.y-boundaryPadding);
-		debugDraw.moveTo(boundaryPadding, 0);
-		debugDraw.lineTo(boundaryPadding, size.y);
-		debugDraw.moveTo(size.x-boundaryPadding, 0);
-		debugDraw.lineTo(size.x-boundaryPadding, size.y);
+		boundryLines = [
+			{ x1:0, y1:boundaryPadding, x2:size.x , y2:boundaryPadding },
+			{ x1:0, y1:size.y-boundaryPadding, x2:size.x , y2:size.y-boundaryPadding },
+			{ x1:boundaryPadding, y1:0, x2:boundaryPadding , y2:size.y },
+			{ x1:size.x - boundaryPadding, y1:0, x2:size.x - boundaryPadding , y2:size.y },
+		];
+
+		for( var i = 0; i < boundryLines.length; i++ ){
+			debugDraw.moveTo(boundryLines[i].x1, boundryLines[i].y1);
+			debugDraw.lineTo(boundryLines[i].x2, boundryLines[i].y2);
+		}
+
 		debugDraw.endFill();
 	}
 
@@ -275,7 +285,7 @@ function render(){
 function getInput(_playerId){
 	var res = {
 		fullscreen: false,
-		
+
 		x: 0,
 		y: 0,
 
@@ -337,7 +347,7 @@ function getInput(_playerId){
 	// clamp directional input (might be using both keyboard and controller)
 	res.x = clamp(-1, res.x, 1);
 	res.y = clamp(-1, res.y, 1);
-	
+
 	return res;
 }
 
@@ -355,7 +365,7 @@ function genWallHorz(y, rad){
 
 	}
 }
-	
+
 function genWallVert(x, rad){
 	var y = 0;
 	var c = 0;
@@ -371,7 +381,7 @@ function genWallVert(x, rad){
 var rad = 200;
 
 function updateLevel(){
-	
+
 	for( var i = 0; i < levelPiecesHorz.length; i++ ){
 		levelPiecesHorz[i].update();
 	}
@@ -397,10 +407,10 @@ function updateLevel(){
 }
 
 function genLevel(){
-	genWallVert(0, rad);	
-	genWallVert(size.x, rad);	
-	genWallHorz(0, rad);	
-	genWallHorz(size.y, rad);	
+	genWallVert(0, rad);
+	genWallVert(size.x, rad);
+	genWallHorz(0, rad);
+	genWallHorz(size.y, rad);
 }
 
 function getPieceForPlayer(player){
@@ -411,11 +421,11 @@ function getPieceForPlayer(player){
 	if(py < 0){ py = 0 }
 	if(py > size.y){ py = size.y }
 
-	var horz = py < (size.y / 2) ? levelPiecesHorz.slice(0, levelPiecesHorz.length / 2) 
+	var horz = py < (size.y / 2) ? levelPiecesHorz.slice(0, levelPiecesHorz.length / 2)
 								: levelPiecesHorz.slice(levelPiecesHorz.length / 2, levelPiecesHorz.length);
 	var vert = px < (size.x / 2) ? levelPiecesVert.slice(0, levelPiecesVert.length / 2)
 								: levelPiecesVert.slice(levelPiecesVert.length / 2, levelPiecesVert.length);
-	var res = {	
+	var res = {
 		x : getPiecesForArr(horz, px),
 		y : getPiecesForArr(vert, py)
 	}
@@ -426,7 +436,7 @@ function getPieceForPlayer(player){
 function getPiecesForArr(arr, playerAxisVal, roundFunc){
 	var idx1 = Math.ceil(playerAxisVal/rad);
 	var idx2;
-	if(idx1 < 0){	
+	if(idx1 < 0){
 		idx1 = 0;
 	}
 	if(playerAxisVal <= idx1 * rad + rad && idx1 > 0){
@@ -437,7 +447,7 @@ function getPiecesForArr(arr, playerAxisVal, roundFunc){
 	if( idx1 >= arr.length ){
 		idx1 = arr.length / 2;
 		idx2 = idx1 - 1;
-	}	
+	}
 	return [arr[idx1], arr[idx2]];
 }
 
@@ -445,17 +455,79 @@ function getPiecesForArr(arr, playerAxisVal, roundFunc){
 function debugPieces(res){
 
 	for( var i = 0; i < levelPiecesHorz.length; i++ ){
-		levelPiecesHorz[i].color = 0xff0000; 
-		levelPiecesHorz[i].shapeDirty = true; 
+		levelPiecesHorz[i].color = 0xff0000;
+		levelPiecesHorz[i].shapeDirty = true;
 	}
 
 	for( var i = 0; i < levelPiecesVert.length; i++ ){
-		levelPiecesVert[i].color = 0xff0000; 
-		levelPiecesVert[i].shapeDirty = true; 
+		levelPiecesVert[i].color = 0xff0000;
+		levelPiecesVert[i].shapeDirty = true;
 	}
 
-	res.x[0].color = 0x00ff00; 
-	res.x[1].color = 0x00ff00; 
-	res.y[0].color = 0x00ff00; 
-	res.y[1].color = 0x00ff00; 
+	res.x[0].color = 0x00ff00;
+	res.x[1].color = 0x00ff00;
+	res.y[0].color = 0x00ff00;
+	res.y[1].color = 0x00ff00;
 }
+
+function castRay(originX, originY, dirX, dirY){
+	var intersect = rayTestWalls(originX, originY, dirX, dirY);
+	if(intersect != null){
+		rayDebug.beginFill(0xFF0000);
+		rayDebug.lineStyle(2, 0x0000FF);
+		rayDebug.moveTo(originX, originY);
+		rayDebug.lineTo( intersect.collision.x, intersect.collision.y);
+		rayDebug.endFill();
+	}
+}
+
+function rayTestWalls(originX, originY, dirX, dirY){
+	var vecLen = 999999999;
+	var nearest = null; 
+	for( var i = 0; i < boundryLines.length; i++){
+		var intersect = lineIntersect(boundryLines[i].x1, boundryLines[i].y1, boundryLines[i].x2, 
+			boundryLines[i].y2, originX, originY, dirX * 9999999, dirY * 9999999);
+		if( intersect != null ){
+			var lenLoc = Math.sqrt( Math.pow( intersect.x - originX, 2) + Math.pow(intersect.y - originY, 2));
+			if( lenLoc < vecLen ){
+				vecLen = lenLoc;
+				nearest = { collision:intersect, wall:boundryLines[i], length:vecLen };
+			}
+		}
+	}
+	return nearest;
+}
+
+// Ported from http://paulbourke.net/geometry/pointlineplane/pdb.c
+function lineIntersect(x1,  y1, x2,  y2, x3,  y3, x4,  y4){
+   
+   var x, y, mua, mub, denom, numera, numerb;
+
+   denom  = (y4-y3) * (x2-x1) - (x4-x3) * (y2-y1);
+   numera = (x4-x3) * (y1-y3) - (y4-y3) * (x1-x3);
+   numerb = (x2-x1) * (y1-y3) - (y2-y1) * (x1-x3);
+
+   /* Are the line coincident? */
+   if (Math.abs(numera) < Number.EPSILON && Math.abs(numerb) < Number.EPSILON && Math.abs(denom) < Number.EPSILON) {
+      x = (x1 + x2) / 2;
+      y = (y1 + y2) / 2;
+      return {x:x, y:y};
+   }
+
+   /* Are the line parallel */
+   if (Math.abs(denom) < Number.EPSILON) {
+      return null;
+   }
+
+   /* Is the intersection along the the segments */
+   mua = numera / denom;
+   mub = numerb / denom;
+   if (mua < 0 || mua > 1 || mub < 0 || mub > 1) {
+      return null;
+   }
+   x = x1 + mua * (x2 - x1);
+   y = y1 + mua * (y2 - y1);
+   return {x:x, y:y};
+}
+
+
