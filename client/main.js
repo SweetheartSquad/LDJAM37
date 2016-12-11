@@ -148,10 +148,20 @@ function update(){
 
 		// jump
 		if(input.jump && player.canJump()){
-			player.ay += -60;
+
 
 			if(player.canWallJump()){
+				// walljump
+				player.ay += -40;
 				player.ax += -40 * (player.flipped ? -1 : 1)
+
+				player.container.scale.y += 0.5;
+				player.container.rotation -= Math.PI/4 * (player.flipped ? -1 : 1);
+			}else{
+				// normal jump
+				player.ay += -60;
+				player.container.scale.x -= 0.5;
+				player.container.scale.y += 0.5;
 			}
 		}
 
@@ -168,6 +178,7 @@ function update(){
 			// kickback
 			player.ax -= player.aimx * 20.0;
 			player.ay -= player.aimy * 20.0;
+			player.container.rotation -= Math.PI/3 * (player.flipped ? -1 : 1);
 
 			scene.position.x += player.aimx*20.0;
 			scene.position.y += player.aimy*20.0;
@@ -368,10 +379,10 @@ function getInput(_playerId){
 	if(keys.isJustDown(keyConfig.shoot)){ res.shoot = true};
 
 	// gamepad input
-	if(gamepads.axisPast(gamepads.LSTICK_H, -0.5, -1, _playerId)){ res.x -= 1; }
-	if(gamepads.axisPast(gamepads.LSTICK_H, 0.5, 1, _playerId)){ res.x += 1; }
-	if(gamepads.axisPast(gamepads.LSTICK_V, -0.5, -1, _playerId)){ res.y -= 1; }
-	if(gamepads.axisPast(gamepads.LSTICK_V, 0.5, 1, _playerId)){ res.y += 1; }
+	if(gamepads.axisPast(gamepads.LSTICK_H, -0.5, -1, _playerId) || gamepads.isDown(gamepads.DPAD_LEFT, _playerId)){ res.x -= 1; }
+	if(gamepads.axisPast(gamepads.LSTICK_H, 0.5, 1, _playerId) || gamepads.isDown(gamepads.DPAD_RIGHT, _playerId)){ res.x += 1; }
+	if(gamepads.axisPast(gamepads.LSTICK_V, -0.5, -1, _playerId) || gamepads.isDown(gamepads.DPAD_UP, _playerId)){ res.y -= 1; }
+	if(gamepads.axisPast(gamepads.LSTICK_V, 0.5, 1, _playerId) || gamepads.isDown(gamepads.DPAD_DOWN, _playerId)){ res.y += 1; }
 
 	if(gamepads.isJustDown(gamepads.A, _playerId) || gamepads.isJustDown(gamepads.Y, _playerId) ){ res.jump = true; }
 	if(gamepads.isJustDown(gamepads.X, _playerId) || gamepads.isJustDown(gamepads.B, _playerId) ){ res.shoot = true; }

@@ -60,8 +60,13 @@ Player.prototype.update = function(){
 	// update actual graphics
 	this.container.position.x = this.px;
 	this.container.position.y = this.py;
-	this.container.scale.x = lerp(this.container.scale.x, 1.0, 0.1);
-	this.container.scale.y = lerp(this.container.scale.y, 1.0, 0.1);
+	this.container.scale.x = lerp(this.container.scale.x, 1.0+Math.sin(curTime/100.0)/10.0, 0.1);
+	this.container.scale.y = lerp(this.container.scale.y, 1.0+Math.cos(curTime/100.0+0.5)/20.0, 0.1);
+
+	this.container.rotation = slerp(this.container.rotation, 0.0, 0.1);
+
+	this.container.skew.x = lerp(this.container.skew.x, clamp(-Math.PI/4, this.vx/100.0, Math.PI/4), 0.5);
+	this.container.skew.y = lerp(this.container.skew.y, clamp(-Math.PI/4, this.vy/100.0, Math.PI/4), 0.5);
 	
 	this.body.x = 0;
 	this.body.y = 0;
@@ -77,10 +82,12 @@ Player.prototype.update = function(){
 
 	this.arms.x = 0;
 	this.arms.y = 0 - 30;
-	this.arms.rotation = Math.atan2(this.aimy, this.aimx);
+
+	var targetRotation = Math.atan2(this.aimy, this.aimx);
 	if(this.flipped){
-		this.arms.rotation += Math.PI;
+		targetRotation += Math.PI;
 	}
+	this.arms.rotation = slerp(this.arms.rotation, targetRotation, 0.5);
 
 	this.debug.x = this.px;
 	this.debug.y = this.py;
