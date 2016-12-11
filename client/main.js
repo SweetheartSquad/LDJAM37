@@ -235,7 +235,7 @@ function getInput(_playerId){
 	// gamepad input
 	if(gamepads.axisPast(gamepads.LSTICK_H, -0.5, -1, _playerId)){ res.x -= 1; }
 	if(gamepads.axisPast(gamepads.LSTICK_H, 0.5, 1, _playerId)){ res.x += 1; }
-	if(gamepads.axisPast(gamepads.LSTICK_V, -0.5, -1, _playerId)){ res.y = 1; }
+	if(gamepads.axisPast(gamepads.LSTICK_V, -0.5, -1, _playerId)){ res.y -= 1; }
 	if(gamepads.axisPast(gamepads.LSTICK_V, 0.5, 1, _playerId)){ res.y += 1; }
 
 	if(gamepads.isJustDown(gamepads.A, _playerId) || gamepads.isJustDown(gamepads.Y, _playerId) ){ res.jump = true; }
