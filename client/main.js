@@ -189,29 +189,61 @@ function getInput(_playerId){
 		jump: false,
 		shoot: false
 	};
+
+	// keyboard input
+	var keyConfig={
+		left:null,
+		right:null,
+		up:null,
+		down:null,
+		jump:null,
+		shoot:null
+	};
+
 	switch(_playerId){
 		case 0:
 		res.fullscreen = keys.isJustDown(keys.F);
-		res.jump = keys.isJustDown(keys.E);
-		res.shoot = keys.isJustDown(keys.R);
-
-		if(keys.isDown(keys.A)){ res.x -= 1; }
-		if(keys.isDown(keys.D)){ res.x += 1; }
-		if(keys.isDown(keys.W)){ res.y -= 1; }
-		if(keys.isDown(keys.S)){ res.y += 1; }
+		keyConfig.left = keys.A;
+		keyConfig.right = keys.D;
+		keyConfig.up = keys.W;
+		keyConfig.down = keys.S;
+		keyConfig.jump = keys.E;
+		keyConfig.shoot = keys.R;
 		break;
-		
+
 		case 1:
-		
-		res.jump = keys.isJustDown(keys.O);
-		res.shoot = keys.isJustDown(keys.P);
-
-		if(keys.isDown(keys.J)){ res.x -= 1; }
-		if(keys.isDown(keys.L)){ res.x += 1; }
-		if(keys.isDown(keys.I)){ res.y -= 1; }
-		if(keys.isDown(keys.K)){ res.y += 1; }
+		keyConfig.left = keys.J;
+		keyConfig.right = keys.L;
+		keyConfig.up = keys.I;
+		keyConfig.down = keys.K;
+		keyConfig.jump = keys.O;
+		keyConfig.shoot = keys.P;
 		break;
+
+		default:
+		// no keyboard controls past first two players
 	}
+
+	if(keys.isDown(keyConfig.left)){ res.x -= 1; }
+	if(keys.isDown(keyConfig.right)){ res.x += 1; }
+	if(keys.isDown(keyConfig.up)){ res.y -= 1; }
+	if(keys.isDown(keyConfig.down)){ res.y += 1; }
+
+	if(keys.isDown(keyConfig.jump)){ res.jump = true};
+	if(keys.isDown(keyConfig.shoot)){ res.shoot = true};
+
+	// gamepad input
+	if(gamepads.axisPast(gamepads.LSTICK_H, -0.5, -1, _playerId)){ res.x -= 1; }
+	if(gamepads.axisPast(gamepads.LSTICK_H, 0.5, 1, _playerId)){ res.x += 1; }
+	if(gamepads.axisPast(gamepads.LSTICK_V, -0.5, -1, _playerId)){ res.y = 1; }
+	if(gamepads.axisPast(gamepads.LSTICK_V, 0.5, 1, _playerId)){ res.y += 1; }
+
+	if(gamepads.isJustDown(gamepads.A, _playerId) || gamepads.isJustDown(gamepads.Y, _playerId) ){ res.jump = true; }
+	if(gamepads.isJustDown(gamepads.X, _playerId) || gamepads.isJustDown(gamepads.B, _playerId) ){ res.shoot = true; }
+
+	// clamp directional input (might be using both keyboard and controller)
+	res.x = clamp(-1, res.x, 1);
+	res.y = clamp(-1, res.y, 1);
 	
 	return res;
 }
