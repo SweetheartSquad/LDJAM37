@@ -363,25 +363,46 @@ var colors = [0xff0000, 0xffff00, 0x0000ff];
 function genWallHorz(y, rad){
 	var x = 0;
 	var c = 0;
+	var pieces=[];
 	while( x < size.x + rad){
 		var pc = new LevelPiece();
 		pc.init(x, y +  rad * 0.5  * ( y > 0 ? 1 : -1), rad, colors[c]);
 		levelPiecesHorz.push(pc);
-		scene.addChild(pc.graphics);
+		pieces.push(pc);
 		x += rad;
 
+		c = (c+1)%colors.length;
+
+	}
+
+	// add pieces to scene, starting from middle and working outwards
+	while(pieces.length > 0){
+		var i = Math.min(pieces.length-1, Math.round((pieces.length-1)/2));
+		scene.addChild(pieces[i].graphics);
+		pieces.splice(i,1);
 	}
 }
 
 function genWallVert(x, rad){
 	var y = 0;
 	var c = 0;
+	var pieces=[];
 	while( y < size.y + rad){
 		var pc = new LevelPiece();
 		pc.init( x +  rad * 0.5  * ( x > 0 ? 1 : -1), y, rad, colors[c]);
 		levelPiecesVert.push(pc);
-		scene.addChild(pc.graphics);
+		pieces.push(pc);
 		y += rad;
+
+		c = (c+1)%colors.length;
+
+	}
+
+	// add pieces to scene, starting from middle and working outwards
+	while(pieces.length > 0){
+		var i = Math.min(pieces.length-1, Math.round((pieces.length-1)/2));
+		scene.addChild(pieces[i].graphics);
+		pieces.splice(i,1);
 	}
 }
 
