@@ -8,6 +8,9 @@ function Bullet(){
 	this.vx = 0;
 	this.vy = 0;
 
+	this.collisions = 0;
+	this.owner = null;
+
 	this.radius = 20;
 
 	this.graphics = new PIXI.Graphics();

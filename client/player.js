@@ -295,9 +295,9 @@ Player.prototype.calcColliderLines =function(){
 	var halfWidth = this.width * 0.5;
 	var halfHeight = this.height * 0.5;
 	return [
-		{x1: this.px + 0 - halfWidth, y1: this.py + 0 - halfHeight, x2: this.px + this.width - halfWidth, y2:this.py + 0 - halfHeight},
-		{x1: this.px + this.width - halfWidth, y1: this.py + 0 - halfHeight, x2:this.px + this.width - halfWidth, y2:this.py + this.height - halfHeight},
-		{x1: this.px + this.width - halfWidth, y1: this.py + this.height - halfHeight, x2: this.px + 0 - halfWidth, y2: this.py + this.height - halfHeight},
-		{x1: this.px + 0 - halfWidth, y1: this.py + this.height  - halfHeight, x2: this.px + 0 - halfWidth, y2: this.py + 0 - halfHeight}
+		{x1: this.px + 0 - halfWidth, y1: this.py + 0 - halfHeight, x2: this.px + this.width - halfWidth, y2:this.py + 0 - halfHeight, owner:this},
+		{x1: this.px + this.width - halfWidth, y1: this.py + 0 - halfHeight, x2:this.px + this.width - halfWidth, y2:this.py + this.height - halfHeight, owner:this},
+		{x1: this.px + this.width - halfWidth, y1: this.py + this.height - halfHeight, x2: this.px + 0 - halfWidth, y2: this.py + this.height - halfHeight, owner:this},
+		{x1: this.px + 0 - halfWidth, y1: this.py + this.height  - halfHeight, x2: this.px + 0 - halfWidth, y2: this.py + 0 - halfHeight, owner:this}
 	];
 }
