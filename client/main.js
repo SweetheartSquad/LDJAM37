@@ -64,6 +64,10 @@ function init(){
 	scene.addChild(player2.footR);
 	scene.addChild(player2.arms);
 
+	debugDraw = new PIXI.Graphics();
+	scene.addChild(debugDraw);
+
+
 	// setup resize
 	window.onresize = onResize;
 	onResize();
@@ -89,9 +93,23 @@ function update(){
 	if(input.fullscreen){ fullscreen.toggleFullscreen(); }
 	player1.ax += input.x;
 
+	// flip if moving horizontally
 	if(Math.abs(input.x) > 0){
 		player1.flipped = input.x < 0;
 	}
+
+	// aim
+	player1.aimx = player1.flipped ? -1 : 1;
+	if(Math.abs(input.y) > Math.abs(input.x)){
+		player1.aimx = 0;
+		player1.aimy = Math.sign(input.y);
+	}else if(Math.abs(input.y) > 0.5){
+		player1.aimx /= 2;
+		player1.aimy = Math.sign(input.y) / 2;
+	}else{
+		player1.aimy = 0;
+	}
+
 	//player1.ay += input.y;
 	if(input.jump && player1.canJump()){
 		player1.ay += -60;
@@ -128,23 +146,23 @@ function update(){
 	
 	updateLevel();	
 
-	var boundaryForce = 0.1;
-	var boundaryPadding = 35;
+	boundaryForce = 0.1;
+	boundaryPadding = 35;
 
 	player1.touchingWall = player1.touchingFloor = player1.touchingCeil = false;
 
-	if(player1.px < boundaryPadding){
-		player1.ax += (boundaryPadding-player1.px) * boundaryForce;
+	if(player1.px - player1.radius < boundaryPadding){
+		player1.ax += (boundaryPadding- (player1.px - player1.radius) ) * boundaryForce;
 		player1.touchingWall = true;
-	}if(player1.px > size.x - boundaryPadding){
-		player1.ax -= (player1.px - (size.x - boundaryPadding)) * boundaryForce;
+	}if(player1.px + player1.radius > size.x - boundaryPadding){
+		player1.ax -= ( (player1.px + player1.radius) - (size.x - boundaryPadding)) * boundaryForce;
 		player1.touchingWall = true;
 	}
-	if(player1.py < boundaryPadding){
-		player1.ay += (boundaryPadding-player1.py) * boundaryForce;
+	if(player1.py - player1.radius < boundaryPadding){
+		player1.ay += (boundaryPadding- (player1.py - player1.radius) ) * boundaryForce;
 		player1.touchingCeil = true;
-	}if(player1.py > size.y - boundaryPadding){
-		player1.ay -= (player1.py - (size.y - boundaryPadding)) * boundaryForce;
+	}if(player1.py + player1.radius > size.y - boundaryPadding){
+		player1.ay -= ( (player1.py + player1.radius) - (size.y - boundaryPadding)) * boundaryForce;
 		player1.touchingFloor = true;
 	}
 
@@ -168,6 +186,25 @@ function render(){
 	for( var i = 0; i < levelPiecesVert.length; i++ ){
 		levelPiecesVert[i].draw();
 	}
+
+
+	debugDraw.clear();
+	debugDraw.lineStyle(4, 0x000000);
+
+	debugDraw.drawCircle(player1.px, player1.py, player1.radius);
+	debugDraw.moveTo(player1.px, player1.py);
+	debugDraw.lineTo(player1.px + player1.aimx*player1.radius, player1.py + player1.aimy*player1.radius);
+
+	debugDraw.moveTo(0, boundaryPadding);
+	debugDraw.lineTo(size.x, boundaryPadding);
+	debugDraw.moveTo(0, size.y-boundaryPadding);
+	debugDraw.lineTo(size.x, size.y-boundaryPadding);
+	debugDraw.moveTo(boundaryPadding, 0);
+	debugDraw.lineTo(boundaryPadding, size.y);
+	debugDraw.moveTo(size.x-boundaryPadding, 0);
+	debugDraw.lineTo(size.x-boundaryPadding, size.y);
+	debugDraw.endFill();
+
 
 	renderer.render(scene,renderTexture);
 	try{

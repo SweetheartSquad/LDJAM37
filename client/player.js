@@ -9,19 +9,25 @@ function Player(){
 
 	this.dampingx = 0.05;
 	this.dampingy = 0.05;
+
+	this.aimx = 1;
+	this.aimy = 0;
 	
 	this.touchingWall = false;
 	this.touchingFloor = false;
 	this.touchingCeil = false;
 	this.flipped = false;
 
-	this.points = [];
+
+	this.radius = 40;
 
 	this.head = new PIXI.Graphics();
 	this.body = new PIXI.Graphics();
 	this.footL = new PIXI.Graphics();
 	this.footR = new PIXI.Graphics();
 	this.arms = new PIXI.Graphics();
+
+	this.debug = new PIXI.Graphics();
 
 	this.draw();
 };
@@ -40,7 +46,7 @@ Player.prototype.update = function(){
 
 	// update actual graphics
 	this.body.x = this.px;
-	this.body.y = this.py-150;
+	this.body.y = this.py;
 
 	this.head.x = this.body.x;
 	this.head.y = this.body.y - 25;
@@ -53,6 +59,13 @@ Player.prototype.update = function(){
 
 	this.arms.x = this.body.x;
 	this.arms.y = this.body.y - 30;
+	this.arms.rotation = Math.atan2(this.aimy, this.aimx);
+	if(this.flipped){
+		this.arms.rotation += Math.PI;
+	}
+
+	this.debug.x = this.px;
+	this.debug.y = this.py;
 
 	this.head.scale.x = (this.flipped ? -1 : 1) * Math.abs(this.head.scale.x);
 	this.body.scale.x = (this.flipped ? -1 : 1) * Math.abs(this.body.scale.x);
@@ -90,6 +103,7 @@ Player.prototype.draw = function(){
 	this.renderSVG(this.footR, "M11.858,6.407C12.25,5.625,11.56-6.693-0.078-6.402C-11.715-6.111-12.278,5.876-11.858,6.407S11.858,6.407,11.858,6.407z");
 	this.footR.endFill();
 
+	// arms
 	this.arms.clear();
 	this.arms.beginFill(0xFF3300);
 	this.renderSVG(this.arms, "M52.272-1.429l-22.429,5.81L12.71,8.503c0,0-2.934-0.111-3.997-3.051C7.688,2.612,11,1.587,11,1.587L27.763-2.04l23.888-5.738L52.272-1.429z");
@@ -100,6 +114,12 @@ Player.prototype.draw = function(){
 	this.arms.beginFill(0xFF3300);
 	this.renderSVG(this.arms, "M46.73-3.297L44.609-13.81l-9-5.978l1.438-2.165l8.775,5.828c0,0,5.263-8.557,5.741-8.757s2.124,1.447,2.124,1.447l-5.925,8.989l2.141,10.509L46.73-3.297z");
 	this.arms.endFill();
+
+	// debug
+	this.debug.clear();
+	this.debug.lineStyle(4,0x000000);
+	this.debug.drawCircle(0, 0, this.radius);
+	this.debug.endFill();
 };
 
 Player.prototype.canJump = function(){
