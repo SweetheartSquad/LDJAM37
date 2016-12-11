@@ -45,6 +45,10 @@ LevelPiece.prototype.draw = function(){
 };
 
 LevelPiece.prototype.compress = function(x, y){
-	this.graphics.scale.x = lerp(this.graphics.scale.x, x, 0.25);
-	this.graphics.scale.y = lerp(this.graphics.scale.y, y, 0.25);
+	if(x < this.graphics.scale.x){
+		this.graphics.scale.x = lerp(this.graphics.scale.x, x, 0.25);
+	}
+	if(y < this.graphics.scale.y){
+		this.graphics.scale.y = lerp(this.graphics.scale.y, y, 0.25);
+	}
 };
