@@ -148,10 +148,20 @@ function update(){
 
 		// jump
 		if(input.jump && player.canJump()){
-			player.ay += -60;
+
 
 			if(player.canWallJump()){
+				// walljump
+				player.ay += -40;
 				player.ax += -40 * (player.flipped ? -1 : 1)
+
+				player.container.scale.y += 0.5;
+				player.container.rotation -= Math.PI/4 * (player.flipped ? -1 : 1);
+			}else{
+				// normal jump
+				player.ay += -60;
+				player.container.scale.x -= 0.5;
+				player.container.scale.y += 0.5;
 			}
 		}
 
