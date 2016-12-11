@@ -174,7 +174,10 @@ function update(){
 		player.ay += 1;
 	}
 
-	var collLines = players[1].calcColliderLines().concat( boundryLines );
+	var collLines = boundryLines;
+	for( var i = 0; i < players.length; i++ ){
+		collLines = collLines.concat(players[i].calcColliderLines());
+	}
 	// update players
 	for(var i = 0; i < players.length; ++i){
 		var player = players[i];
