@@ -214,13 +214,13 @@ function update(){
 		var coll = castRay(b.px, b.py, b.vx, b.vy, collLines);
 		if(coll != null){
 			if(coll.length < 60 ){
-				b.collisions++;
-				if( b.collisions == 1 && b.owner == collLines.owner ){
-					continue;
-				}		
-				var norm = [ coll.line.x2 - coll.line.x1, coll.line.y2 - coll.line.y1];
-				b.vx = norm[1] > 0 ? -b.vx : b.vx;
-				b.vy = norm[0] > 0 ? -b.vy : b.vy;
+				if( !(b.collisions == 0 && b.owner == coll.line.owner) ){	
+					b.collisions++;
+					console.log(false);
+					var norm = [ coll.line.x2 - coll.line.x1, coll.line.y2 - coll.line.y1];
+					b.vx = norm[1] > 0 ? -b.vx : b.vx;
+					b.vy = norm[0] > 0 ? -b.vy : b.vy;
+				}
 			}
 		}
 	}
