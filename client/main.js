@@ -117,6 +117,9 @@ function onResize() {
 }
 
 function update(){
+	scene.position.x = lerp(scene.position.x, 0, 0.1);
+	scene.position.y = lerp(scene.position.y, 0, 0.1);
+
 	// update game
 	var input;
 
@@ -162,8 +165,15 @@ function update(){
 			var b = new Bullet();
 			b.px = player.px;
 			b.py = player.py;
-			b.vx = player.aimx*50.0 + player.vx;
-			b.vy = player.aimy*50.0 + player.vy;
+			b.vx = player.aimx*20.0 + player.vx;
+			b.vy = player.aimy*20.0 + player.vy;
+
+			// kickback
+			player.ax -= player.aimx * 20.0;
+			player.ay -= player.aimy * 20.0;
+
+			scene.position.x += player.aimx*20.0;
+			scene.position.y += player.aimy*20.0;
 
 			scene.addChild(b.graphics);
 

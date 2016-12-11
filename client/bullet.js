@@ -8,7 +8,7 @@ function Bullet(){
 	this.vx = 0;
 	this.vy = 0;
 
-	this.radius = 10;
+	this.radius = 20;
 
 	this.graphics = new PIXI.Graphics();
 
@@ -29,5 +29,3 @@ Bullet.prototype.draw = function(){
 	this.graphics.drawCircle(0,0, this.radius);
 	this.graphics.endFill();
 };
-
-
