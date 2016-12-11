@@ -64,6 +64,9 @@ Player.prototype.update = function(){
 	this.container.scale.y = lerp(this.container.scale.y, 1.0+Math.cos(curTime/100.0)/20.0, 0.1);
 
 	this.container.rotation = slerp(this.container.rotation, 0.0, 0.1);
+
+	this.container.skew.x = lerp(this.container.skew.x, clamp(-Math.PI/4, this.vx/100.0, Math.PI/4), 0.5);
+	this.container.skew.y = lerp(this.container.skew.y, clamp(-Math.PI/4, this.vy/100.0, Math.PI/4), 0.5);
 	
 	this.body.x = 0;
 	this.body.y = 0;
