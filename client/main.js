@@ -36,7 +36,23 @@ function init(){
 
 
 	scene = new PIXI.Container();
+
+
+	layers={
+		bg: new PIXI.Container(),
+		players: new PIXI.Container(),
+		boundaries: new PIXI.Container(),
+		bullets: new PIXI.Container()
+	};
+
+
+
 	game.addChild(scene);
+
+	scene.addChild(layers.bg);
+	scene.addChild(layers.players);
+	scene.addChild(layers.bullets);
+	scene.addChild(layers.boundaries);
 
 	// setup screen filter
 	screen_filter = new CustomFilter(PIXI.loader.resources.screen_shader.data);
@@ -47,16 +63,16 @@ function init(){
 
 
 
-	var g = new PIXI.Graphics();
-	scene.addChild(g);
+	var bg = new PIXI.Graphics();
+	layers.bg.addChild(bg);
 
-	g.beginFill(0xFFFFFF);
-	g.drawRect(0,0,size.x,size.y);
-	g.endFill();
+	bg.beginFill(0xFFFFFF);
+	bg.drawRect(0,0,size.x,size.y);
+	bg.endFill();
 
-	/*g.beginFill(0x000000);
-	g.drawCircle(size.x/2, size.y/2, Math.min(size.x,size.y)/3);
-	g.endFill();*/
+	/*bg.beginFill(0x000000);
+	bg.drawCircle(size.x/2, size.y/2, Math.min(size.x,size.y)/3);
+	bg.endFill();*/
 
 	boundaryForce = 0.1;
 	boundaryPadding = 35;
@@ -74,7 +90,7 @@ function init(){
 	// add players parts to scene
 	for(var i = 0; i < players.length; ++i){
 		var player = players[i];
-		scene.addChild(player.container);
+		layers.players.addChild(player.container);
 	}
 
 
@@ -186,7 +202,7 @@ function update(){
 			player.container.scale.x += 1;
 			player.container.scale.y += 1;
 
-			scene.addChild(b.graphics);
+			layers.bullets.addChild(b.graphics);
 
 			bullets.push(b);
 		}
@@ -414,7 +430,7 @@ function genWallHorz(y, rad){
 	// add pieces to scene, starting from middle and working outwards
 	while(pieces.length > 0){
 		var i = Math.min(pieces.length-1, Math.round((pieces.length-1)/2));
-		scene.addChild(pieces[i].graphics);
+		layers.boundaries.addChild(pieces[i].graphics);
 		pieces.splice(i,1);
 	}
 }
@@ -437,7 +453,7 @@ function genWallVert(x, rad){
 	// add pieces to scene, starting from middle and working outwards
 	while(pieces.length > 0){
 		var i = Math.min(pieces.length-1, Math.round((pieces.length-1)/2));
-		scene.addChild(pieces[i].graphics);
+		layers.boundaries.addChild(pieces[i].graphics);
 		pieces.splice(i,1);
 	}
 }
