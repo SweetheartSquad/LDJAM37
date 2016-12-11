@@ -13,8 +13,10 @@ function main(){
 }
 
 function init(){
-	player1 = new Player();
-	player2 = new Player();
+	players=[];
+	players.push(player1 = new Player());
+	players.push(player2 = new Player());
+	
 	vert = [];
 	levelPiecesHorz = [];
 	levelPiecesVert = [];
@@ -52,17 +54,15 @@ function init(){
 
 	genLevel();
 
-	scene.addChild(player1.body);
-	scene.addChild(player1.head);
-	scene.addChild(player1.footL);
-	scene.addChild(player1.footR);
-	scene.addChild(player1.arms);
-
-	scene.addChild(player2.body);
-	scene.addChild(player2.head);
-	scene.addChild(player2.footL);
-	scene.addChild(player2.footR);
-	scene.addChild(player2.arms);
+	// add players parts to scene
+	for(var i = 0; i < players.length; ++i){
+		var player = players[i];
+		scene.addChild(player.body);
+		scene.addChild(player.head);
+		scene.addChild(player.footL);
+		scene.addChild(player.footR);
+		scene.addChild(player.arms);
+	}
 
 	debugDraw = new PIXI.Graphics();
 	scene.addChild(debugDraw);
@@ -88,60 +88,50 @@ function update(){
 	// update game
 	var input;
 
-	// player 1
-	input = getInput(0);
-	if(input.fullscreen){ fullscreen.toggleFullscreen(); }
-	player1.ax += input.x;
 
-	// flip if moving horizontally
-	if(Math.abs(input.x) > 0){
-		player1.flipped = input.x < 0;
-	}
+	for(var i = 0; i < players.length; ++i){
+		var player = players[i];
+		var input = getInput(i);
 
-	// aim
-	player1.aimx = player1.flipped ? -1 : 1;
-	if(Math.abs(input.y) > Math.abs(input.x)){
-		player1.aimx = 0;
-		player1.aimy = Math.sign(input.y);
-	}else if(Math.abs(input.y) > 0.5){
-		player1.aimx /= 2;
-		player1.aimy = Math.sign(input.y) / 2;
-	}else{
-		player1.aimy = 0;
-	}
+		if(input.fullscreen){ fullscreen.toggleFullscreen(); }
 
-	//player1.ay += input.y;
-	if(input.jump && player1.canJump()){
-		player1.ay += -60;
+		// move
+		player.ax += input.x;
 
-		if(player1.canWallJump()){
-			player1.ax += -40 * (player1.flipped ? -1 : 1)
+		// flip if moving horizontally
+		if(Math.abs(input.x) > 0){
+			player.flipped = input.x < 0;
 		}
-	}
 
-	// player 2
-	input = getInput(1);
-	player2.ax += input.x;
-
-	if(Math.abs(input.x) > 0){
-		player2.flipped = input.x < 0;
-	}
-	//player2.ay += input.y;
-	if(input.jump && player2.canJump()){
-		player2.ay += -40;
-
-		if(player2.canWallJump()){
-			player2.ax += -40 * (player2.flipped ? -1 : 1)
+		// aim
+		player.aimx = player.flipped ? -1 : 1;
+		if(Math.abs(input.y) > Math.abs(input.x)){
+			player.aimx = 0;
+			player.aimy = Math.sign(input.y);
+		}else if(Math.abs(input.y) > 0.5){
+			player.aimx /= 2;
+			player.aimy = Math.sign(input.y) / 2;
+		}else{
+			player.aimy = 0;
 		}
-	}
 
-	// gravity
-	player1.ay += 1;
-	player2.ay += 1;
+		// jump
+		if(input.jump && player.canJump()){
+			player.ay += -60;
+
+			if(player.canWallJump()){
+				player.ax += -40 * (player.flipped ? -1 : 1)
+			}
+		}
+
+		// gravity
+		player.ay += 1;
+	}
 
 	// update players
 	player1.update();
 	player2.update();
+
 	// update collisions
 	
 	updateLevel();	
@@ -149,21 +139,26 @@ function update(){
 	boundaryForce = 0.1;
 	boundaryPadding = 35;
 
-	player1.touchingWall = player1.touchingFloor = player1.touchingCeil = false;
+	// boundary collisions
+	for(var i = 0; i < players.length; ++i){
+		var player = players[i];
 
-	if(player1.px - player1.radius < boundaryPadding){
-		player1.ax += (boundaryPadding- (player1.px - player1.radius) ) * boundaryForce;
-		player1.touchingWall = true;
-	}if(player1.px + player1.radius > size.x - boundaryPadding){
-		player1.ax -= ( (player1.px + player1.radius) - (size.x - boundaryPadding)) * boundaryForce;
-		player1.touchingWall = true;
-	}
-	if(player1.py - player1.radius < boundaryPadding){
-		player1.ay += (boundaryPadding- (player1.py - player1.radius) ) * boundaryForce;
-		player1.touchingCeil = true;
-	}if(player1.py + player1.radius > size.y - boundaryPadding){
-		player1.ay -= ( (player1.py + player1.radius) - (size.y - boundaryPadding)) * boundaryForce;
-		player1.touchingFloor = true;
+		player.touchingWall = player.touchingFloor = player.touchingCeil = false;
+
+		if(player.px - player.radius < boundaryPadding){
+			player.ax += (boundaryPadding- (player.px - player.radius) ) * boundaryForce;
+			player.touchingWall = true;
+		}if(player.px + player.radius > size.x - boundaryPadding){
+			player.ax -= ( (player.px + player.radius) - (size.x - boundaryPadding)) * boundaryForce;
+			player.touchingWall = true;
+		}
+		if(player.py - player.radius < boundaryPadding){
+			player.ay += (boundaryPadding- (player.py - player.radius) ) * boundaryForce;
+			player.touchingCeil = true;
+		}if(player.py + player.radius > size.y - boundaryPadding){
+			player.ay -= ( (player.py + player.radius) - (size.y - boundaryPadding)) * boundaryForce;
+			player.touchingFloor = true;
+		}
 	}
 
 	// update input managers
@@ -191,9 +186,12 @@ function render(){
 	debugDraw.clear();
 	debugDraw.lineStyle(4, 0x000000);
 
-	debugDraw.drawCircle(player1.px, player1.py, player1.radius);
-	debugDraw.moveTo(player1.px, player1.py);
-	debugDraw.lineTo(player1.px + player1.aimx*player1.radius, player1.py + player1.aimy*player1.radius);
+	for(var i = 0; i < players.length; ++i){
+		var player = players[i];
+		debugDraw.drawCircle(player.px, player.py, player.radius);
+		debugDraw.moveTo(player.px, player.py);
+		debugDraw.lineTo(player.px + player.aimx*player.radius, player.py + player.aimy*player.radius);
+	}
 
 	debugDraw.moveTo(0, boundaryPadding);
 	debugDraw.lineTo(size.x, boundaryPadding);
@@ -324,19 +322,20 @@ function updateLevel(){
 		levelPiecesVert[i].update();
 	}
 
-	var player1Pieces = getPieceForPlayer(player1);
-	player1Pieces.x[0].compress(1, 0.7);
-	player1Pieces.x[1].compress(1, 0.8);
-	player1Pieces.y[0].compress(0.7, 1);
-	player1Pieces.y[1].compress(0.8, 1);
+	for(var i = 0; i < players.length; ++i){
+		var player = players[i];
+		var playerPieces = getPieceForPlayer(player);
+		playerPieces.x[0].compress(1, 0.7);
+		playerPieces.x[1].compress(1, 0.8);
+		playerPieces.y[0].compress(0.7, 1);
+		playerPieces.y[1].compress(0.8, 1);
 
-	var player2pieces = getPieceForPlayer(player2);
-	player2pieces.x[0].compress(1, 0.7);
-	player2pieces.x[1].compress(1, 0.8);
-	player2pieces.y[0].compress(0.7, 1);
-	player2pieces.y[1].compress(0.8, 1);
+		// debug pieces for player 1
+		if(i == 0){
+			debugPieces(playerPieces);
+		}
+	}
 
-	debugPieces(player1Pieces);
 }
 
 function genLevel(){
