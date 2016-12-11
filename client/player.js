@@ -4,6 +4,9 @@ function Player(){
 	this.ax = 0;
 	this.ay = 0;
 
+	this.width = 50;
+	this.height = 60;
+
 	this.px = size.x/2;
 	this.py = size.y/2;
 
@@ -26,6 +29,8 @@ function Player(){
 	this.footL = new PIXI.Graphics();
 	this.footR = new PIXI.Graphics();
 	this.arms = new PIXI.Graphics();
+	
+	this.colliderLines = this.calcColliderLines();
 
 	this.debug = new PIXI.Graphics();
 
@@ -271,4 +276,15 @@ Player.prototype.renderSVG = function(g, input){
 			break;
 		}
 	}
+}
+
+Player.prototype.calcColliderLines =function(){
+	var halfWidth = this.width * 0.5;
+	var halfHeight = this.height * 0.5;
+	return [
+		{x1: this.px + 0 - halfWidth, y1: this.py + 0 - halfHeight, x2: this.px + this.width - halfWidth, y2:this.py + 0 - halfHeight},
+		{x1: this.px + this.width - halfWidth, y1: this.py + 0 - halfHeight, x2:this.px + this.width - halfWidth, y2:this.py + this.height - halfHeight},
+		{x1: this.px + this.width - halfWidth, y1: this.py + this.height - halfHeight, x2: this.px + 0 - halfWidth, y2: this.py + this.height - halfHeight},
+		{x1: this.px + 0 - halfWidth, y1: this.py + this.height  - halfHeight, x2: this.px + 0 - halfWidth, y2: this.py + 0 - halfHeight}
+	];
 }

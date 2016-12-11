@@ -58,7 +58,18 @@ function init(){
 	g.drawCircle(size.x/2, size.y/2, Math.min(size.x,size.y)/3);
 	g.endFill();
 
+	boundaryForce = 0.1;
+	boundaryPadding = 35;
+
 	genLevel();
+
+	boundryLines = [
+		{ x1:0, y1:boundaryPadding, x2:size.x, y2:boundaryPadding },
+		{ x1:0, y1:size.y-boundaryPadding, x2:size.x , y2:size.y-boundaryPadding },
+		{ x1:boundaryPadding, y1:0, x2:boundaryPadding , y2:size.y },
+		{ x1:size.x - boundaryPadding, y1:0, x2:size.x - boundaryPadding , y2:size.y },
+	];
+
 
 	// add players parts to scene
 	for(var i = 0; i < players.length; ++i){
@@ -163,19 +174,23 @@ function update(){
 		player.ay += 1;
 	}
 
+	var collLines = players[1].calcColliderLines().concat( boundryLines );
 	// update players
 	for(var i = 0; i < players.length; ++i){
 		var player = players[i];
 		player.update();
 	}
-
-	rayDebug.clear();
-
 	// update bullets
 	for(var i = bullets.length-1; i >= 0; --i){
 		var b = bullets[i];
 		b.update();
-		castRay(b.px, b.py, b.vx, b.vy);
+		var coll = castRay(b.px, b.py, b.vx, b.vy, collLines);
+		if(coll != null){
+			if(coll.length < 60 ){
+				b.vx = -1 * b.vx;
+				b.vy = -1 * b.vy;
+			}
+		}
 	}
 
 	// update powerups
@@ -187,9 +202,6 @@ function update(){
 	// update collisions
 
 	updateLevel();
-
-	boundaryForce = 0.1;
-	boundaryPadding = 35;
 
 	// boundary collisions
 	for(var i = 0; i < players.length; ++i){
@@ -241,9 +253,11 @@ function render(){
 
 		for(var i = 0; i < players.length; ++i){
 			var player = players[i];
-			debugDraw.drawCircle(player.px, player.py, player.radius);
-			debugDraw.moveTo(player.px, player.py);
-			debugDraw.lineTo(player.px + player.aimx*player.radius, player.py + player.aimy*player.radius);
+			var lines = player.calcColliderLines();
+			for( var j = 0; j < lines.length; j++ ){
+				debugDraw.moveTo(lines[j].x1, lines[j].y1);
+				debugDraw.lineTo(lines[j].x2, lines[j].y2);
+			}
 		}
 
 		for(var i = 0; i < bullets.length; ++i){
@@ -255,13 +269,6 @@ function render(){
 			var p = powerups[i];
 			debugDraw.drawCircle(p.px, p.py, p.radius);
 		}
-
-		boundryLines = [
-			{ x1:0, y1:boundaryPadding, x2:size.x , y2:boundaryPadding },
-			{ x1:0, y1:size.y-boundaryPadding, x2:size.x , y2:size.y-boundaryPadding },
-			{ x1:boundaryPadding, y1:0, x2:boundaryPadding , y2:size.y },
-			{ x1:size.x - boundaryPadding, y1:0, x2:size.x - boundaryPadding , y2:size.y },
-		];
 
 		for( var i = 0; i < boundryLines.length; i++ ){
 			debugDraw.moveTo(boundryLines[i].x1, boundryLines[i].y1);
@@ -470,8 +477,8 @@ function debugPieces(res){
 	res.y[1].color = 0x00ff00;
 }
 
-function castRay(originX, originY, dirX, dirY){
-	var intersect = rayTestWalls(originX, originY, dirX, dirY);
+function castRay(originX, originY, dirX, dirY, lines){
+	var intersect = rayTestLines(originX, originY, dirX, dirY, lines);
 	if(intersect != null){
 		rayDebug.beginFill(0xFF0000);
 		rayDebug.lineStyle(2, 0x0000FF);
@@ -479,19 +486,20 @@ function castRay(originX, originY, dirX, dirY){
 		rayDebug.lineTo( intersect.collision.x, intersect.collision.y);
 		rayDebug.endFill();
 	}
+	return intersect;
 }
 
-function rayTestWalls(originX, originY, dirX, dirY){
+function rayTestLines(originX, originY, dirX, dirY, lines){
 	var vecLen = 999999999;
 	var nearest = null; 
-	for( var i = 0; i < boundryLines.length; i++){
-		var intersect = lineIntersect(boundryLines[i].x1, boundryLines[i].y1, boundryLines[i].x2, 
-			boundryLines[i].y2, originX, originY, dirX * 9999999, dirY * 9999999);
+	for( var i = 0; i < lines.length; i++){
+		var intersect = lineIntersect(lines[i].x1, lines[i].y1, lines[i].x2, 
+			lines[i].y2, originX, originY, dirX * 9999999, dirY * 9999999);
 		if( intersect != null ){
 			var lenLoc = Math.sqrt( Math.pow( intersect.x - originX, 2) + Math.pow(intersect.y - originY, 2));
 			if( lenLoc < vecLen ){
 				vecLen = lenLoc;
-				nearest = { collision:intersect, wall:boundryLines[i], length:vecLen };
+				nearest = { collision:intersect, line:lines[i], length:vecLen };
 			}
 		}
 	}
