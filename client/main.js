@@ -263,6 +263,19 @@ function render(){
 	}
 
 
+	//drawDebug();
+
+
+	renderer.render(scene,renderTexture);
+	try{
+		renderer.render(renderSprite,null,true,false);
+	}catch(e){
+		renderer.render(scene,null,true,false);
+		console.error(e);
+	}
+}
+
+function drawDebug(){
 	debugDraw.clear();
 	for(var d = 0; d < 2; ++d){
 		debugDraw.lineStyle(10-d*5, d == 0 ? 0 : 0xFFFFFF);
