@@ -171,6 +171,9 @@ function update(){
 			scene.position.x += player.aimx*20.0;
 			scene.position.y += player.aimy*20.0;
 
+			player.container.scale.x += 1;
+			player.container.scale.y += 1;
+
 			scene.addChild(b.graphics);
 
 			bullets.push(b);
