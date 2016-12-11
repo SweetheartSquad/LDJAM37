@@ -60,8 +60,8 @@ Player.prototype.update = function(){
 	// update actual graphics
 	this.container.position.x = this.px;
 	this.container.position.y = this.py;
-	this.container.scale.x = lerp(this.container.scale.x, 1.0, 0.1);
-	this.container.scale.y = lerp(this.container.scale.y, 1.0, 0.1);
+	this.container.scale.x = lerp(this.container.scale.x, 1.0+Math.sin(curTime/100.0)/10.0, 0.1);
+	this.container.scale.y = lerp(this.container.scale.y, 1.0+Math.cos(curTime/100.0)/20.0, 0.1);
 	
 	this.body.x = 0;
 	this.body.y = 0;
