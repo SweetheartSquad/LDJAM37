@@ -161,8 +161,8 @@ function update(){
 			var b = new Bullet();
 			b.px = player.px;
 			b.py = player.py;
-			b.vx = player.aimx*20.0 + player.vx;
-			b.vy = player.aimy*20.0 + player.vy;
+			b.vx = player.aimx*20.0 + player.vx*0.25;
+			b.vy = player.aimy*20.0 + player.vy*0.25;
 
 			// kickback
 			player.ax -= player.aimx * 20.0;
