@@ -365,25 +365,46 @@ var colors = [0xff0000, 0xffff00, 0x0000ff];
 function genWallHorz(y, rad){
 	var x = 0;
 	var c = 0;
+	var pieces=[];
 	while( x < size.x + rad){
 		var pc = new LevelPiece();
 		pc.init(x, y +  rad * 0.5  * ( y > 0 ? 1 : -1), rad, colors[c]);
 		levelPiecesHorz.push(pc);
-		scene.addChild(pc.graphics);
+		pieces.push(pc);
 		x += rad;
 
+		c = (c+1)%colors.length;
+
+	}
+
+	// add pieces to scene, starting from middle and working outwards
+	while(pieces.length > 0){
+		var i = Math.min(pieces.length-1, Math.round((pieces.length-1)/2));
+		scene.addChild(pieces[i].graphics);
+		pieces.splice(i,1);
 	}
 }
 
 function genWallVert(x, rad){
 	var y = 0;
 	var c = 0;
+	var pieces=[];
 	while( y < size.y + rad){
 		var pc = new LevelPiece();
 		pc.init( x +  rad * 0.5  * ( x > 0 ? 1 : -1), y, rad, colors[c]);
 		levelPiecesVert.push(pc);
-		scene.addChild(pc.graphics);
+		pieces.push(pc);
 		y += rad;
+
+		c = (c+1)%colors.length;
+
+	}
+
+	// add pieces to scene, starting from middle and working outwards
+	while(pieces.length > 0){
+		var i = Math.min(pieces.length-1, Math.round((pieces.length-1)/2));
+		scene.addChild(pieces[i].graphics);
+		pieces.splice(i,1);
 	}
 }
 
@@ -402,10 +423,17 @@ function updateLevel(){
 	for(var i = 0; i < players.length; ++i){
 		var player = players[i];
 		var playerPieces = getPieceForPlayer(player);
-		playerPieces.x[0].compress(1, 0.7);
-		playerPieces.x[1].compress(1, 0.8);
-		playerPieces.y[0].compress(0.7, 1);
-		playerPieces.y[1].compress(0.8, 1);
+		var distX = Math.abs(player.py-playerPieces.x[0].py) / (player.radius + playerPieces.x[0].rad);
+		var distY = Math.abs(player.px-playerPieces.y[0].px) / (player.radius + playerPieces.y[0].rad);
+
+		var ratioX = (player.px - playerPieces.x[0].px) / (playerPieces.x[1].px - playerPieces.x[0].px);
+		var ratioY = (player.py - playerPieces.y[0].py) / (playerPieces.y[1].py - playerPieces.y[0].py);
+
+		playerPieces.x[0].compress(1, clamp(0.1, lerp(1.0, distX, 1.0-ratioX), 1.0));
+		playerPieces.x[1].compress(1, clamp(0.1, lerp(1.0, distX, ratioX), 1.0));
+		
+		playerPieces.y[0].compress(clamp(0.1, lerp(1.0, distY, 1.0-ratioY), 1.0), 1);
+		playerPieces.y[1].compress(clamp(0.1, lerp(1.0, distY, ratioY), 1.0), 1);
 
 		// debug pieces for player 1
 		if(i == 0){

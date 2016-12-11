@@ -1,6 +1,6 @@
 // linear interpolation
 function lerp(from,to,t){
-	if(Math.abs(to-from) < 1){
+	if(Math.abs(to-from) < 0.0000001){
 		return to;
 	}
 	return from+(to-from)*t;
