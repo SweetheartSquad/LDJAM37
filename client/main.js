@@ -451,7 +451,7 @@ function updateLevel(){
 
 		// debug pieces for player 1
 		if(i == 0){
-			debugPieces(playerPieces);
+		//	debugPieces(playerPieces);
 		}
 	}
 
