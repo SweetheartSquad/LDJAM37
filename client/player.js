@@ -79,10 +79,12 @@ Player.prototype.update = function(){
 
 	this.arms.x = 0;
 	this.arms.y = 0 - 30;
-	this.arms.rotation = Math.atan2(this.aimy, this.aimx);
+
+	var targetRotation = Math.atan2(this.aimy, this.aimx);
 	if(this.flipped){
-		this.arms.rotation += Math.PI;
+		targetRotation += Math.PI;
 	}
+	this.arms.rotation = slerp(this.arms.rotation, targetRotation, 0.5);
 
 	this.debug.x = this.px;
 	this.debug.y = this.py;
