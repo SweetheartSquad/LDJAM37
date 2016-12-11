@@ -465,7 +465,7 @@ function rayTestWalls(originX, originY, dirX, dirY){
 			var lenLoc = Math.sqrt( Math.pow( intersect.x - originX, 2) + Math.pow(intersect.y - originY, 2));
 			if( lenLoc < vecLen ){
 				vecLen = lenLoc;
-				nearest = { collision:intersect, wall:boundryLines[i]};
+				nearest = { collision:intersect, wall:boundryLines[i], length:vecLen };
 			}
 		}
 	}
