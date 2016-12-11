@@ -24,11 +24,19 @@ function Player(){
 
 	this.radius = 40;
 
+	this.container = new PIXI.Container();
+
 	this.head = new PIXI.Graphics();
 	this.body = new PIXI.Graphics();
 	this.footL = new PIXI.Graphics();
 	this.footR = new PIXI.Graphics();
 	this.arms = new PIXI.Graphics();
+
+	this.container.addChild(this.body);
+	this.container.addChild(this.head);
+	this.container.addChild(this.footL);
+	this.container.addChild(this.footR);
+	this.container.addChild(this.arms);
 	
 	this.colliderLines = this.calcColliderLines();
 
@@ -50,20 +58,23 @@ Player.prototype.update = function(){
 	this.py += this.vy;
 
 	// update actual graphics
-	this.body.x = this.px;
-	this.body.y = this.py;
+	this.container.position.x = this.px;
+	this.container.position.y = this.py;
+	
+	this.body.x = 0;
+	this.body.y = 0;
 
-	this.head.x = this.body.x;
-	this.head.y = this.body.y - 25;
+	this.head.x = 0;
+	this.head.y = 0 - 25;
 
-	this.footL.x = this.body.x-20;
-	this.footL.y = this.body.y + 10;
+	this.footL.x = 0-20;
+	this.footL.y = 0 + 10;
 
-	this.footR.x = this.body.x+20;
-	this.footR.y = this.body.y + 10;
+	this.footR.x = 0+20;
+	this.footR.y = 0 + 10;
 
-	this.arms.x = this.body.x;
-	this.arms.y = this.body.y - 30;
+	this.arms.x = 0;
+	this.arms.y = 0 - 30;
 	this.arms.rotation = Math.atan2(this.aimy, this.aimx);
 	if(this.flipped){
 		this.arms.rotation += Math.PI;

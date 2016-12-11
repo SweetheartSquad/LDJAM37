@@ -74,11 +74,7 @@ function init(){
 	// add players parts to scene
 	for(var i = 0; i < players.length; ++i){
 		var player = players[i];
-		scene.addChild(player.body);
-		scene.addChild(player.head);
-		scene.addChild(player.footL);
-		scene.addChild(player.footR);
-		scene.addChild(player.arms);
+		scene.addChild(player.container);
 	}
 
 
