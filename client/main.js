@@ -17,6 +17,8 @@ function init(){
 	players.push(player1 = new Player());
 	players.push(player2 = new Player());
 	
+	bullets=[];
+
 	vert = [];
 	levelPiecesHorz = [];
 	levelPiecesVert = [];
@@ -124,6 +126,20 @@ function update(){
 			}
 		}
 
+
+		// shoot
+		if(input.shoot){
+			var b = new Bullet();
+			b.px = player.px;
+			b.py = player.py;
+			b.vx = player.aimx*50.0 + player.vx;
+			b.vy = player.aimy*50.0 + player.vy;
+
+			scene.addChild(b.graphics);
+
+			bullets.push(b);
+		}
+
 		// gravity
 		player.ay += 1;
 	}
@@ -132,6 +148,12 @@ function update(){
 	for(var i = 0; i < players.length; ++i){
 		var player = players[i];
 		player.update();
+	}
+
+	// update bullets
+	for(var i = bullets.length-1; i >= 0; --i){
+		var b = bullets[i];
+		b.update();
 	}
 
 	// update collisions
@@ -194,6 +216,11 @@ function render(){
 			debugDraw.drawCircle(player.px, player.py, player.radius);
 			debugDraw.moveTo(player.px, player.py);
 			debugDraw.lineTo(player.px + player.aimx*player.radius, player.py + player.aimy*player.radius);
+		}
+
+		for(var i = 0; i < bullets.length; ++i){
+			var b = bullets[i];
+			debugDraw.drawCircle(b.px, b.py, b.radius);
 		}
 
 		debugDraw.moveTo(0, boundaryPadding);
