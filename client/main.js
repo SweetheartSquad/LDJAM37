@@ -177,6 +177,7 @@ function update(){
 			// kickback
 			player.ax -= player.aimx * 20.0;
 			player.ay -= player.aimy * 20.0;
+			player.container.rotation -= Math.PI/3 * (player.flipped ? -1 : 1);
 
 			scene.position.x += player.aimx*20.0;
 			scene.position.y += player.aimy*20.0;
