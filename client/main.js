@@ -295,8 +295,8 @@ function getInput(_playerId){
 	if(keys.isDown(keyConfig.up)){ res.y -= 1; }
 	if(keys.isDown(keyConfig.down)){ res.y += 1; }
 
-	if(keys.isDown(keyConfig.jump)){ res.jump = true};
-	if(keys.isDown(keyConfig.shoot)){ res.shoot = true};
+	if(keys.isJustDown(keyConfig.jump)){ res.jump = true};
+	if(keys.isJustDown(keyConfig.shoot)){ res.shoot = true};
 
 	// gamepad input
 	if(gamepads.axisPast(gamepads.LSTICK_H, -0.5, -1, _playerId)){ res.x -= 1; }
