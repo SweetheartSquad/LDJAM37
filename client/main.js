@@ -188,7 +188,6 @@ function update(){
 		if(coll != null){
 			if(coll.length < 60 ){
 				var norm = [ coll.line.x2 - coll.line.x1, coll.line.y2 - coll.line.y1];
-				console.log(norm);
 				b.vx = norm[1] > 0 ? -b.vx : b.vx;
 				b.vy = norm[0] > 0 ? -b.vy : b.vy;
 			}
