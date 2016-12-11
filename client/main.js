@@ -129,8 +129,10 @@ function update(){
 	}
 
 	// update players
-	player1.update();
-	player2.update();
+	for(var i = 0; i < players.length; ++i){
+		var player = players[i];
+		player.update();
+	}
 
 	// update collisions
 	
