@@ -389,15 +389,15 @@ function getPieceForPlayer(player){
 	var vert = px < (size.x / 2) ? levelPiecesVert.slice(0, levelPiecesVert.length / 2)
 								: levelPiecesVert.slice(levelPiecesVert.length / 2, levelPiecesVert.length);
 	var res = {	
-		x : getPiecesForArr(horz, px, 'ceil'),
-		y : getPiecesForArr(vert, py, 'floor')
+		x : getPiecesForArr(horz, px),
+		y : getPiecesForArr(vert, py)
 	}
 
 	return res;
 }
 
 function getPiecesForArr(arr, playerAxisVal, roundFunc){
-	var idx1 = Math[roundFunc](playerAxisVal/rad);
+	var idx1 = Math.ceil(playerAxisVal/rad);
 	var idx2;
 	if(idx1 < 0){	
 		idx1 = 0;
