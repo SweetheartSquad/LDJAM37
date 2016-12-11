@@ -16,6 +16,9 @@ function init(){
 	players=[];
 	players.push(player1 = new Player());
 	players.push(player2 = new Player());
+
+
+	powerups=[];
 	
 	bullets=[];
 
@@ -65,6 +68,19 @@ function init(){
 		scene.addChild(player.footR);
 		scene.addChild(player.arms);
 	}
+
+
+	// powerups
+	var p1 = new Powerup();
+	scene.addChild(p1.graphics);
+	p1.px = size.x/3;
+	p1.py = size.y/2;
+	powerups.push(p1);
+	var p2 = new Powerup();
+	scene.addChild(p2.graphics);
+	p2.px = size.x/3*2;
+	p2.py = size.y/2;
+	powerups.push(p2);
 
 	debugDraw = new PIXI.Graphics();
 	scene.addChild(debugDraw);
@@ -156,6 +172,12 @@ function update(){
 		b.update();
 	}
 
+	// update powerups
+	for(var i = powerups.length-1; i >= 0; --i){
+		var p = powerups[i];
+		p.update();
+	}
+
 	// update collisions
 	
 	updateLevel();	
@@ -221,6 +243,11 @@ function render(){
 		for(var i = 0; i < bullets.length; ++i){
 			var b = bullets[i];
 			debugDraw.drawCircle(b.px, b.py, b.radius);
+		}
+
+		for(var i = 0; i < powerups.length; ++i){
+			var p = powerups[i];
+			debugDraw.drawCircle(p.px, p.py, p.radius);
 		}
 
 		debugDraw.moveTo(0, boundaryPadding);
