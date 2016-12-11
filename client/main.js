@@ -54,9 +54,9 @@ function init(){
 	g.drawRect(0,0,size.x,size.y);
 	g.endFill();
 
-	g.beginFill(0x000000);
+	/*g.beginFill(0x000000);
 	g.drawCircle(size.x/2, size.y/2, Math.min(size.x,size.y)/3);
-	g.endFill();
+	g.endFill();*/
 
 	boundaryForce = 0.1;
 	boundaryPadding = 35;
@@ -292,15 +292,6 @@ function render(){
 		}
 
 		debugDraw.endFill();
-	}
-
-
-	renderer.render(scene,renderTexture);
-	try{
-		renderer.render(renderSprite,null,true,false);
-	}catch(e){
-		renderer.render(scene,null,true,false);
-		console.error(e);
 	}
 }
 
