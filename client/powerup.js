@@ -33,6 +33,13 @@ Powerup.types=[
 		}
 	},
 	{
+		id: "unlimited jumps",
+		duration:200,
+		effect:function(player){
+			player.doubleJump = true;
+		}
+	},
+	{
 		id: "speed",
 		duration:200,
 		effect:function(player){
