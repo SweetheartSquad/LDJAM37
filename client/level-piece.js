@@ -21,7 +21,7 @@ LevelPiece.prototype.update = function(){
 
 LevelPiece.prototype.draw = function(){
 	this.graphics.clear();
-	this.graphics.beginFill(0x7a5e57);
+	this.graphics.beginFill(0x000000);
 	this.graphics.drawCircle(0, 0, this.radius);
 	this.graphics.endFill();
 	this.graphics.beginFill(this.color);
