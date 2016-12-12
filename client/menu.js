@@ -7,21 +7,6 @@ function Menu(_players){
 	this.bg.height = size.y;
 	this.scene.addChild(this.bg);
 
-	this.title = new PIXI.Sprite(PIXI.loader.resources.title.texture);
-	this.title.anchor.x = 0.5;
-	this.title.anchor.y = 0.5;
-	this.title.position.x = size.x/2;
-	this.title.position.y = size.y/2;
-	this.scene.addChild(this.title);
-
-	this.title = new PIXI.Sprite(PIXI.loader.resources.title.texture);
-	this.title.anchor.x = 0.5;
-	this.title.anchor.y = 0.5;
-	this.title.position.x = size.x/2+5;
-	this.title.position.y = size.y/2+5;
-	this.title.tint = 0x999999;
-	this.scene.addChild(this.title);
-
 	game.scale.x = game.scale.y = 3.5;
 
 	this.playerGraphics=[];
@@ -37,6 +22,21 @@ function Menu(_players){
 
 		this.playerGraphics.push(g);
 	}
+
+	this.title = new PIXI.Sprite(PIXI.loader.resources.title.texture);
+	this.title.anchor.x = 0.5;
+	this.title.anchor.y = 0.5;
+	this.title.position.x = size.x/2;
+	this.title.position.y = size.y/2;
+	this.scene.addChild(this.title);
+
+	this.title = new PIXI.Sprite(PIXI.loader.resources.title.texture);
+	this.title.anchor.x = 0.5;
+	this.title.anchor.y = 0.5;
+	this.title.position.x = size.x/2+5;
+	this.title.position.y = size.y/2+5;
+	this.title.tint = 0x999999;
+	this.scene.addChild(this.title);
 
 	this.playerGraphics[1].x = size.x/2;
 	this.playerGraphics[2].y = size.y/2;
