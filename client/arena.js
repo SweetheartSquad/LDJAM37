@@ -135,6 +135,22 @@ Arena.prototype.update = function(){
 		var player = this.players[i];
 		var input = getInput(player.id);
 
+		// particles
+		for(var p = 0; p < Math.floor(Math.random()*(Math.abs(player.vx)+Math.abs(player.vy))/20.0); ++p){
+			var particle = new Particle(
+				player.px+(Math.random()-Math.random())*5,
+				player.py+(Math.random()-Math.random())*5,
+				-0.5*player.vx*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*5,
+				-0.5*player.vy*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*5,
+				3+Math.random(3),
+				0x7a5e57
+			);
+
+			this.particles.push(particle);
+
+			this.layers.particles.addChild(particle.graphics);
+		}
+
 		if(input.fullscreen){ fullscreen.toggleFullscreen(); }
 
 
