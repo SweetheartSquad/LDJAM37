@@ -214,7 +214,7 @@ function update(){
 					b.py,
 					b.vx*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*3,
 					b.vy*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*3,
-					20+Math.random(5)
+					30+Math.random(15)
 				);
 
 				particles.push(particle);
@@ -259,6 +259,20 @@ function update(){
 					b.py = coll.collision.y + Math.sign(Math.floor(b.vy))*b.radius;
 
 					b.skip = 2;
+
+					for(var p = 0; p < Math.random()*5+5; ++p){
+						var particle = new Particle(
+							b.px,
+							b.py,
+							b.vx*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*3,
+							b.vy*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*3,
+							20+Math.random(5)
+						);
+
+						particles.push(particle);
+
+						layers.bullets.addChild(particle.graphics);
+					}
 				}
 			}
 		}
