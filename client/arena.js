@@ -11,8 +11,13 @@ function Arena(_players){
 
 
 	this.players = [];
+
+	// place players
 	for(var i = 0; i < _players.length; ++i){
-		this.players.push(new Player(_players[i]));
+		var p = new Player(_players[i]);
+		p.py = size.y/4;
+		p.px = size.x/2 + (i-(_players.length-1)/2)/_players.length*size.x/2;
+		this.players.push(p);
 	}
 
 	this.powerups = [];
