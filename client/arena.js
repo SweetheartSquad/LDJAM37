@@ -487,15 +487,6 @@ Arena.prototype.update = function(){
 };
 
 Arena.prototype.render = function(){
-	for( var i = 0; i < this.levelPiecesHorz.length; i++ ){
-		this.levelPiecesHorz[i].draw();
-	}
-
-	for( var i = 0; i < this.levelPiecesVert.length; i++ ){
-		this.levelPiecesVert[i].draw();
-	}
-
-
 	//this.drawDebug();
 };
 
@@ -536,7 +527,7 @@ Arena.prototype.genWallHorz = function(y, boundaryRadius){
 	var c = 0;
 	var pieces = [];
 	while( x < size.x + boundaryRadius){
-		var pc = new LevelPiece();
+		var pc = new LevelPiece(x, y + boundaryRadius * 0.5 * ( y > 0 ? 1 : -1), boundaryRadius, colors[c]);
 
 		if(y > size.x/2){
 			pc.graphics.rotation = Math.PI;
@@ -544,7 +535,6 @@ Arena.prototype.genWallHorz = function(y, boundaryRadius){
 			pc.graphics.rotation = 0;
 		}
 
-		pc.init(x, y + boundaryRadius * 0.5 * ( y > 0 ? 1 : -1), boundaryRadius, colors[c]);
 		this.levelPiecesHorz.push(pc);
 		pieces.push(pc);
 		x += boundaryRadius;
@@ -568,7 +558,7 @@ Arena.prototype.genWallVert = function(x, boundaryRadius){
 	var c = 0;
 	var pieces = [];
 	while( y < size.y + boundaryRadius){
-		var pc = new LevelPiece();
+		var pc = new LevelPiece(x + boundaryRadius * 0.5 * ( x > 0 ? 1 : -1), y, boundaryRadius, colors[c]);
 
 		if(x > size.x/2){
 			pc.graphics.rotation = Math.PI/2;
@@ -576,7 +566,6 @@ Arena.prototype.genWallVert = function(x, boundaryRadius){
 			pc.graphics.rotation = -Math.PI/2;
 		}
 
-		pc.init( x + boundaryRadius * 0.5 * ( x > 0 ? 1 : -1), y, boundaryRadius, colors[c]);
 		this.levelPiecesVert.push(pc);
 		pieces.push(pc);
 		y += boundaryRadius;
@@ -608,8 +597,8 @@ Arena.prototype.updateLevel = function(){
 	for(var i = 0; i < entities.length; ++i){
 		var entity = entities[i];
 		var entityPieces = this.getPieceForEntity(entity);
-		var distX = Math.abs(entity.py-entityPieces.x[0].py) / (entity.radius + entityPieces.x[0].rad);
-		var distY = Math.abs(entity.px-entityPieces.y[0].px) / (entity.radius + entityPieces.y[0].rad);
+		var distX = Math.abs(entity.py-entityPieces.x[0].py) / (entity.radius + entityPieces.x[0].radius);
+		var distY = Math.abs(entity.px-entityPieces.y[0].px) / (entity.radius + entityPieces.y[0].radius);
 
 		var ratioX = (entity.px - entityPieces.x[0].px) / (entityPieces.x[1].px - entityPieces.x[0].px);
 		var ratioY = (entity.py - entityPieces.y[0].py) / (entityPieces.y[1].py - entityPieces.y[0].py);
@@ -619,11 +608,6 @@ Arena.prototype.updateLevel = function(){
 		
 		entityPieces.y[0].compress(clamp(0.1, lerp(1.0, distY, 1.0-ratioY), 1.0));
 		entityPieces.y[1].compress(clamp(0.1, lerp(1.0, distY, ratioY), 1.0));
-
-		// debug pieces for player 1
-		if(i == 0){
-		//	debugPieces(playerPieces);
-		}
 	}
 
 };
@@ -671,25 +655,6 @@ Arena.prototype.getPiecesForArr = function(arr, playerAxisVal, roundFunc){
 		idx2 = idx1 - 1;
 	}
 	return [arr[idx1], arr[idx2]];
-};
-
-
-Arena.prototype.debugPieces = function(res){
-
-	for( var i = 0; i < this.levelPiecesHorz.length; i++ ){
-		this.levelPiecesHorz[i].color = 0xff0000;
-		this.levelPiecesHorz[i].shapeDirty = true;
-	}
-
-	for( var i = 0; i < this.levelPiecesVert.length; i++ ){
-		this.levelPiecesVert[i].color = 0xff0000;
-		this.levelPiecesVert[i].shapeDirty = true;
-	}
-
-	res.x[0].color = 0x00ff00;
-	res.x[1].color = 0x00ff00;
-	res.y[0].color = 0x00ff00;
-	res.y[1].color = 0x00ff00;
 };
 
 Arena.prototype.castRay = function(originX, originY, dirX, dirY, lines){
