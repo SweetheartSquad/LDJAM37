@@ -8,67 +8,59 @@ function Arena(){
 
 
 
-	players=[];
-	players.push(player1 = new Player());
-	players.push(player2 = new Player());
+	this.players=[];
+	this.players.push(player1 = new Player());
+	this.players.push(player2 = new Player());
 
-	powerups=[];
+	this.powerups=[];
 	
-	bullets=[];
+	this.bullets=[];
 
-	vert = [];
-	levelPiecesHorz = [];
-	levelPiecesVert = [];
-
+	this.levelPiecesHorz = [];
+	this.levelPiecesVert = [];
 
 
 
 
 
-	scene = new PIXI.Container();
+
+	this.scene = new PIXI.Container();
 
 
-	layers={
+	this.layers={
 		bg: new PIXI.Container(),
 		players: new PIXI.Container(),
 		boundaries: new PIXI.Container(),
 		bullets: new PIXI.Container()
 	};
 
-	particles = [];
+	this.particles = [];
 
 
 
-	game.addChild(scene);
+	game.addChild(this.scene);
 
-	scene.x = -size.x/2;
-	scene.y = -size.y/2;
+	this.scene.x = -size.x/2;
+	this.scene.y = -size.y/2;
 
 	game.position.x = size.x/2;
 	game.position.y = size.y/2;
 
-	scene.addChild(layers.bg);
-	scene.addChild(layers.players);
-	scene.addChild(layers.bullets);
-	scene.addChild(layers.boundaries);
-
-	// setup screen filter
-	screen_filter = new CustomFilter(PIXI.loader.resources.screen_shader.data);
-	screen_filter.padding=0;
-	renderSprite.filterArea = new PIXI.Rectangle(0,0,size.x,size.y);
-
-	renderSprite.filters = [screen_filter];
+	this.scene.addChild(this.layers.bg);
+	this.scene.addChild(this.layers.players);
+	this.scene.addChild(this.layers.bullets);
+	this.scene.addChild(this.layers.boundaries);
 
 
 
 	var bg = new PIXI.Sprite(PIXI.loader.resources.bg.texture);
 	bg.width=size.x;
 	bg.height=size.y;
-	layers.bg.addChild(bg);
+	this.layers.bg.addChild(bg);
 
 	this.genLevel();
 
-	boundryLines = [
+	this.boundaryLines = [
 		{ x1:0, y1:boundaryPadding, x2:size.x, y2:boundaryPadding, owner: "level", enabled: true },
 		{ x1:0, y1:size.y-boundaryPadding, x2:size.x , y2:size.y-boundaryPadding, owner: "level", enabled: true },
 		{ x1:boundaryPadding, y1:0, x2:boundaryPadding , y2:size.y, owner: "level", enabled: true },
@@ -77,28 +69,34 @@ function Arena(){
 
 
 	// add players parts to scene
-	for(var i = 0; i < players.length; ++i){
-		var player = players[i];
-		layers.players.addChild(player.container);
+	for(var i = 0; i < this.players.length; ++i){
+		var player = this.players[i];
+		this.layers.players.addChild(player.container);
 	}
 
 
 	// powerups
-	var p1 = new Powerup();
-	scene.addChild(p1.graphics);
+	/*var p1 = new Powerup();
+	this.scene.addChild(p1.graphics);
 	p1.px = size.x/3;
 	p1.py = size.y/2;
-	powerups.push(p1);
+	this.powerups.push(p1);
+
 	var p2 = new Powerup();
-	scene.addChild(p2.graphics);
+	this.scene.addChild(p2.graphics);
 	p2.px = size.x/3*2;
 	p2.py = size.y/2;
-	powerups.push(p2);
+	this.powerups.push(p2);*/
 
-	debugDraw = new PIXI.Graphics();
-	debugDraw.lines=[];
-	scene.addChild(debugDraw);
+	this.debugDraw = new PIXI.Graphics();
+	this.debugDraw.lines = [];
+	this.scene.addChild(this.debugDraw);
 };
+
+Arena.prototype.destroy = function(){
+	game.removeChild(this.scene);
+	this.scene.destroy();
+}
 
 Arena.prototype.update = function(){
 	// always try to center camera
@@ -106,13 +104,13 @@ Arena.prototype.update = function(){
 	var camcenterweight = 6;
 	var camx = size.x / 2 * camcenterweight;
 	var camy = size.y / 2 * camcenterweight;
-	for(var i = 0; i < players.length; ++i){
-		camx += players[i].px;
-		camy += players[i].py;
+	for(var i = 0; i < this.players.length; ++i){
+		camx += this.players[i].px;
+		camy += this.players[i].py;
 	}
 
-	camx /= players.length + camcenterweight;
-	camy /= players.length + camcenterweight;
+	camx /= this.players.length + camcenterweight;
+	camy /= this.players.length + camcenterweight;
 
 	camx = size.x - camx;
 	camy = size.y - camy;
@@ -122,14 +120,14 @@ Arena.prototype.update = function(){
 
 	game.scale.x = game.scale.y = lerp(game.scale.x, 1.0, 0.1);
 
-	debugDraw.lines=[];
+	this.debugDraw.lines=[];
 
 	// update game
 	var input;
 
 
-	for(var i = 0; i < players.length; ++i){
-		var player = players[i];
+	for(var i = 0; i < this.players.length; ++i){
+		var player = this.players[i];
 		var input = getInput(i);
 
 		if(input.fullscreen){ fullscreen.toggleFullscreen(); }
@@ -220,9 +218,9 @@ Arena.prototype.update = function(){
 						10+Math.random(5)
 					);
 
-					particles.push(particle);
+					this.particles.push(particle);
 
-					layers.bullets.addChild(particle.graphics);
+					this.layers.bullets.addChild(particle.graphics);
 				}
 			}
 
@@ -245,8 +243,8 @@ Arena.prototype.update = function(){
 					b.vy = (Math.random()-Math.random())*0.1;
 				}
 
-				bullets.push(b);
-				layers.bullets.addChild(b.graphics);
+				this.bullets.push(b);
+				this.layers.bullets.addChild(b.graphics);
 
 				// kickback
 				player.ax -= player.aimx * 20.0;
@@ -280,9 +278,9 @@ Arena.prototype.update = function(){
 						30+Math.random(15)
 					);
 
-					particles.push(particle);
+					this.particles.push(particle);
 
-					layers.bullets.addChild(particle.graphics);
+					this.layers.bullets.addChild(particle.graphics);
 				}
 			}
 		}
@@ -291,20 +289,20 @@ Arena.prototype.update = function(){
 		player.ay += 1;
 	}
 
-	var collLines = boundryLines;
-	for( var i = 0; i < players.length; i++ ){
-		collLines = collLines.concat(players[i].calcColliderLines());
+	var collLines = this.boundaryLines;
+	for( var i = 0; i < this.players.length; i++ ){
+		collLines = collLines.concat(this.players[i].calcColliderLines());
 	}
 
 	// update players
-	for(var i = 0; i < players.length; ++i){
-		var player = players[i];
+	for(var i = 0; i < this.players.length; ++i){
+		var player = this.players[i];
 		player.update();
 	}
 
 	// update bullets
-	for(var i = bullets.length-1; i >= 0; --i){
-		var b = bullets[i];
+	for(var i = this.bullets.length-1; i >= 0; --i){
+		var b = this.bullets[i];
 		b.update();
 
 		// keep within boundaries
@@ -350,7 +348,7 @@ Arena.prototype.update = function(){
 				// bullet hit player
 				b.graphics.parent.removeChild(b.graphics);
 				b.graphics.destroy();
-				bullets.splice(i,1);
+				this.bullets.splice(i,1);
 
 				sounds["hit"].play();
 
@@ -406,27 +404,27 @@ Arena.prototype.update = function(){
 					20+Math.random(5)
 				);
 
-				particles.push(particle);
+				this.particles.push(particle);
 
-				layers.bullets.addChild(particle.graphics);
+				this.layers.bullets.addChild(particle.graphics);
 			}
 		}
 	}
 
 	// update particles
-	for(var i = particles.length-1; i >= 0; --i){
-		var p = particles[i];
+	for(var i = this.particles.length-1; i >= 0; --i){
+		var p = this.particles[i];
 		p.update();
 		if(p.age >= p.lifetime){
 			p.graphics.parent.removeChild(p.graphics);
 			p.graphics.destroy();
-			particles.splice(i,1);
+			this.particles.splice(i,1);
 		}
 	}
 
 	// update powerups
-	for(var i = powerups.length-1; i >= 0; --i){
-		var p = powerups[i];
+	for(var i = this.powerups.length-1; i >= 0; --i){
+		var p = this.powerups[i];
 		p.update();
 	}
 
@@ -435,8 +433,8 @@ Arena.prototype.update = function(){
 	this.updateLevel();
 
 	// boundary collisions
-	for(var i = 0; i < players.length; ++i){
-		var player = players[i];
+	for(var i = 0; i < this.players.length; ++i){
+		var player = this.players[i];
 
 		player.touchingWall = player.touchingFloor = player.touchingCeil = false;
 
@@ -458,12 +456,12 @@ Arena.prototype.update = function(){
 };
 
 Arena.prototype.render = function(){
-	for( var i = 0; i < levelPiecesHorz.length; i++ ){
-		levelPiecesHorz[i].draw();
+	for( var i = 0; i < this.levelPiecesHorz.length; i++ ){
+		this.levelPiecesHorz[i].draw();
 	}
 
-	for( var i = 0; i < levelPiecesVert.length; i++ ){
-		levelPiecesVert[i].draw();
+	for( var i = 0; i < this.levelPiecesVert.length; i++ ){
+		this.levelPiecesVert[i].draw();
 	}
 
 
@@ -471,35 +469,35 @@ Arena.prototype.render = function(){
 };
 
 Arena.prototype.drawDebug = function(){
-	debugDraw.clear();
+	this.debugDraw.clear();
 	for(var d = 0; d < 2; ++d){
-		debugDraw.lineStyle(10-d*5, d == 0 ? 0 : 0xFFFFFF);
+		this.debugDraw.lineStyle(10-d*5, d == 0 ? 0 : 0xFFFFFF);
 
-		for(var i = 0; i < players.length; ++i){
-			var player = players[i];
+		for(var i = 0; i < this.players.length; ++i){
+			var player = this.players[i];
 			var lines = player.calcColliderLines();
 			for( var j = 0; j < lines.length; j++ ){
-				debugDraw.moveTo(lines[j].x1, lines[j].y1);
-				debugDraw.lineTo(lines[j].x2, lines[j].y2);
+				this.debugDraw.moveTo(lines[j].x1, lines[j].y1);
+				this.debugDraw.lineTo(lines[j].x2, lines[j].y2);
 			}
 		}
 
-		for(var i = 0; i < bullets.length; ++i){
-			var b = bullets[i];
-			debugDraw.drawCircle(b.px, b.py, b.radius);
+		for(var i = 0; i < this.bullets.length; ++i){
+			var b = this.bullets[i];
+			this.debugDraw.drawCircle(b.px, b.py, b.radius);
 		}
 
-		for(var i = 0; i < powerups.length; ++i){
-			var p = powerups[i];
-			debugDraw.drawCircle(p.px, p.py, p.radius);
+		for(var i = 0; i < this.powerups.length; ++i){
+			var p = this.powerups[i];
+			this.debugDraw.drawCircle(p.px, p.py, p.radius);
 		}
 
-		debugDraw.lines = debugDraw.lines.concat(boundryLines);
-		for( var i = 0; i < debugDraw.lines.length; i++ ){
-			debugDraw.moveTo(debugDraw.lines[i].x1, debugDraw.lines[i].y1);
-			debugDraw.lineTo(debugDraw.lines[i].x2, debugDraw.lines[i].y2);
+		this.debugDraw.lines = this.debugDraw.lines.concat(this.boundaryLines);
+		for( var i = 0; i < this.debugDraw.lines.length; i++ ){
+			this.debugDraw.moveTo(this.debugDraw.lines[i].x1, this.debugDraw.lines[i].y1);
+			this.debugDraw.lineTo(this.debugDraw.lines[i].x2, this.debugDraw.lines[i].y2);
 		}
-		debugDraw.endFill();
+		this.debugDraw.endFill();
 	}
 }
 Arena.prototype.genWallHorz = function(y, boundaryRadius){
@@ -509,7 +507,7 @@ Arena.prototype.genWallHorz = function(y, boundaryRadius){
 	while( x < size.x + boundaryRadius){
 		var pc = new LevelPiece();
 		pc.init(x, y +  boundaryRadius * 0.5  * ( y > 0 ? 1 : -1), boundaryRadius, colors[c]);
-		levelPiecesHorz.push(pc);
+		this.levelPiecesHorz.push(pc);
 		pieces.push(pc);
 		x += boundaryRadius;
 
@@ -520,7 +518,7 @@ Arena.prototype.genWallHorz = function(y, boundaryRadius){
 	// add pieces to scene, starting from middle and working outwards
 	while(pieces.length > 0){
 		var i = Math.min(pieces.length-1, Math.round((pieces.length-1)/2));
-		layers.boundaries.addChild(pieces[i].graphics);
+		this.layers.boundaries.addChild(pieces[i].graphics);
 		pieces.splice(i,1);
 	}
 }
@@ -532,7 +530,7 @@ Arena.prototype.genWallVert = function(x, boundaryRadius){
 	while( y < size.y + boundaryRadius){
 		var pc = new LevelPiece();
 		pc.init( x +  boundaryRadius * 0.5  * ( x > 0 ? 1 : -1), y, boundaryRadius, colors[c]);
-		levelPiecesVert.push(pc);
+		this.levelPiecesVert.push(pc);
 		pieces.push(pc);
 		y += boundaryRadius;
 
@@ -543,22 +541,22 @@ Arena.prototype.genWallVert = function(x, boundaryRadius){
 	// add pieces to scene, starting from middle and working outwards
 	while(pieces.length > 0){
 		var i = Math.min(pieces.length-1, Math.round((pieces.length-1)/2));
-		layers.boundaries.addChild(pieces[i].graphics);
+		this.layers.boundaries.addChild(pieces[i].graphics);
 		pieces.splice(i,1);
 	}
 }
 
 Arena.prototype.updateLevel = function(){
 
-	for( var i = 0; i < levelPiecesHorz.length; i++ ){
-		levelPiecesHorz[i].update();
+	for( var i = 0; i < this.levelPiecesHorz.length; i++ ){
+		this.levelPiecesHorz[i].update();
 	}
 
-	for( var i = 0; i < levelPiecesVert.length; i++ ){
-		levelPiecesVert[i].update();
+	for( var i = 0; i < this.levelPiecesVert.length; i++ ){
+		this.levelPiecesVert[i].update();
 	}
 
-	var entities = players.concat(bullets);
+	var entities = this.players.concat(this.bullets);
 	for(var i = 0; i < entities.length; ++i){
 		var entity = entities[i];
 		var entityPieces = this.getPieceForEntity(entity);
@@ -597,10 +595,10 @@ Arena.prototype.getPieceForEntity = function(entity){
 	if(py < 0){ py = 0 }
 	if(py > size.y){ py = size.y }
 
-	var horz = py < (size.y / 2) ? levelPiecesHorz.slice(0, levelPiecesHorz.length / 2)
-								: levelPiecesHorz.slice(levelPiecesHorz.length / 2, levelPiecesHorz.length);
-	var vert = px < (size.x / 2) ? levelPiecesVert.slice(0, levelPiecesVert.length / 2)
-								: levelPiecesVert.slice(levelPiecesVert.length / 2, levelPiecesVert.length);
+	var horz = py < (size.y / 2) ? this.levelPiecesHorz.slice(0, this.levelPiecesHorz.length / 2)
+								: this.levelPiecesHorz.slice(this.levelPiecesHorz.length / 2, this.levelPiecesHorz.length);
+	var vert = px < (size.x / 2) ? this.levelPiecesVert.slice(0, this.levelPiecesVert.length / 2)
+								: this.levelPiecesVert.slice(this.levelPiecesVert.length / 2, this.levelPiecesVert.length);
 	var res = {
 		x : this.getPiecesForArr(horz, px),
 		y : this.getPiecesForArr(vert, py)
@@ -630,14 +628,14 @@ Arena.prototype.getPiecesForArr = function(arr, playerAxisVal, roundFunc){
 
 Arena.prototype.debugPieces = function(res){
 
-	for( var i = 0; i < levelPiecesHorz.length; i++ ){
-		levelPiecesHorz[i].color = 0xff0000;
-		levelPiecesHorz[i].shapeDirty = true;
+	for( var i = 0; i < this.levelPiecesHorz.length; i++ ){
+		this.levelPiecesHorz[i].color = 0xff0000;
+		this.levelPiecesHorz[i].shapeDirty = true;
 	}
 
-	for( var i = 0; i < levelPiecesVert.length; i++ ){
-		levelPiecesVert[i].color = 0xff0000;
-		levelPiecesVert[i].shapeDirty = true;
+	for( var i = 0; i < this.levelPiecesVert.length; i++ ){
+		this.levelPiecesVert[i].color = 0xff0000;
+		this.levelPiecesVert[i].shapeDirty = true;
 	}
 
 	res.x[0].color = 0x00ff00;
@@ -649,7 +647,7 @@ Arena.prototype.debugPieces = function(res){
 Arena.prototype.castRay = function(originX, originY, dirX, dirY, lines){
 	var intersect = this.rayTestLines(originX, originY, dirX, dirY, lines);
 	if(intersect != null){
-		debugDraw.lines.push({
+		this.debugDraw.lines.push({
 			x1:originX,
 			y1:originY,
 			x2:intersect.collision.x,
