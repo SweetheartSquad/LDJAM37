@@ -56,6 +56,7 @@ function update(){
 			transition = Math.max(0.0, transition-0.02);
 			transitionDirection = -1;
 			if(transition < 0.0001){
+				sounds["transition"].play();
 				arena = new Arena(menu.getPlayers());
 				menu.destroy();
 				menu = false;
@@ -70,6 +71,7 @@ function update(){
 			transition = Math.max(0.0, transition-0.02);
 			transitionDirection = -1;
 			if(transition < 0.0001){
+				sounds["transition"].play();
 				menu = new Menu(arena.getPlayers());
 
 				var players = [];

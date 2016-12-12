@@ -84,6 +84,12 @@ $(document).ready(function(){
 		loop:false,
 		volume:1
 	});
+	sounds["transition"]=new Howl({
+		urls:["assets/audio/fweep.ogg"],
+		autoplay:false,
+		loop:false,
+		volume:1
+	});
 
 	// create render texture
 	renderTexture = PIXI.RenderTexture.create(size.x,size.y,PIXI.SCALE_MODES.NEAREST,1);
