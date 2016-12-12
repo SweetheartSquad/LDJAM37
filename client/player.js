@@ -32,17 +32,36 @@ function Player(){
 
 	this.container = new PIXI.Container();
 
+	this.partsContainer = new PIXI.Container();
+	this.heartsContainer = new PIXI.Container();
+
 	this.head = new PIXI.Graphics();
 	this.body = new PIXI.Graphics();
 	this.footL = new PIXI.Graphics();
 	this.footR = new PIXI.Graphics();
 	this.arms = new PIXI.Graphics();
 
-	this.container.addChild(this.body);
-	this.container.addChild(this.head);
-	this.container.addChild(this.footL);
-	this.container.addChild(this.footR);
-	this.container.addChild(this.arms);
+	this.container.addChild(this.partsContainer);
+	this.container.addChild(this.heartsContainer);
+
+	this.partsContainer.addChild(this.body);
+	this.partsContainer.addChild(this.head);
+	this.partsContainer.addChild(this.footL);
+	this.partsContainer.addChild(this.footR);
+	this.partsContainer.addChild(this.arms);
+
+	this.hearts = [];
+
+	this.lives = 3;
+	for(var i = 1; i <= this.lives; ++i){
+		var heart = new PIXI.Graphics();
+		heart.x = (i-(this.lives+1)/2)*30;
+		heart.y = -100;
+		this.hearts.push(heart);
+
+		this.heartsContainer.addChild(heart);
+	}
+	this.updateLives();
 	
 	this.colliderLines = this.calcColliderLines();
 
@@ -119,9 +138,14 @@ Player.prototype.update = function(){
 	}
 	if(this.hitDelay > 0){
 		this.hitDelay -= 1;
-		this.container.visible = Math.round(this.hitDelay/4)%2 == 0;
+		this.partsContainer.visible = Math.round(this.hitDelay/4)%2 == 0;
+		this.heartsContainer.visible = true;
+
+		this.hearts[this.lives].scale.x = this.hearts[this.lives].scale.y = 2;
+		this.hearts[this.lives].position.x = (this.lives-1-(this.hearts.length+1)/2)*30+90;
 	}else{
-		this.container.visible = true;
+		this.partsContainer.visible = true;
+		this.heartsContainer.visible = false;
 	}
 };
 
@@ -171,6 +195,34 @@ Player.prototype.draw = function(){
 	this.debug.drawCircle(0, 0, this.radius);
 	this.debug.endFill();
 };
+
+Player.prototype.updateLives = function(){
+	for(var i = 0; i < this.hearts.length; ++i){
+		var heart = this.hearts[i];
+		
+		heart.clear();
+		heart.beginFill(0xFF0000);
+		
+		if(i < this.lives){
+			// draw full hearts for remaining lives
+			this.renderSVG(heart, "M14.438-5.565C14.438,4.454,0,12.576,0,12.576S-14.438,4.454-14.438-5.565C-14.438-15.585,0-16.013,0-7.329C0-16.013,14.438-15.585,14.438-5.565z");
+		}else if(i == this.lives){
+			// draw broken heart for previously lost life
+			this.renderSVG(heart, "M3.345-14.762C1.413-13.842,0-12.037,0-9.329c0-6.262-7.507-7.784-11.695-4.389C-10.18-11.586-2.486-3.359-0.189-1.342C2.313-3.24,4.718-5.307,7.048-7.486C5.767-9.912,4.604-12.337,3.345-14.762z");
+			this.renderSVG(heart, "M16.507-16.942c-2.341-2.593-6.319-3.174-9.162-1.82c1.259,2.425,2.422,4.851,3.704,7.276C12.917-13.234,14.742-15.05,16.507-16.942z");
+			this.renderSVG(heart, "M16.507-10.942C14.742-9.05,6.313-1.24,3.811,0.658c1.236,1.086,6.37,5.308,7.682,6.35c3.516-3.261,6.946-7.69,6.946-12.573C18.438-7.861,17.675-9.647,16.507-10.942z");
+			this.renderSVG(heart, "M9.582,9.855c-0.629,2.565-1.358,4.916-1.426,7.36c1.432-0.966,3.395-2.406,5.337-4.208C12.181,11.966,10.874,10.917,9.582,9.855z");
+			this.renderSVG(heart, "M-0.189,2.658C-2.834,4.665-5.576,6.497-8.43,8.107C-4.466,12.062,0,14.576,0,14.576s0.861-0.487,2.156-1.361c0.068-2.444,0.797-4.795,1.426-7.36C2.308,4.807,1.047,3.744-0.189,2.658z");
+			this.renderSVG(heart, "M-15.695-11.718c-1.619,1.313-2.743,3.358-2.743,6.152c0,1.229,0.224,2.428,0.605,3.588c2.452-1.005,4.572-2.424,7.063-3.726C-12.523-7.597-14.18-9.586-15.695-11.718z");
+			this.renderSVG(heart, "M-6.189,4.658c-2.297-2.017-4.507-4.121-6.582-6.361c-2.491,1.302-4.611,2.721-7.063,3.726c0.998,3.038,3.114,5.801,5.403,8.084C-11.576,8.497-8.834,6.665-6.189,4.658z");
+		}else{
+			// don't draw the rest of the lost lives
+		}
+		
+		heart.endFill();
+
+	}
+}
 
 Player.prototype.canJump = function(){
 	return this.touchingFloor || this.touchingWall || this.doubleJump;

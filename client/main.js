@@ -382,6 +382,9 @@ function update(){
 				collision.hit.ay += b.vy;
 
 				collision.hit.hitDelay = 120;
+
+				collision.hit.lives -= 1;
+				collision.hit.updateLives();
 			}else{
 				// bullet hit something else
 
