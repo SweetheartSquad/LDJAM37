@@ -17,18 +17,25 @@ function Bullet(){
 	this.graphics.scale.x = 3;
 	this.graphics.scale.y = 3;
 
+	this.skip = false;
+
 	this.draw();
 };
 
 Bullet.prototype.update = function(){
-	this.px += this.vx;
-	this.py += this.vy;
+	if(this.skip <= 0){
+		this.px += this.vx;
+		this.py += this.vy;
 
-	this.graphics.x = this.px;
-	this.graphics.y = this.py;
-
-	this.graphics.scale.x = lerp(this.graphics.scale.x, 1.0, 0.2);
-	this.graphics.scale.y = lerp(this.graphics.scale.y, 1.0, 0.2);
+		this.graphics.x = this.px;
+		this.graphics.y = this.py;
+		
+		this.graphics.scale.x = lerp(this.graphics.scale.x, 1.0, 0.2);
+		this.graphics.scale.y = lerp(this.graphics.scale.y, 1.0, 0.2);
+	}else{
+		this.skip -= 1;
+	}
+	
 };
 
 Bullet.prototype.draw = function(){
