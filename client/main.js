@@ -26,6 +26,8 @@ function init(){
 
 	renderSprite.filters = [screen_filter];
 
+	transition = -1;
+
 
 	menu = new Menu();
 
@@ -50,18 +52,29 @@ function update(){
 	if(menu){
 		menu.update();
 		if(menu.isDone()){
-			arena = new Arena(menu.getPlayers());
-			menu.destroy();
-			menu = false;
+			transition = Math.max(0.0, transition-0.02);
+			if(transition < 0.0001){
+				arena = new Arena(menu.getPlayers());
+				menu.destroy();
+				menu = false;
+			}
+		}else{
+			transition = Math.min(1.0, transition+0.02);
 		}
 	}else if(arena){
 		arena.update();
 		if(arena.done){
-			arena.destroy();
-			arena = false;
+			transition = Math.max(0.0, transition-0.02);
+			if(transition < 0.0001){
+				arena.destroy();
+				arena = false;
 
-			menu = new Menu();
+				menu = new Menu();
+			}
+		}else{
+			transition = Math.min(1.0, transition+0.02);
 		}
+	}else{
 	}
 	
 	// update input managers
@@ -72,6 +85,7 @@ function update(){
 
 
 function render(){
+	screen_filter.uniforms["transition"] = transition;
 	screen_filter.uniforms["time"] = curTime/1000;
 
 	if(menu){
