@@ -98,8 +98,8 @@ Player.prototype.update = function(){
 	// update actual graphics
 	this.container.position.x = this.px;
 	this.container.position.y = this.py;
-	this.container.scale.x = lerp(this.container.scale.x, 1.0+Math.sin(curTime/100.0)/10.0, 0.1);
-	this.container.scale.y = lerp(this.container.scale.y, 1.0+Math.cos(curTime/100.0+0.5)/20.0, 0.1);
+	this.container.scale.x = lerp(this.container.scale.x, 1.0+Math.sin(curTime/100+this.id*Math.PI)/10.0, 0.1);
+	this.container.scale.y = lerp(this.container.scale.y, 1.0+Math.cos(curTime/100.0+0+this.id*Math.PI)/20.0, 0.1);
 
 	this.partsContainer.rotation = slerp(this.partsContainer.rotation, this.canAct() ? 0.0 : (this.flipped ? Math.PI/2 : -Math.PI/2), 0.1);
 
