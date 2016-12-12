@@ -243,6 +243,10 @@ Player.prototype.canShoot = function(){
 	return this.shootDelay <= 0 && this.hitDelay <= 0;
 };
 
+Player.prototype.isDead = function(){
+	return this.lives == 0;
+}
+
 
 Player.prototype.renderSVG = function(g, input){
 	input = input.replace(/[-]/g,",-");

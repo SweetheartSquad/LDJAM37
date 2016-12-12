@@ -164,153 +164,156 @@ function update(){
 
 		if(input.fullscreen){ fullscreen.toggleFullscreen(); }
 
-		// move
-		player.ax += input.x;
 
-		// flip if moving horizontally
-		if(Math.abs(input.x) > 0){
-			player.flipped = input.x < 0;
-		}
+		if(!player.isDead()){
+			// move
+			player.ax += input.x;
 
-		// aim
-		player.aimx = player.flipped ? -1 : 1;
-		if(Math.abs(input.y) > Math.abs(input.x)){
-			player.aimx = 0;
-			player.aimy = Math.sign(input.y);
-		}else if(Math.abs(input.y) > 0.5){
-			player.aimx /= 2;
-			player.aimy = Math.sign(input.y) / 2;
-		}else{
-			player.aimy = 0;
-		}
+			// flip if moving horizontally
+			if(Math.abs(input.x) > 0){
+				player.flipped = input.x < 0;
+			}
 
-		// jump
-		if(input.jump && player.canJump()){
-
-
-			if(player.canWallJump()){
-				// walljump
-				player.ay += -30;
-				player.ax += -40 * (player.flipped ? -1 : 1)
-
-				// kick out
-				player.footL.x += 50 * (player.flipped ? -1 : 1);
-				player.footR.x += 50 * (player.flipped ? -1 : 1);
-				player.footL.y += 20;
-				player.footR.y += 20;
-
-				// squash/stretch
-				player.container.scale.y += 0.5;
-				player.container.rotation -= Math.PI/4 * (player.flipped ? -1 : 1);
-
-				player.doubleJump = true;
-			}else if(player.canDoubleJump()){
-				// double jump
-				player.doubleJump = false;
-				player.ay += -30;
-
-				// squash/stretch
-				player.container.scale.x -= 0.5;
-				player.container.scale.y += 0.5;
+			// aim
+			player.aimx = player.flipped ? -1 : 1;
+			if(Math.abs(input.y) > Math.abs(input.x)){
+				player.aimx = 0;
+				player.aimy = Math.sign(input.y);
+			}else if(Math.abs(input.y) > 0.5){
+				player.aimx /= 2;
+				player.aimy = Math.sign(input.y) / 2;
 			}else{
-				// normal jump
-				player.ay += -40;
-
-				// squash/stretch
-				player.container.scale.x -= 0.5;
-				player.container.scale.y += 0.5;
-
-				// kick up
-				player.footL.y += 50;
-				player.footR.y += 50;
-
-				player.doubleJump = true;
+				player.aimy = 0;
 			}
 
-			// if just jumped, can't be touching ground or wall anymore
-			player.touchingWall = false;
-			player.touchingGround = false;
+			// jump
+			if(input.jump && player.canJump()){
 
-			// camera kick/zoom
-			game.scale.x+=0.01;
-			game.scale.y+=0.01;
-			game.position.y+=10;
 
-			sounds["jump"].play();
+				if(player.canWallJump()){
+					// walljump
+					player.ay += -30;
+					player.ax += -40 * (player.flipped ? -1 : 1)
 
-			// particles
-			for(var p = 0; p < Math.random()*5+5; ++p){
-				var particle = new Particle(
-					player.px,
-					player.py,
-					-0.5*player.vx*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*5,
-					-0.5*player.vy*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*5,
-					10+Math.random(5)
-				);
+					// kick out
+					player.footL.x += 50 * (player.flipped ? -1 : 1);
+					player.footR.x += 50 * (player.flipped ? -1 : 1);
+					player.footL.y += 20;
+					player.footR.y += 20;
 
-				particles.push(particle);
+					// squash/stretch
+					player.container.scale.y += 0.5;
+					player.container.rotation -= Math.PI/4 * (player.flipped ? -1 : 1);
 
-				layers.bullets.addChild(particle.graphics);
+					player.doubleJump = true;
+				}else if(player.canDoubleJump()){
+					// double jump
+					player.doubleJump = false;
+					player.ay += -30;
+
+					// squash/stretch
+					player.container.scale.x -= 0.5;
+					player.container.scale.y += 0.5;
+				}else{
+					// normal jump
+					player.ay += -40;
+
+					// squash/stretch
+					player.container.scale.x -= 0.5;
+					player.container.scale.y += 0.5;
+
+					// kick up
+					player.footL.y += 50;
+					player.footR.y += 50;
+
+					player.doubleJump = true;
+				}
+
+				// if just jumped, can't be touching ground or wall anymore
+				player.touchingWall = false;
+				player.touchingGround = false;
+
+				// camera kick/zoom
+				game.scale.x+=0.01;
+				game.scale.y+=0.01;
+				game.position.y+=10;
+
+				sounds["jump"].play();
+
+				// particles
+				for(var p = 0; p < Math.random()*5+5; ++p){
+					var particle = new Particle(
+						player.px,
+						player.py,
+						-0.5*player.vx*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*5,
+						-0.5*player.vy*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*5,
+						10+Math.random(5)
+					);
+
+					particles.push(particle);
+
+					layers.bullets.addChild(particle.graphics);
+				}
 			}
-		}
 
 
-		// shoot
-		if(input.shoot && player.canShoot()){
-			// bullet
-			var b = new Bullet();
-			b.owner = player;
-			b.px = player.px;
-			b.py = player.py;
-			b.vx = Math.sign(player.aimx)*20.0 + Math.sign(player.vx)*0.25;
-			b.vy = Math.sign(player.aimy)*20.0 + Math.sign(player.vy)*0.25;
+			// shoot
+			if(input.shoot && player.canShoot()){
+				// bullet
+				var b = new Bullet();
+				b.owner = player;
+				b.px = player.px;
+				b.py = player.py;
+				b.vx = Math.sign(player.aimx)*20.0 + Math.sign(player.vx)*0.25;
+				b.vy = Math.sign(player.aimy)*20.0 + Math.sign(player.vy)*0.25;
 
-			// prevent bullets from firing too straight
-			if(Math.abs(b.vx) < 0.001){
-				b.vx = (Math.random()-Math.random())*0.1;
-			}
-			if(Math.abs(b.vy) < 0.001){
-				b.vy = (Math.random()-Math.random())*0.1;
-			}
+				// prevent bullets from firing too straight
+				if(Math.abs(b.vx) < 0.001){
+					b.vx = (Math.random()-Math.random())*0.1;
+				}
+				if(Math.abs(b.vy) < 0.001){
+					b.vy = (Math.random()-Math.random())*0.1;
+				}
 
-			bullets.push(b);
-			layers.bullets.addChild(b.graphics);
+				bullets.push(b);
+				layers.bullets.addChild(b.graphics);
 
-			// kickback
-			player.ax -= player.aimx * 20.0;
-			player.ay -= player.aimy * 20.0;
-			
-			// recoil
-			player.container.rotation -= Math.PI/3 * (player.flipped ? -1 : 1);
+				// kickback
+				player.ax -= player.aimx * 20.0;
+				player.ay -= player.aimy * 20.0;
+				
+				// recoil
+				player.container.rotation -= Math.PI/3 * (player.flipped ? -1 : 1);
 
-			// camera kick/zoom
-			game.position.x += player.aimx*20.0;
-			game.position.y += player.aimy*20.0;
-			game.scale.x+=0.05;
-			game.scale.y+=0.05;
+				// camera kick/zoom
+				game.position.x += player.aimx*20.0;
+				game.position.y += player.aimy*20.0;
+				game.scale.x+=0.05;
+				game.scale.y+=0.05;
 
-			sounds["shoot"].play();
+				sounds["shoot"].play();
 
-			// pop
-			player.container.scale.x += 1;
-			player.container.scale.y += 1;
+				// pop
+				player.container.scale.x += 1;
+				player.container.scale.y += 1;
 
-			// prevent another shot for 100 frames
-			player.shootDelay = Player.shootDelay;
-			
-			// particles
-			for(var p = 0; p < Math.random()*5+5; ++p){
-				var particle = new Particle(
-					b.px,
-					b.py,
-					b.vx*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*3,
-					b.vy*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*3,
-					30+Math.random(15)
-				);
+				// prevent another shot for 100 frames
+				player.shootDelay = Player.shootDelay;
+				
+				// particles
+				for(var p = 0; p < Math.random()*5+5; ++p){
+					var particle = new Particle(
+						b.px,
+						b.py,
+						b.vx*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*3,
+						b.vy*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*3,
+						30+Math.random(15)
+					);
 
-				particles.push(particle);
+					particles.push(particle);
 
-				layers.bullets.addChild(particle.graphics);
+					layers.bullets.addChild(particle.graphics);
+				}
 			}
 		}
 
@@ -383,10 +386,12 @@ function update(){
 				collision.hit.ax += b.vx;
 				collision.hit.ay += b.vy;
 
-				collision.hit.hitDelay = Player.hitDelay;
 
-				collision.hit.lives -= 1;
-				collision.hit.updateLives();
+				if(!collision.hit.isDead()){
+					collision.hit.hitDelay = Player.hitDelay;
+					collision.hit.lives -= 1;
+					collision.hit.updateLives();
+				}
 			}else{
 				// bullet hit something else
 
