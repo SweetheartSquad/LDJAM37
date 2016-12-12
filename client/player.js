@@ -203,6 +203,12 @@ Player.prototype.draw = function(){
 	this.arms.beginFill(0xb38589);
 	renderSVG(this.arms, "M46.73-3.297L44.609-13.81l-9-5.978l1.438-2.165l8.775,5.828c0,0,5.263-8.557,5.741-8.757s2.124,1.447,2.124,1.447l-5.925,8.989l2.141,10.509L46.73-3.297z");
 	this.arms.endFill();
+	this.arms.lineStyle(4, 0x8aa548);
+	this.arms.moveTo(this.bulletPreview.px, this.bulletPreview.py);
+	this.arms.lineTo(50, -25);
+	this.arms.moveTo(this.bulletPreview.px, this.bulletPreview.py);
+	this.arms.lineTo(40, -20);
+	this.arms.endFill();
 
 	// debug
 	this.debug.clear();
