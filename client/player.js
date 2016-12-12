@@ -32,6 +32,8 @@ function Player(_id){
 
 	this.hitDelay = 0;
 
+	this.powerupTime = 0;
+
 	this.container = new PIXI.Container();
 
 	this.partsContainer = new PIXI.Container();
@@ -166,6 +168,11 @@ Player.prototype.update = function(){
 	}else{
 		this.partsContainer.visible = true;
 		this.heartsContainer.visible = false;
+	}
+
+	if(this.powerupTime > 0){
+		this.powerupTime -= 1;
+		this.powerupEffect(this);
 	}
 
 	this.bulletPreview.graphics.visible = this.canShoot();

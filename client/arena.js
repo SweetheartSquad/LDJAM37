@@ -125,17 +125,17 @@ function Arena(_players){
 
 
 	// powerups
-	/*var p1 = new Powerup();
+	var p1 = new Powerup(1);
 	this.scene.addChild(p1.graphics);
 	p1.px = size.x/3;
 	p1.py = size.y/2;
 	this.powerups.push(p1);
 
-	var p2 = new Powerup();
+	var p2 = new Powerup(0);
 	this.scene.addChild(p2.graphics);
 	p2.px = size.x/3*2;
 	p2.py = size.y/2;
-	this.powerups.push(p2);*/
+	this.powerups.push(p2);
 
 	this.debugDraw = new PIXI.Graphics();
 	this.debugDraw.lines = [];
@@ -546,6 +546,10 @@ Arena.prototype.update = function(){
 				p.graphics.parent.removeChild(p.graphics);
 				p.graphics.destroy();
 				this.powerups.splice(i,1);
+
+				player.powerupTime = Powerup.types[p.type].duration;
+				player.powerupEffect = Powerup.types[p.type].effect;
+
 				break;
 			}
 		}
