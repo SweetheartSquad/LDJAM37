@@ -534,6 +534,21 @@ Arena.prototype.update = function(){
 	for(var i = this.powerups.length-1; i >= 0; --i){
 		var p = this.powerups[i];
 		p.update();
+		for(var j = 0; j < this.players.length; ++j){
+			var player = this.players[i];
+
+			var dx = player.px - p.px;
+			var dy = player.py - p.py;
+
+			var d = dx*dx + dy*dy;
+			var r = player.radius + p.radius;
+			if(d < r*r){
+				p.graphics.parent.removeChild(p.graphics);
+				p.graphics.destroy();
+				this.powerups.splice(i,1);
+				break;
+			}
+		}
 	}
 
 	// update collisions
