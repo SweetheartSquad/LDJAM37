@@ -555,20 +555,21 @@ function updateLevel(){
 		levelPiecesVert[i].update();
 	}
 
-	for(var i = 0; i < players.length; ++i){
-		var player = players[i];
-		var playerPieces = getPieceForPlayer(player);
-		var distX = Math.abs(player.py-playerPieces.x[0].py) / (player.radius + playerPieces.x[0].rad);
-		var distY = Math.abs(player.px-playerPieces.y[0].px) / (player.radius + playerPieces.y[0].rad);
+	var entities = players.concat(bullets);
+	for(var i = 0; i < entities.length; ++i){
+		var entity = entities[i];
+		var entityPieces = getPieceForEntity(entity);
+		var distX = Math.abs(entity.py-entityPieces.x[0].py) / (entity.radius + entityPieces.x[0].rad);
+		var distY = Math.abs(entity.px-entityPieces.y[0].px) / (entity.radius + entityPieces.y[0].rad);
 
-		var ratioX = (player.px - playerPieces.x[0].px) / (playerPieces.x[1].px - playerPieces.x[0].px);
-		var ratioY = (player.py - playerPieces.y[0].py) / (playerPieces.y[1].py - playerPieces.y[0].py);
+		var ratioX = (entity.px - entityPieces.x[0].px) / (entityPieces.x[1].px - entityPieces.x[0].px);
+		var ratioY = (entity.py - entityPieces.y[0].py) / (entityPieces.y[1].py - entityPieces.y[0].py);
 
-		playerPieces.x[0].compress(1, clamp(0.1, lerp(1.0, distX, 1.0-ratioX), 1.0));
-		playerPieces.x[1].compress(1, clamp(0.1, lerp(1.0, distX, ratioX), 1.0));
+		entityPieces.x[0].compress(1, clamp(0.1, lerp(1.0, distX, 1.0-ratioX), 1.0));
+		entityPieces.x[1].compress(1, clamp(0.1, lerp(1.0, distX, ratioX), 1.0));
 		
-		playerPieces.y[0].compress(clamp(0.1, lerp(1.0, distY, 1.0-ratioY), 1.0), 1);
-		playerPieces.y[1].compress(clamp(0.1, lerp(1.0, distY, ratioY), 1.0), 1);
+		entityPieces.y[0].compress(clamp(0.1, lerp(1.0, distY, 1.0-ratioY), 1.0), 1);
+		entityPieces.y[1].compress(clamp(0.1, lerp(1.0, distY, ratioY), 1.0), 1);
 
 		// debug pieces for player 1
 		if(i == 0){
@@ -585,9 +586,9 @@ function genLevel(){
 	genWallHorz(size.y, rad);
 }
 
-function getPieceForPlayer(player){
-	var px = player.px;
-	var py = player.py;
+function getPieceForEntity(entity){
+	var px = entity.px;
+	var py = entity.py;
 	if(px < 0){ px = 0 }
 	if(px > size.x){ px = size.x }
 	if(py < 0){ py = 0 }
