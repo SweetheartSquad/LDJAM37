@@ -28,7 +28,7 @@ function Player(_id){
 
 	this.doubleJump = false;
 
-	this.shootDelay = 0;
+	this.shootDelay = Player.shootDelay;
 
 	this.hitDelay = 0;
 
@@ -51,6 +51,11 @@ function Player(_id){
 	this.partsContainer.addChild(this.footL);
 	this.partsContainer.addChild(this.footR);
 	this.partsContainer.addChild(this.arms);
+
+	this.bulletPreview = new Bullet();
+	this.bulletPreview.px = -20;
+	this.bulletPreview.py = -10;
+	this.arms.addChild(this.bulletPreview.graphics);
 
 	this.hearts = [];
 
@@ -76,6 +81,9 @@ Player.shootDelay = 100;
 Player.hitDelay = 120;
 
 Player.prototype.update = function(){
+	this.bulletPreview.update();
+	this.bulletPreview.graphics.scale.x = this.bulletPreview.graphics.scale.y = 0.5;
+
 	// integrate velocity by acceleration
 	this.vx += this.ax;
 	this.vy += this.ay;
@@ -152,6 +160,8 @@ Player.prototype.update = function(){
 		this.partsContainer.visible = true;
 		this.heartsContainer.visible = false;
 	}
+
+	this.bulletPreview.graphics.visible = this.canShoot();
 };
 
 Player.prototype.draw = function(){
