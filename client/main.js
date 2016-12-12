@@ -423,10 +423,10 @@ function update(){
 				sounds["collision"].play();
 
 				// camera kick/zoom
-				game.position.x += b.vx;
-				game.position.y += b.vy;
-				game.scale.x+=0.01;
-				game.scale.y+=0.01;
+				game.position.x += b.vx/3;
+				game.position.y += b.vy/3;
+				game.scale.x+=0.005;
+				game.scale.y+=0.005;
 			}
 
 			// particles
