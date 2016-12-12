@@ -279,7 +279,6 @@ function update(){
 	// update bullets
 	for(var i = bullets.length-1; i >= 0; --i){
 		var b = bullets[i];
-		b.update();
 		var coll = castRay(b.px, b.py, b.vx, b.vy, collLines);
 		if(coll != null){
 			if(coll.length < b.radius ){
@@ -292,8 +291,8 @@ function update(){
 					b.graphics.scale.x += 1;
 					b.graphics.scale.y += 1;
 
-					b.px = coll.collision.x + Math.sign(Math.floor(b.vx))*b.radius;
-					b.py = coll.collision.y + Math.sign(Math.floor(b.vy))*b.radius;
+					///b.px = coll.collision.x + Math.sign(Math.floor(b.vx))*b.radius*2;
+					///b.py = coll.collision.y + Math.sign(Math.floor(b.vy))*b.radius*2;
 
 					b.skip = 2;
 
@@ -313,6 +312,7 @@ function update(){
 				}
 			}
 		}
+		b.update();
 	}
 
 	// update particles
