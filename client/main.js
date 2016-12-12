@@ -383,11 +383,19 @@ function update(){
 
 				sounds["hit"].play();
 
+				// camera kick/zoom
+				game.scale.x += 0.1;
+				game.scale.y += 0.1;
+				game.x += b.vx;
+				game.y += b.vy;
+
+
+				// push/rotate player
 				collision.hit.ax += b.vx;
 				collision.hit.ay += b.vy;
-
 				collision.hit.partsContainer.rotation += collision.hit.flipped ? Math.PI*0.75 : -Math.PI*0.75;
 
+				// if alive, take off a life
 				if(!collision.hit.isDead()){
 					collision.hit.hitDelay = Player.hitDelay;
 					collision.hit.lives -= 1;
