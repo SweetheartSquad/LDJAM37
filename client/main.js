@@ -26,7 +26,7 @@ function init(){
 
 	renderSprite.filters = [screen_filter];
 
-	transition = -1;
+	transition = 0;
 	transitionDirection = 1;
 
 

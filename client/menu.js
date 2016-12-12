@@ -2,9 +2,6 @@ function Menu(_players){
 	this.scene = new PIXI.Container();
 	game.addChild(this.scene);
 
-	game.position.x = 0;
-	game.position.y = 0;
-
 	this.bg = new PIXI.Sprite(PIXI.loader.resources.bg.texture);
 	this.bg.width = size.x;
 	this.bg.height = size.y;
@@ -25,6 +22,7 @@ function Menu(_players){
 	this.title.tint = 0x999999;
 	this.scene.addChild(this.title);
 
+	game.scale.x = game.scale.y = 3.5;
 
 	this.playerGraphics=[];
 
@@ -60,6 +58,14 @@ Menu.prototype.destroy = function(){
 };
 
 Menu.prototype.update = function(){
+	game.position.x = size.x/2;
+	game.position.y = size.y/2;
+
+	this.scene.position.x = Math.sin(curTime/2000.0)*10-size.x/2;
+	this.scene.position.y = Math.cos(curTime/3000.0)*10-size.y/2;
+
+	game.scale.x = game.scale.y = lerp(game.scale.x, 1.25, 0.05);
+
 	if(!this.isDone()){
 		for(var i = 0; i < 4; ++i){
 			var input = getInput(i);
@@ -67,13 +73,16 @@ Menu.prototype.update = function(){
 			if(input.jump){
 				if(this.ready[i]){
 					// nothing
-					this.ready[i] = true;
 				}else if(this.joined[i]){
 					// ready up
 					this.ready[i] = true;
+					game.scale.x += 0.1;
+					game.scale.y += 0.1;
 				}else{
 					// join
 					this.joined[i] = true;
+					game.scale.x += 0.1;
+					game.scale.y += 0.1;
 				}
 			}
 
@@ -81,9 +90,13 @@ Menu.prototype.update = function(){
 				if(this.ready[i]){
 					// unready
 					this.ready[i] = false;
+					game.scale.x -= 0.1;
+					game.scale.y -= 0.1;
 				}else if(this.joined[i]){
 					// unjoin
 					this.joined[i] = false;
+					game.scale.x -= 0.1;
+					game.scale.y -= 0.1;
 				}else{
 					// nothing
 				}

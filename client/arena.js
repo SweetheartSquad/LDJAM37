@@ -50,6 +50,8 @@ function Arena(_players){
 	game.position.x = size.x/2;
 	game.position.y = size.y/2;
 
+	game.scale.x = game.scale.y = 3.5;
+
 	this.scene.addChild(this.layers.bg);
 	this.scene.addChild(this.layers.players);
 	this.scene.addChild(this.layers.particles);
