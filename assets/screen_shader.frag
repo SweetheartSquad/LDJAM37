@@ -13,19 +13,22 @@ void main(void){
 	vec2 uvs = vTextureCoord.xy;
 
 	uvs *= bufferSize;
-	uvs/=4.0;
-	uvs.x = floor(uvs.x+0.5);
-	uvs.y = floor(uvs.y+0.5);
-	uvs*=4.0;
-	uvs/=bufferSize;
 
-	vec4 fg =texture2D(uSampler, uvs);
-	
-	// convert from almost NDC (uvs are based on largest power-of-2 instead of actual texture size) to pixels
-	uvs *= bufferSize;
+	vec4 fg =texture2D(uSampler, uvs/bufferSize);
 
+	float f =
+	distance(fg,texture2D(uSampler, (uvs+vec2(1,1))/bufferSize))+
+	distance(fg,texture2D(uSampler, (uvs+vec2(1,-1))/bufferSize))+
+	distance(fg,texture2D(uSampler, (uvs+vec2(-1,-1))/bufferSize))+
+	distance(fg,texture2D(uSampler, (uvs+vec2(-1,1))/bufferSize))+
+	distance(fg,texture2D(uSampler, (uvs+vec2(-1,0))/bufferSize))+
+	distance(fg,texture2D(uSampler, (uvs+vec2(0,1))/bufferSize))+
+	distance(fg,texture2D(uSampler, (uvs+vec2(1,0))/bufferSize))+
+	distance(fg,texture2D(uSampler, (uvs+vec2(0,-1))/bufferSize));
 
-	fg.rgb = mix(fg.rgb, fg.rgb/(vec3(255.0, 149.0, 162.0)/255.0), 1.0*uvs.y/screen.y*0.5);
+	fg.rgb-=vec3(smoothstep(0.0, 1.0, f/1.0));
+
+	fg.rgb = mix(fg.rgb, fg.rgb/(vec3(255.0, 149.0, 162.0)/255.0), (1.0 - uvs.y/screen.y)*0.75);
 
 	// transition circles
 	float transitionSize = 150.0;
