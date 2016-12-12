@@ -467,7 +467,7 @@ Arena.prototype.render = function(){
 	}
 
 
-	this.drawDebug();
+	//this.drawDebug();
 };
 
 Arena.prototype.drawDebug = function(){
