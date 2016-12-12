@@ -157,7 +157,7 @@ Player.prototype.update = function(){
 Player.prototype.draw = function(){
 	// head
 	this.head.clear();
-	this.head.beginFill(0xFF0000);
+	this.head.beginFill(0xff959c);
 	renderSVG(this.head, "M9.264,2.32c0,0,4.625-43.945-11.404-37.715c-16.028,6.231-9.04,36.543-6.969,38.347C3.679,15.435,9.264,2.32,9.264,2.32");
 	this.head.beginFill(0xFFFFFF);
 	this.head.drawEllipse(-5,-20, 3, 6);
@@ -166,31 +166,31 @@ Player.prototype.draw = function(){
 
 	// body
 	this.body.clear();
-	this.body.beginFill(0xFF3300);
+	this.body.beginFill(0x6a689c);
 	renderSVG(this.body, "M21.473,10.333c-0.973,1.167-42.303,0.833-43.138,0S-21.624-36.046,0-36.046S22.446,9.167,21.473,10.333z");
 	this.body.endFill();
 
 
 	// feet
 	this.footL.clear();
-	this.footL.beginFill(0xFF3300);
+	this.footL.beginFill(0x8aa548);
 	renderSVG(this.footL, "M11.858,6.407C12.25,5.625,11.56-6.693-0.078-6.402C-11.715-6.111-12.278,5.876-11.858,6.407S11.858,6.407,11.858,6.407z");
 	this.footL.endFill();
 
 	this.footR.clear();
-	this.footR.beginFill(0xFF3300);
+	this.footR.beginFill(0x8aa548);
 	renderSVG(this.footR, "M11.858,6.407C12.25,5.625,11.56-6.693-0.078-6.402C-11.715-6.111-12.278,5.876-11.858,6.407S11.858,6.407,11.858,6.407z");
 	this.footR.endFill();
 
 	// arms
 	this.arms.clear();
-	this.arms.beginFill(0xFF3300);
+	this.arms.beginFill(0x6a689c);
 	renderSVG(this.arms, "M52.272-1.429l-22.429,5.81L12.71,8.503c0,0-2.934-0.111-3.997-3.051C7.688,2.612,11,1.587,11,1.587L27.763-2.04l23.888-5.738L52.272-1.429z");
 	this.arms.endFill();
-	this.arms.beginFill(0xFF3300);
+	this.arms.beginFill(0x6a689c);
 	renderSVG(this.arms, "M-10.174-13.653L-46.25-3.484l30.947,10.988c0,0,3.137,2.161,5.496-0.904c2.278-2.96-1.265-5.428-1.265-5.428c-0.903-0.603-19.149-4.619-19.149-4.619l21.888-4.605L-10.174-13.653z");
 	this.arms.endFill();
-	this.arms.beginFill(0xFF3300);
+	this.arms.beginFill(0xb38589);
 	renderSVG(this.arms, "M46.73-3.297L44.609-13.81l-9-5.978l1.438-2.165l8.775,5.828c0,0,5.263-8.557,5.741-8.757s2.124,1.447,2.124,1.447l-5.925,8.989l2.141,10.509L46.73-3.297z");
 	this.arms.endFill();
 

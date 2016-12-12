@@ -23,7 +23,9 @@ LevelPiece.prototype.init = function(x, y, rad, color){
 
 LevelPiece.prototype.renderShape = function(){
 	this.graphics.clear();
-	this.graphics.lineStyle(0);
+	this.graphics.beginFill(0x7a5e57);
+	this.graphics.drawCircle(0, 20, this.rad);
+	this.graphics.endFill();
 	this.graphics.beginFill(this.color);
 	this.graphics.drawCircle(0, 0, this.rad);
 	this.graphics.endFill();
@@ -44,10 +46,7 @@ LevelPiece.prototype.draw = function(){
 	}
 };
 
-LevelPiece.prototype.compress = function(x, y){
-	if(x < this.graphics.scale.x){
-		this.graphics.scale.x = lerp(this.graphics.scale.x, x, 0.25);
-	}
+LevelPiece.prototype.compress = function(y){
 	if(y < this.graphics.scale.y){
 		this.graphics.scale.y = lerp(this.graphics.scale.y, y, 0.25);
 	}

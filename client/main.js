@@ -27,6 +27,7 @@ function init(){
 	renderSprite.filters = [screen_filter];
 
 	transition = -1;
+	transitionDirection = 1;
 
 
 	menu = new Menu();
@@ -53,6 +54,7 @@ function update(){
 		menu.update();
 		if(menu.isDone()){
 			transition = Math.max(0.0, transition-0.02);
+			transitionDirection = -1;
 			if(transition < 0.0001){
 				arena = new Arena(menu.getPlayers());
 				menu.destroy();
@@ -60,11 +62,13 @@ function update(){
 			}
 		}else{
 			transition = Math.min(1.0, transition+0.02);
+			transitionDirection = 1;
 		}
 	}else if(arena){
 		arena.update();
 		if(arena.done){
 			transition = Math.max(0.0, transition-0.02);
+			transitionDirection = -1;
 			if(transition < 0.0001){
 				arena.destroy();
 				arena = false;
@@ -73,8 +77,10 @@ function update(){
 			}
 		}else{
 			transition = Math.min(1.0, transition+0.02);
+			transitionDirection = 1;
 		}
 	}else{
+		
 	}
 	
 	// update input managers
@@ -86,6 +92,7 @@ function update(){
 
 function render(){
 	screen_filter.uniforms["transition"] = transition;
+	screen_filter.uniforms["transitionDirection"] = transitionDirection;
 	screen_filter.uniforms["time"] = curTime/1000;
 
 	if(menu){
@@ -175,4 +182,4 @@ function getInput(_playerId){
 	return res;
 }
 
-var colors = [0xff0000, 0xffff00, 0x0000ff];
+var colors = [0xf70208, 0xffec6b, 0x29018c];

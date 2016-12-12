@@ -537,12 +537,21 @@ Arena.prototype.genWallHorz = function(y, boundaryRadius){
 	var pieces = [];
 	while( x < size.x + boundaryRadius){
 		var pc = new LevelPiece();
+
+		if(y > size.x/2){
+			pc.graphics.rotation = Math.PI;
+		}else{
+			pc.graphics.rotation = 0;
+		}
+
 		pc.init(x, y + boundaryRadius * 0.5 * ( y > 0 ? 1 : -1), boundaryRadius, colors[c]);
 		this.levelPiecesHorz.push(pc);
 		pieces.push(pc);
 		x += boundaryRadius;
 
-		c = (c+1)%colors.length;
+		if(pieces.length == 1 || pieces.length%2 == 0){
+			c = (c+1)%colors.length;
+		}
 
 	}
 
@@ -560,13 +569,21 @@ Arena.prototype.genWallVert = function(x, boundaryRadius){
 	var pieces = [];
 	while( y < size.y + boundaryRadius){
 		var pc = new LevelPiece();
+
+		if(x > size.x/2){
+			pc.graphics.rotation = Math.PI/2;
+		}else{
+			pc.graphics.rotation = -Math.PI/2;
+		}
+
 		pc.init( x + boundaryRadius * 0.5 * ( x > 0 ? 1 : -1), y, boundaryRadius, colors[c]);
 		this.levelPiecesVert.push(pc);
 		pieces.push(pc);
 		y += boundaryRadius;
 
-		c = (c+1)%colors.length;
-
+		if(pieces.length == 1 || pieces.length%2 == 0){
+			c = (c+1)%colors.length;
+		}
 	}
 
 	// add pieces to scene, starting from middle and working outwards
@@ -597,11 +614,11 @@ Arena.prototype.updateLevel = function(){
 		var ratioX = (entity.px - entityPieces.x[0].px) / (entityPieces.x[1].px - entityPieces.x[0].px);
 		var ratioY = (entity.py - entityPieces.y[0].py) / (entityPieces.y[1].py - entityPieces.y[0].py);
 
-		entityPieces.x[0].compress(1, clamp(0.1, lerp(1.0, distX, 1.0-ratioX), 1.0));
-		entityPieces.x[1].compress(1, clamp(0.1, lerp(1.0, distX, ratioX), 1.0));
+		entityPieces.x[0].compress(clamp(0.1, lerp(1.0, distX, 1.0-ratioX), 1.0));
+		entityPieces.x[1].compress(clamp(0.1, lerp(1.0, distX, ratioX), 1.0));
 		
-		entityPieces.y[0].compress(clamp(0.1, lerp(1.0, distY, 1.0-ratioY), 1.0), 1);
-		entityPieces.y[1].compress(clamp(0.1, lerp(1.0, distY, ratioY), 1.0), 1);
+		entityPieces.y[0].compress(clamp(0.1, lerp(1.0, distY, 1.0-ratioY), 1.0));
+		entityPieces.y[1].compress(clamp(0.1, lerp(1.0, distY, ratioY), 1.0));
 
 		// debug pieces for player 1
 		if(i == 0){
