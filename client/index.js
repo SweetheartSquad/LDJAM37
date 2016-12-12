@@ -95,7 +95,8 @@ $(document).ready(function(){
 		.add("win_0","assets/win_1.png")
 		.add("win_1","assets/win_2.png")
 		.add("win_2","assets/win_3.png")
-		.add("win_3","assets/win_4.png");
+		.add("win_3","assets/win_4.png")
+		.add("win_tie","assets/win_tie.png");
 
 	PIXI.loader
 		.on("progress", loadProgressHandler)

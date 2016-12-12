@@ -468,17 +468,19 @@ Arena.prototype.update = function(){
 		}
 	}
 
-	if(alive == 1){
+	if(alive <= 1){
 		if(this.doneTimer > 0){
 			this.doneTimer -= 1;
 		}else{
 			if(this.doneTimer == 0 && !this.winMessage){
-				this.winMessage = new PIXI.Sprite(PIXI.loader.resources["win_"+lastAlive.id].texture);
+				this.winMessage = new PIXI.Sprite(PIXI.loader.resources["win_"+(alive == 1 ? lastAlive.id : "tie")].texture);
 				this.scene.addChild(this.winMessage);
 			}
 
-			if(getInput(lastAlive.id).jump){
-				this.done = true;
+			for(var i = 0; i < this.players.length; ++i){
+				if(getInput(this.players[i].id).jump){
+					this.done = true;
+				}
 			}
 		}
 	}
