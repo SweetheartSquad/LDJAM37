@@ -1,4 +1,4 @@
-function Particle(x,y, vx,vy, r){
+function Particle(x,y, vx,vy, r, color){
 	this.graphics = new PIXI.Graphics();
 
 	this.age = 0;
@@ -11,6 +11,8 @@ function Particle(x,y, vx,vy, r){
 
 	this.vx = vx;
 	this.vy = vy;
+
+	this.color = color;
 
 	this.draw();
 };
@@ -33,7 +35,7 @@ Particle.prototype.update = function(){
 
 Particle.prototype.draw = function(){
 	this.graphics.clear();
-	this.graphics.beginFill(0xDDDDDD);
+	this.graphics.beginFill(this.color);
 	this.graphics.drawCircle(0,0,this.radius);
 	this.graphics.endFill();
 };

@@ -19,6 +19,8 @@ function Bullet(){
 
 	this.skip = false;
 
+	this.graphics.rotation = Math.random()*Math.PI*2;
+
 	this.draw();
 };
 
@@ -32,6 +34,8 @@ Bullet.prototype.update = function(){
 		
 		this.graphics.scale.x = lerp(this.graphics.scale.x, 1.0, 0.2);
 		this.graphics.scale.y = lerp(this.graphics.scale.y, 1.0, 0.2);
+
+		this.graphics.rotation += 0.1;
 	}else{
 		this.skip -= 1;
 	}
@@ -40,7 +44,20 @@ Bullet.prototype.update = function(){
 
 Bullet.prototype.draw = function(){
 	this.graphics.clear();
-	this.graphics.beginFill(0x000000);
-	this.graphics.drawCircle(0,0, this.radius);
+	this.graphics.beginFill(colors[0]);
+	this.graphics.drawCircle(
+		(Math.random()-Math.random())*3,
+		(Math.random()-Math.random())*3,
+		this.radius+Math.random()*5);
+	this.graphics.beginFill(colors[1]);
+	this.graphics.drawCircle(
+		(Math.random()-Math.random())*3,
+		(Math.random()-Math.random())*3,
+		this.radius-Math.random()*3-3);
+	this.graphics.beginFill(colors[2]);
+	this.graphics.drawCircle(
+		(Math.random()-Math.random())*3,
+		(Math.random()-Math.random())*3,
+		this.radius-Math.random()*3-9);
 	this.graphics.endFill();
 };
