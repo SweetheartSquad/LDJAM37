@@ -386,6 +386,7 @@ function update(){
 				collision.hit.ax += b.vx;
 				collision.hit.ay += b.vy;
 
+				collision.hit.container.rotation += Math.sign(b.vx ) * Math.PI/2;
 
 				if(!collision.hit.isDead()){
 					collision.hit.hitDelay = Player.hitDelay;
