@@ -184,8 +184,6 @@ Arena.prototype.update = function(){
 			this.layers.particles.addChild(particle.graphics);
 		}
 
-		if(input.fullscreen){ fullscreen.toggleFullscreen(); }
-
 
 		if(player.canAct()){
 			// move
@@ -604,6 +602,18 @@ Arena.prototype.update = function(){
 			if(this.doneTimer == 0 && !this.winMessage){
 				this.winMessage = new PIXI.Sprite(PIXI.loader.resources["win_"+(alive == 1 ? lastAlive.id : "tie")].texture);
 				this.scene.addChild(this.winMessage);
+				this.winMessage.anchor.x = 0.5;
+				this.winMessage.anchor.y = 0.5;
+				this.winMessage.position.x = size.x/2;
+				this.winMessage.position.y = size.y/2;
+
+				this.winMessage = new PIXI.Sprite(PIXI.loader.resources["win_"+(alive == 1 ? lastAlive.id : "tie")].texture);
+				this.scene.addChild(this.winMessage);
+				this.winMessage.anchor.x = 0.5;
+				this.winMessage.anchor.y = 0.5;
+				this.winMessage.position.x = size.x/2+5;
+				this.winMessage.position.y = size.y/2+5;
+				this.winMessage.tint = 0x999999;
 			}
 
 			for(var i = 0; i < this.players.length; ++i){
