@@ -342,43 +342,12 @@ function update(){
 				if(coll.length < b.radius ){
 					if( !(b.collisions == 0 && b.owner == coll.line.owner) ){	
 						b.collisions++;
-						
-						// reflect movement
-						var norm = [ coll.line.x2 - coll.line.x1, coll.line.y2 - coll.line.y1];
-						b.vx = norm[1] > 0 ? -b.vx : b.vx;
-						b.vy = norm[0] > 0 ? -b.vy : b.vy;
 
-						// pop
-						b.graphics.scale.x += 1;
-						b.graphics.scale.y += 1;
-
-						// freeze for 4 frames
-						b.skip = 4;
-
-						// particles
-						for(var p = 0; p < Math.random()*5+5; ++p){
-							var particle = new Particle(
-								b.px,
-								b.py,
-								b.vx*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*3,
-								b.vy*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*3,
-								20+Math.random(5)
-							);
-
-							particles.push(particle);
-
-							layers.bullets.addChild(particle.graphics);
-						}
-
-						// camera kick/zoom
-						game.position.x += b.vx;
-						game.position.y += b.vy;
-						game.scale.x+=0.01;
-						game.scale.y+=0.01;
-
-						sounds["collision"].play();
-
-						return true;
+						return {
+							hit: coll.line.owner,
+							intersection: coll.collision,
+							line: coll.line
+						};
 					}
 				}
 			}
@@ -388,9 +357,59 @@ function update(){
 		// cast two rays from the perimeter of the circle in the direction it's moving
 		// rays originate on a line perpendicular to direction
 		var a = Math.atan2(b.vy, b.vx)+Math.PI/2;
-		collCheck(castRay(b.px + Math.cos(a)*b.radius, b.py + Math.sin(a)*b.radius, b.vx, b.vy, collLines)) ||
+		var collision = collCheck(castRay(b.px + Math.cos(a)*b.radius, b.py + Math.sin(a)*b.radius, b.vx, b.vy, collLines)) ||
 		collCheck(castRay(b.px - Math.cos(a)*b.radius, b.py - Math.sin(a)*b.radius, b.vx, b.vy, collLines));
 		
+		if(collision){
+			if(collision.hit && collision.hit instanceof Player){
+				// bullet hit player
+				b.graphics.parent.removeChild(b.graphics);
+				b.graphics.destroy();
+				bullets.splice(i,1);
+
+				sounds["hit"].play();
+
+				collision.hit.ax += b.vx;
+				collision.hit.ay += b.vy;
+			}else{
+				// bullet hit something else
+
+				// reflect movement
+				var norm = [ collision.line.x2 - collision.line.x1, collision.line.y2 - collision.line.y1];
+				b.vx = norm[1] > 0 ? -b.vx : b.vx;
+				b.vy = norm[0] > 0 ? -b.vy : b.vy;
+
+				// pop
+				b.graphics.scale.x += 1;
+				b.graphics.scale.y += 1;
+
+				// freeze for 4 frames
+				b.skip = 4;
+
+				sounds["collision"].play();
+
+				// camera kick/zoom
+				game.position.x += b.vx;
+				game.position.y += b.vy;
+				game.scale.x+=0.01;
+				game.scale.y+=0.01;
+			}
+
+			// particles
+			for(var p = 0; p < Math.random()*5+5; ++p){
+				var particle = new Particle(
+					b.px,
+					b.py,
+					b.vx*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*3,
+					b.vy*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*3,
+					20+Math.random(5)
+				);
+
+				particles.push(particle);
+
+				layers.bullets.addChild(particle.graphics);
+			}
+		}
 	}
 
 	// update particles
