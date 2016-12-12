@@ -262,8 +262,8 @@ function update(){
 			b.owner = player;
 			b.px = player.px;
 			b.py = player.py;
-			b.vx = player.aimx*20.0 + player.vx*0.25;
-			b.vy = player.aimy*20.0 + player.vy*0.25;
+			b.vx = Math.sign(player.aimx)*20.0 + Math.sign(player.vx)*0.25;
+			b.vy = Math.sign(player.aimy)*20.0 + Math.sign(player.vy)*0.25;
 
 			// prevent bullets from firing too straight
 			if(Math.abs(b.vx) < 0.001){
