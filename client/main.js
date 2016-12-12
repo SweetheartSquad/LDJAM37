@@ -137,15 +137,19 @@ function onResize() {
 function update(){
 	// always try to center camera
 	
-	var camcenterweight=5;
-	var camx=size.x*camcenterweight;
-	var camy=size.y*camcenterweight;
+	var camcenterweight = 6;
+	var camx = size.x / 2 * camcenterweight;
+	var camy = size.y / 2 * camcenterweight;
 	for(var i = 0; i < players.length; ++i){
-		camx -= players[i].px;
-		camy -= players[i].py;
+		camx += players[i].px;
+		camy += players[i].py;
 	}
-	camx /= players.length+camcenterweight;
-	camy /= players.length+camcenterweight;
+
+	camx /= players.length + camcenterweight;
+	camy /= players.length + camcenterweight;
+
+	camx = size.x - camx;
+	camy = size.y - camy;
 
 	game.position.x = lerp(game.position.x, camx, 0.1);
 	game.position.y = lerp(game.position.y, camy, 0.1);
