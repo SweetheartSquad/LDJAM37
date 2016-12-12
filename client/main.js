@@ -173,6 +173,11 @@ function update(){
 				player.ay += -30;
 				player.ax += -40 * (player.flipped ? -1 : 1)
 
+				player.footL.x += 50 * (player.flipped ? -1 : 1);
+				player.footR.x += 50 * (player.flipped ? -1 : 1);
+				player.footL.y += 20;
+				player.footR.y += 20;
+
 				player.container.scale.y += 0.5;
 				player.container.rotation -= Math.PI/4 * (player.flipped ? -1 : 1);
 
@@ -188,6 +193,9 @@ function update(){
 				player.ay += -40;
 				player.container.scale.x -= 0.5;
 				player.container.scale.y += 0.5;
+
+				player.footL.y += 50;
+				player.footR.y += 50;
 
 				player.doubleJump = true;
 			}

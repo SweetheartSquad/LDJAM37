@@ -84,11 +84,11 @@ Player.prototype.update = function(){
 	targetRotation = slerp(0, targetRotation, 0.4);
 	this.head.rotation = slerp(this.head.rotation, targetRotation, 0.2);
 
-	this.footL.x = 0-20;
-	this.footL.y = 0 + 10;
+	this.footL.x = lerp(this.footL.x, -20, 0.1);
+	this.footL.y = lerp(this.footL.y, 10 + Math.sin(curTime/50)*20*clamp(0.0, Math.abs(this.vx/10), 1.0), 0.1);
 
-	this.footR.x = 0+20;
-	this.footR.y = 0 + 10;
+	this.footR.x = lerp(this.footR.x, 20, 0.1);
+	this.footR.y = lerp(this.footR.y, 10 + Math.sin(curTime/50+Math.PI)*20*clamp(0.0, Math.abs(this.vx/10), 1.0), 0.1);
 
 	this.arms.x = 0;
 	this.arms.y = 0 - 30;
