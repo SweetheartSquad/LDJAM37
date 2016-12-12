@@ -108,7 +108,11 @@ $(document).ready(function(){
 		.add("win_1","assets/win_2.png")
 		.add("win_2","assets/win_3.png")
 		.add("win_3","assets/win_4.png")
-		.add("win_tie","assets/win_tie.png");
+		.add("win_tie","assets/win_tie.png")
+		.add("port_1", "assets/port_1.png")
+		.add("port_2", "assets/port_2.png")
+		.add("port_3", "assets/port_3.png")
+		.add("port_4", "assets/port_4.png");
 
 	PIXI.loader
 		.on("progress", loadProgressHandler)
