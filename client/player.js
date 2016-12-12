@@ -114,6 +114,9 @@ Player.prototype.draw = function(){
 	this.head.clear();
 	this.head.beginFill(0xFF0000);
 	this.renderSVG(this.head, "M9.264,2.32c0,0,4.625-43.945-11.404-37.715c-16.028,6.231-9.04,36.543-6.969,38.347C3.679,15.435,9.264,2.32,9.264,2.32");
+	this.head.beginFill(0xFFFFFF);
+	this.head.drawEllipse(-5,-20, 3, 6);
+	this.head.drawEllipse(5,-20, 4, 5);
 	this.head.endFill();
 
 	// body
