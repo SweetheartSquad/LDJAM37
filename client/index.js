@@ -47,6 +47,13 @@ $(document).ready(function(){
 	$("#display").prepend(renderer.view);
 
 
+	// TODO: add an OGG fallback
+	sounds["bgm"]=new Howl({
+		urls:["assets/audio/Bouncy_Castle.m4a"],
+		autoplay:true,
+		loop:true,
+		volume:1
+	});
 
 	// create a new render texture..
 	renderTexture = PIXI.RenderTexture.create(size.x,size.y,PIXI.SCALE_MODES.NEAREST,1);
