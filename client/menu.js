@@ -78,11 +78,13 @@ Menu.prototype.update = function(){
 					this.ready[i] = true;
 					game.scale.x += 0.1;
 					game.scale.y += 0.1;
+					sounds["jump"].play();
 				}else{
 					// join
 					this.joined[i] = true;
 					game.scale.x += 0.1;
 					game.scale.y += 0.1;
+					sounds["shoot"].play();
 				}
 			}
 
@@ -92,11 +94,13 @@ Menu.prototype.update = function(){
 					this.ready[i] = false;
 					game.scale.x -= 0.1;
 					game.scale.y -= 0.1;
+					sounds["cancel"].play();
 				}else if(this.joined[i]){
 					// unjoin
 					this.joined[i] = false;
 					game.scale.x -= 0.1;
 					game.scale.y -= 0.1;
+					sounds["cancel"].play();
 				}else{
 					// nothing
 				}

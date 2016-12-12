@@ -250,62 +250,66 @@ Arena.prototype.update = function(){
 
 
 			// shoot
-			if(input.shoot && player.canShoot()){
-				// bullet
-				var b = new Bullet();
-				b.owner = player;
-				b.px = player.px;
-				b.py = player.py;
-				b.vx = Math.sign(player.aimx)*20.0 + Math.sign(player.vx)*0.25;
-				b.vy = Math.sign(player.aimy)*20.0 + Math.sign(player.vy)*0.25;
+			if(input.shoot){
+				if(player.canShoot()){
+					// bullet
+					var b = new Bullet();
+					b.owner = player;
+					b.px = player.px;
+					b.py = player.py;
+					b.vx = Math.sign(player.aimx)*20.0 + Math.sign(player.vx)*0.25;
+					b.vy = Math.sign(player.aimy)*20.0 + Math.sign(player.vy)*0.25;
 
-				// prevent bullets from firing too straight
-				if(Math.abs(b.vx) < 0.001){
-					b.vx = (Math.random()-Math.random())*0.1;
-				}
-				if(Math.abs(b.vy) < 0.001){
-					b.vy = (Math.random()-Math.random())*0.1;
-				}
+					// prevent bullets from firing too straight
+					if(Math.abs(b.vx) < 0.001){
+						b.vx = (Math.random()-Math.random())*0.1;
+					}
+					if(Math.abs(b.vy) < 0.001){
+						b.vy = (Math.random()-Math.random())*0.1;
+					}
 
-				this.bullets.push(b);
-				this.layers.bullets.addChild(b.graphics);
+					this.bullets.push(b);
+					this.layers.bullets.addChild(b.graphics);
 
-				// kickback
-				player.ax -= player.aimx * 20.0;
-				player.ay -= player.aimy * 20.0;
-				
-				// recoil
-				player.partsContainer.rotation -= Math.PI/3 * (player.flipped ? -1 : 1);
+					// kickback
+					player.ax -= player.aimx * 20.0;
+					player.ay -= player.aimy * 20.0;
+					
+					// recoil
+					player.partsContainer.rotation -= Math.PI/3 * (player.flipped ? -1 : 1);
 
-				// camera kick/zoom
-				game.position.x += player.aimx*20.0;
-				game.position.y += player.aimy*20.0;
-				game.scale.x += 0.05;
-				game.scale.y += 0.05;
+					// camera kick/zoom
+					game.position.x += player.aimx*20.0;
+					game.position.y += player.aimy*20.0;
+					game.scale.x += 0.05;
+					game.scale.y += 0.05;
 
-				sounds["shoot"].play();
+					sounds["shoot"].play();
 
-				// pop
-				player.container.scale.x += 1;
-				player.container.scale.y += 1;
+					// pop
+					player.container.scale.x += 1;
+					player.container.scale.y += 1;
 
-				// prevent another shot for 100 frames
-				player.shootDelay = Player.shootDelay;
-				
-				// particles
-				for(var p = 0; p < Math.random()*5+5; ++p){
-					var particle = new Particle(
-						b.px,
-						b.py,
-						b.vx*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*3,
-						b.vy*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*3,
-						30+Math.random(15),
-						colors[0]
-					);
+					// prevent another shot for 100 frames
+					player.shootDelay = Player.shootDelay;
+					
+					// particles
+					for(var p = 0; p < Math.random()*5+5; ++p){
+						var particle = new Particle(
+							b.px,
+							b.py,
+							b.vx*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*3,
+							b.vy*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*3,
+							30+Math.random(15),
+							colors[0]
+						);
 
-					this.particles.push(particle);
+						this.particles.push(particle);
 
-					this.layers.particles.addChild(particle.graphics);
+						this.layers.particles.addChild(particle.graphics);
+					}
+				}else{
+					sounds["cancel"].play();
 				}
 			}
 		}
