@@ -20,6 +20,8 @@ function init(){
 	boundaryPadding = rad/8;
 
 
+
+
 	players=[];
 	players.push(player1 = new Player());
 	players.push(player2 = new Player());
@@ -294,7 +296,7 @@ function update(){
 			player.container.scale.y += 1;
 
 			// prevent another shot for 100 frames
-			player.shootDelay = 100;
+			player.shootDelay = Player.shootDelay;
 			
 			// particles
 			for(var p = 0; p < Math.random()*5+5; ++p){
@@ -381,7 +383,7 @@ function update(){
 				collision.hit.ax += b.vx;
 				collision.hit.ay += b.vy;
 
-				collision.hit.hitDelay = 120;
+				collision.hit.hitDelay = Player.hitDelay;
 
 				collision.hit.lives -= 1;
 				collision.hit.updateLives();

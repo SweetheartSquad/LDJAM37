@@ -70,6 +70,9 @@ function Player(){
 	this.draw();
 };
 
+Player.shootDelay = 100;
+Player.hitDelay = 120;
+
 Player.prototype.update = function(){
 	// integrate velocity by acceleration
 	this.vx += this.ax;
