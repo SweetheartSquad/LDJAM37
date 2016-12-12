@@ -55,41 +55,43 @@ Menu.prototype.destroy = function(){
 };
 
 Menu.prototype.update = function(){
-	for(var i = 0; i < 4; ++i){
-		var input = getInput(i);
+	if(!this.isDone()){
+		for(var i = 0; i < 4; ++i){
+			var input = getInput(i);
 
-		if(input.jump){
-			if(this.ready[i]){
-				// nothing
-				this.ready[i] = true;
-			}else if(this.joined[i]){
-				// ready up
-				this.ready[i] = true;
-			}else{
-				// join
-				this.joined[i] = true;
+			if(input.jump){
+				if(this.ready[i]){
+					// nothing
+					this.ready[i] = true;
+				}else if(this.joined[i]){
+					// ready up
+					this.ready[i] = true;
+				}else{
+					// join
+					this.joined[i] = true;
+				}
 			}
-		}
 
-		if(input.shoot){
-			if(this.ready[i]){
-				// unready
-				this.ready[i] = false;
-			}else if(this.joined[i]){
-				// unjoin
-				this.joined[i] = false;
-			}else{
-				// nothing
+			if(input.shoot){
+				if(this.ready[i]){
+					// unready
+					this.ready[i] = false;
+				}else if(this.joined[i]){
+					// unjoin
+					this.joined[i] = false;
+				}else{
+					// nothing
+				}
 			}
-		}
 
 
-		if(this.ready[i]){
-			this.playerGraphics[i].tint = 0x999999;
-		}else if(this.joined[i]){
-			this.playerGraphics[i].tint = 0x555555;
-		}else{
-			this.playerGraphics[i].tint = 0x000000;
+			if(this.ready[i]){
+				this.playerGraphics[i].tint = 0x999999;
+			}else if(this.joined[i]){
+				this.playerGraphics[i].tint = 0x555555;
+			}else{
+				this.playerGraphics[i].tint = 0x000000;
+			}
 		}
 	}
 };
