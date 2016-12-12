@@ -28,6 +28,8 @@ function Player(){
 
 	this.shootDelay = 0;
 
+	this.hitDelay = 0;
+
 	this.container = new PIXI.Container();
 
 	this.head = new PIXI.Graphics();
@@ -114,6 +116,12 @@ Player.prototype.update = function(){
 
 	if(this.shootDelay > 0){
 		this.shootDelay -= 1;
+	}
+	if(this.hitDelay > 0){
+		this.hitDelay -= 1;
+		this.container.visible = Math.round(this.hitDelay/4)%2 == 0;
+	}else{
+		this.container.visible = true;
 	}
 };
 
@@ -327,9 +335,9 @@ Player.prototype.calcColliderLines =function(){
 	var halfWidth = this.width * 0.5;
 	var halfHeight = this.height * 0.5;
 	return [
-		{x1: this.px + 0 - halfWidth, y1: this.py + 0 - halfHeight, x2: this.px + this.width - halfWidth, y2:this.py + 0 - halfHeight, owner:this},
-		{x1: this.px + this.width - halfWidth, y1: this.py + 0 - halfHeight, x2:this.px + this.width - halfWidth, y2:this.py + this.height - halfHeight, owner:this},
-		{x1: this.px + this.width - halfWidth, y1: this.py + this.height - halfHeight, x2: this.px + 0 - halfWidth, y2: this.py + this.height - halfHeight, owner:this},
-		{x1: this.px + 0 - halfWidth, y1: this.py + this.height  - halfHeight, x2: this.px + 0 - halfWidth, y2: this.py + 0 - halfHeight, owner:this}
+		{x1: this.px + 0 - halfWidth, y1: this.py + 0 - halfHeight, x2: this.px + this.width - halfWidth, y2:this.py + 0 - halfHeight, owner:this, enabled:(this.hitDelay <= 0)},
+		{x1: this.px + this.width - halfWidth, y1: this.py + 0 - halfHeight, x2:this.px + this.width - halfWidth, y2:this.py + this.height - halfHeight, owner:this, enabled:(this.hitDelay <= 0)},
+		{x1: this.px + this.width - halfWidth, y1: this.py + this.height - halfHeight, x2: this.px + 0 - halfWidth, y2: this.py + this.height - halfHeight, owner:this, enabled:(this.hitDelay <= 0)},
+		{x1: this.px + 0 - halfWidth, y1: this.py + this.height  - halfHeight, x2: this.px + 0 - halfWidth, y2: this.py + 0 - halfHeight, owner:this, enabled:(this.hitDelay <= 0)}
 	];
 }

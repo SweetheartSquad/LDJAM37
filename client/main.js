@@ -86,10 +86,10 @@ function init(){
 	genLevel();
 
 	boundryLines = [
-		{ x1:0, y1:boundaryPadding, x2:size.x, y2:boundaryPadding },
-		{ x1:0, y1:size.y-boundaryPadding, x2:size.x , y2:size.y-boundaryPadding },
-		{ x1:boundaryPadding, y1:0, x2:boundaryPadding , y2:size.y },
-		{ x1:size.x - boundaryPadding, y1:0, x2:size.x - boundaryPadding , y2:size.y },
+		{ x1:0, y1:boundaryPadding, x2:size.x, y2:boundaryPadding, owner: "level", enabled: true },
+		{ x1:0, y1:size.y-boundaryPadding, x2:size.x , y2:size.y-boundaryPadding, owner: "level", enabled: true },
+		{ x1:boundaryPadding, y1:0, x2:boundaryPadding , y2:size.y, owner: "level", enabled: true },
+		{ x1:size.x - boundaryPadding, y1:0, x2:size.x - boundaryPadding , y2:size.y, owner: "level", enabled: true },
 	];
 
 
@@ -371,6 +371,8 @@ function update(){
 
 				collision.hit.ax += b.vx;
 				collision.hit.ay += b.vy;
+
+				collision.hit.hitDelay = 120;
 			}else{
 				// bullet hit something else
 
@@ -755,13 +757,16 @@ function rayTestLines(originX, originY, dirX, dirY, lines){
 	var vecLen = 999999999;
 	var nearest = null; 
 	for( var i = 0; i < lines.length; i++){
-		var intersect = lineIntersect(lines[i].x1, lines[i].y1, lines[i].x2, 
-			lines[i].y2, originX, originY, dirX * 9999999, dirY * 9999999);
+		var line=lines[i];
+		if(!line.enabled){
+			continue;
+		}
+		var intersect = lineIntersect(line.x1, line.y1, line.x2, line.y2, originX, originY, dirX * 9999999, dirY * 9999999);
 		if( intersect != null ){
 			var lenLoc = Math.sqrt( Math.pow( intersect.x - originX, 2) + Math.pow(intersect.y - originY, 2));
 			if( lenLoc < vecLen ){
 				vecLen = lenLoc;
-				nearest = { collision:intersect, line:lines[i], length:vecLen };
+				nearest = { collision:intersect, line:line, length:vecLen };
 			}
 		}
 	}
