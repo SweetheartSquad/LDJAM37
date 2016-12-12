@@ -51,6 +51,9 @@ function init(){
 
 	game.addChild(scene);
 
+	scene.x = -size.x/2;
+	scene.y = -size.y/2;
+
 	scene.addChild(layers.bg);
 	scene.addChild(layers.players);
 	scene.addChild(layers.bullets);
@@ -129,8 +132,22 @@ function onResize() {
 }
 
 function update(){
-	scene.position.x = lerp(scene.position.x, 0, 0.1);
-	scene.position.y = lerp(scene.position.y, 0, 0.1);
+	// always try to center camera
+	
+	var camcenterweight=5;
+	var camx=size.x*camcenterweight;
+	var camy=size.y*camcenterweight;
+	for(var i = 0; i < players.length; ++i){
+		camx -= players[i].px;
+		camy -= players[i].py;
+	}
+	camx /= players.length+camcenterweight;
+	camy /= players.length+camcenterweight;
+
+	game.position.x = lerp(game.position.x, camx, 0.1);
+	game.position.y = lerp(game.position.y, camy, 0.1);
+
+	game.scale.x = game.scale.y = lerp(game.scale.x, 1.0, 0.1);
 
 	debugDraw.lines=[];
 
@@ -173,11 +190,13 @@ function update(){
 				player.ay += -30;
 				player.ax += -40 * (player.flipped ? -1 : 1)
 
+				// kick out
 				player.footL.x += 50 * (player.flipped ? -1 : 1);
 				player.footR.x += 50 * (player.flipped ? -1 : 1);
 				player.footL.y += 20;
 				player.footR.y += 20;
 
+				// squash/stretch
 				player.container.scale.y += 0.5;
 				player.container.rotation -= Math.PI/4 * (player.flipped ? -1 : 1);
 
@@ -186,20 +205,35 @@ function update(){
 				// double jump
 				player.doubleJump = false;
 				player.ay += -30;
+
+				// squash/stretch
 				player.container.scale.x -= 0.5;
 				player.container.scale.y += 0.5;
 			}else{
 				// normal jump
 				player.ay += -40;
+
+				// squash/stretch
 				player.container.scale.x -= 0.5;
 				player.container.scale.y += 0.5;
 
+				// kick up
 				player.footL.y += 50;
 				player.footR.y += 50;
 
 				player.doubleJump = true;
 			}
 
+			// if just jumped, can't be touching ground or wall anymore
+			player.touchingWall = false;
+			player.touchingGround = false;
+
+			// camera kick/zoom
+			game.scale.x+=0.01;
+			game.scale.y+=0.01;
+			game.position.y+=10;
+
+			// particles
 			for(var p = 0; p < Math.random()*5+5; ++p){
 				var particle = new Particle(
 					player.px,
@@ -213,36 +247,43 @@ function update(){
 
 				layers.bullets.addChild(particle.graphics);
 			}
-
-			player.touchingWall = false;
-			player.touchingGround = false;
 		}
 
 
 		// shoot
 		if(input.shoot && player.canShoot()){
+			// bullet
 			var b = new Bullet();
 			b.owner = player;
 			b.px = player.px;
 			b.py = player.py;
 			b.vx = player.aimx*20.0 + player.vx*0.25;
 			b.vy = player.aimy*20.0 + player.vy*0.25;
+			bullets.push(b);
+			layers.bullets.addChild(b.graphics);
 
 			// kickback
 			player.ax -= player.aimx * 20.0;
 			player.ay -= player.aimy * 20.0;
+			
+			// recoil
 			player.container.rotation -= Math.PI/3 * (player.flipped ? -1 : 1);
 
-			scene.position.x += player.aimx*20.0;
-			scene.position.y += player.aimy*20.0;
+			// camera kick/zoom
+			game.position.x += player.aimx*20.0;
+			game.position.y += player.aimy*20.0;
+			game.scale.x+=0.05;
+			game.scale.y+=0.05;
 
+
+			// pop
 			player.container.scale.x += 1;
 			player.container.scale.y += 1;
 
-			layers.bullets.addChild(b.graphics);
-
-			bullets.push(b);
-
+			// prevent another shot for 100 frames
+			player.shootDelay = 100;
+			
+			// particles
 			for(var p = 0; p < Math.random()*5+5; ++p){
 				var particle = new Particle(
 					b.px,
@@ -256,8 +297,6 @@ function update(){
 
 				layers.bullets.addChild(particle.graphics);
 			}
-
-			player.shootDelay = 100;
 		}
 
 		// gravity
@@ -268,6 +307,7 @@ function update(){
 	for( var i = 0; i < players.length; i++ ){
 		collLines = collLines.concat(players[i].calcColliderLines());
 	}
+
 	// update players
 	for(var i = 0; i < players.length; ++i){
 		var player = players[i];
@@ -278,6 +318,8 @@ function update(){
 	for(var i = bullets.length-1; i >= 0; --i){
 		var b = bullets[i];
 		b.update();
+
+		// keep within boundaries
 		if(b.px-b.radius < boundaryPadding){
 			b.px = boundaryPadding+b.radius;
 		}else if(b.px+b.radius > size.x-boundaryPadding){
@@ -290,25 +332,26 @@ function update(){
 			b.py = size.y-boundaryPadding-b.radius;
 		}
 
-		var a = Math.atan2(b.vy, b.vx)+Math.PI/2;
-
+		
 		var collCheck = function(coll){
 			if(coll != null){
 				if(coll.length < b.radius ){
 					if( !(b.collisions == 0 && b.owner == coll.line.owner) ){	
 						b.collisions++;
+						
+						// reflect movement
 						var norm = [ coll.line.x2 - coll.line.x1, coll.line.y2 - coll.line.y1];
 						b.vx = norm[1] > 0 ? -b.vx : b.vx;
 						b.vy = norm[0] > 0 ? -b.vy : b.vy;
 
+						// pop
 						b.graphics.scale.x += 1;
 						b.graphics.scale.y += 1;
 
-						///b.px = coll.collision.x + Math.sign(Math.floor(b.vx))*b.radius*2;
-						///b.py = coll.collision.y + Math.sign(Math.floor(b.vy))*b.radius*2;
-
+						// freeze for 4 frames
 						b.skip = 4;
 
+						// particles
 						for(var p = 0; p < Math.random()*5+5; ++p){
 							var particle = new Particle(
 								b.px,
@@ -322,6 +365,12 @@ function update(){
 
 							layers.bullets.addChild(particle.graphics);
 						}
+
+						// camera kick/zoom
+						game.position.x += b.vx;
+						game.position.y += b.vy;
+						game.scale.x+=0.01;
+						game.scale.y+=0.01;
 					}
 					return true;
 				}
@@ -329,6 +378,9 @@ function update(){
 			return false;
 		}
 
+		// cast two rays from the perimeter of the circle in the direction it's moving
+		// rays originate on a line perpendicular to direction
+		var a = Math.atan2(b.vy, b.vx)+Math.PI/2;
 		collCheck(castRay(b.px + Math.cos(a)*b.radius, b.py + Math.sin(a)*b.radius, b.vx, b.vy, collLines)) ||
 		collCheck(castRay(b.px - Math.cos(a)*b.radius, b.py - Math.sin(a)*b.radius, b.vx, b.vy, collLines));
 		
@@ -402,11 +454,11 @@ function render(){
 	//drawDebug();
 
 
-	renderer.render(scene,renderTexture);
+	renderer.render(game,renderTexture);
 	try{
 		renderer.render(renderSprite,null,true,false);
 	}catch(e){
-		renderer.render(scene,null,true,false);
+		renderer.render(game,null,true,false);
 		console.error(e);
 	}
 }

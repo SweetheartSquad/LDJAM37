@@ -54,7 +54,6 @@ $(document).ready(function(){
 	// create a sprite that uses the new render texture...
 	// and add it to the stage
 	renderSprite = new PIXI.Sprite(renderTexture, new PIXI.Rectangle(0,0,size.x,size.y));
-	game.addChild(renderSprite);
 
 	CustomFilter.prototype = Object.create(PIXI.Filter.prototype);
 	CustomFilter.prototype.constructor = CustomFilter;
