@@ -73,11 +73,10 @@ $(document).ready(function(){
 		volume:1
 	});
 
-	// create a new render texture..
+	// create render texture
 	renderTexture = PIXI.RenderTexture.create(size.x,size.y,PIXI.SCALE_MODES.NEAREST,1);
 	 
-	// create a sprite that uses the new render texture...
-	// and add it to the stage
+	// create a sprite that uses the render texture
 	renderSprite = new PIXI.Sprite(renderTexture, new PIXI.Rectangle(0,0,size.x,size.y));
 
 	CustomFilter.prototype = Object.create(PIXI.Filter.prototype);

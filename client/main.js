@@ -13,6 +13,13 @@ function main(){
 }
 
 function init(){
+
+	rad = 150;
+
+	boundaryForce = 0.1;
+	boundaryPadding = rad/8;
+
+
 	players=[];
 	players.push(player1 = new Player());
 	players.push(player2 = new Player());
@@ -54,6 +61,9 @@ function init(){
 	scene.x = -size.x/2;
 	scene.y = -size.y/2;
 
+	game.position.x = size.x/2;
+	game.position.y = size.y/2;
+
 	scene.addChild(layers.bg);
 	scene.addChild(layers.players);
 	scene.addChild(layers.bullets);
@@ -78,9 +88,6 @@ function init(){
 	/*bg.beginFill(0x000000);
 	bg.drawCircle(size.x/2, size.y/2, Math.min(size.x,size.y)/3);
 	bg.endFill();*/
-
-	boundaryForce = 0.1;
-	boundaryPadding = 35;
 
 	genLevel();
 
@@ -619,8 +626,6 @@ function genWallVert(x, rad){
 		pieces.splice(i,1);
 	}
 }
-
-var rad = 200;
 
 function updateLevel(){
 
