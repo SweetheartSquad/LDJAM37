@@ -45,6 +45,8 @@ function init(){
 		bullets: new PIXI.Container()
 	};
 
+	particles = [];
+
 
 
 	game.addChild(scene);
@@ -205,6 +207,20 @@ function update(){
 			layers.bullets.addChild(b.graphics);
 
 			bullets.push(b);
+
+			for(var p = 0; p < Math.random()*5+5; ++p){
+				var particle = new Particle(
+					b.px,
+					b.py,
+					b.vx*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*3,
+					b.vy*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*3,
+					20+Math.random(5)
+				);
+
+				particles.push(particle);
+
+				layers.bullets.addChild(particle.graphics);
+			}
 		}
 
 		// gravity
@@ -245,6 +261,17 @@ function update(){
 					b.skip = 2;
 				}
 			}
+		}
+	}
+
+	// update particles
+	for(var i = particles.length-1; i >= 0; --i){
+		var p = particles[i];
+		p.update();
+		if(p.age >= p.lifetime){
+			p.graphics.parent.removeChild(p.graphics);
+			p.graphics.destroy();
+			particles.splice(i,1);
 		}
 	}
 
