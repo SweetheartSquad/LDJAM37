@@ -1,7 +1,7 @@
 function Menu(){
 	this.bg = new PIXI.Sprite(PIXI.loader.resources.bg.texture);
-	this.bg.width=size.x;
-	this.bg.height=size.y;
+	this.bg.width = size.x;
+	this.bg.height = size.y;
 	game.addChild(this.bg);
 
 	this.joined = [false,false,false,false];

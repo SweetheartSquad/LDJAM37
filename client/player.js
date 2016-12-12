@@ -264,15 +264,15 @@ Player.prototype.renderSVG = function(g, input){
 	//console.log(inputs);
 	//console.log(instructions);
 
-	var start={x:0,y:0};
-	var current={x:0,y:0};
-	var lastCurve={x:0,y:0};
+	var start = {x: 0, y: 0};
+	var current = {x: 0, y: 0};
+	var lastCurve = {x: 0, y: 0};
 	for(var i = 0; i < instructions.length; ++i){
 
 		if(inputs[i].substr(0,1) == ","){
 			inputs[i] = inputs[i].substr(1);
 		}
-		var data=inputs[i].split(",");
+		var data = inputs[i].split(",");
 
 		var relative = false;
 		//console.log(instructions[i]);
@@ -396,14 +396,14 @@ Player.prototype.renderSVG = function(g, input){
 	}
 }
 
-Player.prototype.calcColliderLines =function(){
+Player.prototype.calcColliderLines = function(){
 	var halfWidth = this.width * 0.5;
 	var halfHeight = this.height * 0.5;
 	return [
 		{x1: this.px + 0 - halfWidth, y1: this.py + 0 - halfHeight, x2: this.px + this.width - halfWidth, y2:this.py + 0 - halfHeight, owner:this, enabled:(this.hitDelay <= 0)},
 		{x1: this.px + this.width - halfWidth, y1: this.py + 0 - halfHeight, x2:this.px + this.width - halfWidth, y2:this.py + this.height - halfHeight, owner:this, enabled:(this.hitDelay <= 0)},
 		{x1: this.px + this.width - halfWidth, y1: this.py + this.height - halfHeight, x2: this.px + 0 - halfWidth, y2: this.py + this.height - halfHeight, owner:this, enabled:(this.hitDelay <= 0)},
-		{x1: this.px + 0 - halfWidth, y1: this.py + this.height  - halfHeight, x2: this.px + 0 - halfWidth, y2: this.py + 0 - halfHeight, owner:this, enabled:(this.hitDelay <= 0)},
+		{x1: this.px + 0 - halfWidth, y1: this.py + this.height - halfHeight, x2: this.px + 0 - halfWidth, y2: this.py + 0 - halfHeight, owner:this, enabled:(this.hitDelay <= 0)},
 		{x1: this.px, y1: this.py, x2: this.px + this.vx, y2: this.py + this.vy, owner:this, enabled:(this.hitDelay <= 0)}
 	];
 }

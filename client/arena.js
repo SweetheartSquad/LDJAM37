@@ -9,14 +9,14 @@ function Arena(_players){
 
 
 
-	this.players=[];
+	this.players = [];
 	for(var i = 0; i < _players.length; ++i){
 		this.players.push(new Player(_players[i]));
 	}
 
-	this.powerups=[];
+	this.powerups = [];
 	
-	this.bullets=[];
+	this.bullets = [];
 
 	this.levelPiecesHorz = [];
 	this.levelPiecesVert = [];
@@ -29,7 +29,7 @@ function Arena(_players){
 	this.scene = new PIXI.Container();
 
 
-	this.layers={
+	this.layers = {
 		bg: new PIXI.Container(),
 		players: new PIXI.Container(),
 		boundaries: new PIXI.Container(),
@@ -56,8 +56,8 @@ function Arena(_players){
 
 
 	var bg = new PIXI.Sprite(PIXI.loader.resources.bg.texture);
-	bg.width=size.x;
-	bg.height=size.y;
+	bg.width = size.x;
+	bg.height = size.y;
 	this.layers.bg.addChild(bg);
 
 	this.genLevel();
@@ -122,7 +122,7 @@ Arena.prototype.update = function(){
 
 	game.scale.x = game.scale.y = lerp(game.scale.x, 1.0, 0.1);
 
-	this.debugDraw.lines=[];
+	this.debugDraw.lines = [];
 
 	// update game
 	var input;
@@ -204,9 +204,9 @@ Arena.prototype.update = function(){
 				player.touchingGround = false;
 
 				// camera kick/zoom
-				game.scale.x+=0.01;
-				game.scale.y+=0.01;
-				game.position.y+=10;
+				game.scale.x += 0.01;
+				game.scale.y += 0.01;
+				game.position.y += 10;
 
 				sounds["jump"].play();
 
@@ -258,8 +258,8 @@ Arena.prototype.update = function(){
 				// camera kick/zoom
 				game.position.x += player.aimx*20.0;
 				game.position.y += player.aimy*20.0;
-				game.scale.x+=0.05;
-				game.scale.y+=0.05;
+				game.scale.x += 0.05;
+				game.scale.y += 0.05;
 
 				sounds["shoot"].play();
 
@@ -341,7 +341,7 @@ Arena.prototype.update = function(){
 		// cast two rays from the perimeter of the circle in the direction it's moving
 		// rays originate on a line perpendicular to direction
 		var a = Math.atan2(b.vy, b.vx)+Math.PI/2;
-		var collision =
+		var collision = 
 		collCheck(this.castRay(b.px + Math.cos(a)*b.radius, b.py + Math.sin(a)*b.radius, b.vx, b.vy, collLines)) ||
 		collCheck(this.castRay(b.px - Math.cos(a)*b.radius, b.py - Math.sin(a)*b.radius, b.vx, b.vy, collLines));
 		
@@ -392,8 +392,8 @@ Arena.prototype.update = function(){
 				// camera kick/zoom
 				game.position.x += b.vx/3;
 				game.position.y += b.vy/3;
-				game.scale.x+=0.005;
-				game.scale.y+=0.005;
+				game.scale.x += 0.005;
+				game.scale.y += 0.005;
 			}
 
 			// particles
@@ -505,10 +505,10 @@ Arena.prototype.drawDebug = function(){
 Arena.prototype.genWallHorz = function(y, boundaryRadius){
 	var x = 0;
 	var c = 0;
-	var pieces=[];
+	var pieces = [];
 	while( x < size.x + boundaryRadius){
 		var pc = new LevelPiece();
-		pc.init(x, y +  boundaryRadius * 0.5  * ( y > 0 ? 1 : -1), boundaryRadius, colors[c]);
+		pc.init(x, y + boundaryRadius * 0.5 * ( y > 0 ? 1 : -1), boundaryRadius, colors[c]);
 		this.levelPiecesHorz.push(pc);
 		pieces.push(pc);
 		x += boundaryRadius;
@@ -528,10 +528,10 @@ Arena.prototype.genWallHorz = function(y, boundaryRadius){
 Arena.prototype.genWallVert = function(x, boundaryRadius){
 	var y = 0;
 	var c = 0;
-	var pieces=[];
+	var pieces = [];
 	while( y < size.y + boundaryRadius){
 		var pc = new LevelPiece();
-		pc.init( x +  boundaryRadius * 0.5  * ( x > 0 ? 1 : -1), y, boundaryRadius, colors[c]);
+		pc.init( x + boundaryRadius * 0.5 * ( x > 0 ? 1 : -1), y, boundaryRadius, colors[c]);
 		this.levelPiecesVert.push(pc);
 		pieces.push(pc);
 		y += boundaryRadius;
@@ -663,7 +663,7 @@ Arena.prototype.rayTestLines = function(originX, originY, dirX, dirY, lines){
 	var vecLen = 999999999;
 	var nearest = null; 
 	for( var i = 0; i < lines.length; i++){
-		var line=lines[i];
+		var line = lines[i];
 		if(!line.enabled){
 			continue;
 		}
@@ -680,33 +680,33 @@ Arena.prototype.rayTestLines = function(originX, originY, dirX, dirY, lines){
 };
 
 // Ported from http://paulbourke.net/geometry/pointlineplane/pdb.c
-Arena.prototype.lineIntersect = function(x1,  y1, x2,  y2, x3,  y3, x4,  y4){
-   
-   var x, y, mua, mub, denom, numera, numerb;
+Arena.prototype.lineIntersect = function(x1, y1, x2, y2, x3, y3, x4, y4){
+  
+	var x, y, mua, mub, denom, numera, numerb;
 
-   denom  = (y4-y3) * (x2-x1) - (x4-x3) * (y2-y1);
-   numera = (x4-x3) * (y1-y3) - (y4-y3) * (x1-x3);
-   numerb = (x2-x1) * (y1-y3) - (y2-y1) * (x1-x3);
+	denom  = (y4-y3) * (x2-x1) - (x4-x3) * (y2-y1);
+	numera = (x4-x3) * (y1-y3) - (y4-y3) * (x1-x3);
+	numerb = (x2-x1) * (y1-y3) - (y2-y1) * (x1-x3);
 
-   /* Are the line coincident? */
-   if (Math.abs(numera) < Number.EPSILON && Math.abs(numerb) < Number.EPSILON && Math.abs(denom) < Number.EPSILON) {
-      x = (x1 + x2) / 2;
-      y = (y1 + y2) / 2;
-      return {x:x, y:y};
-   }
+	/* Are the line coincident? */
+	if (Math.abs(numera) < Number.EPSILON && Math.abs(numerb) < Number.EPSILON && Math.abs(denom) < Number.EPSILON) {
+	x = (x1 + x2) / 2;
+	y = (y1 + y2) / 2;
+		return {x:x, y:y};
+	}
 
-   /* Are the line parallel */
-   if (Math.abs(denom) < Number.EPSILON) {
-      return null;
-   }
+	/* Are the line parallel */
+	if (Math.abs(denom) < Number.EPSILON) {
+		return null;
+	}
 
-   /* Is the intersection along the the segments */
-   mua = numera / denom;
-   mub = numerb / denom;
-   if (mua < 0 || mua > 1 || mub < 0 || mub > 1) {
-      return null;
-   }
-   x = x1 + mua * (x2 - x1);
-   y = y1 + mua * (y2 - y1);
-   return {x:x, y:y};
+	/* Is the intersection along the the segments */
+	mua = numera / denom;
+	mub = numerb / denom;
+	if (mua < 0 || mua > 1 || mub < 0 || mub > 1) {
+		return null;
+	}
+	x = x1 + mua * (x2 - x1);
+	y = y1 + mua * (y2 - y1);
+	return {x:x, y:y};
 };

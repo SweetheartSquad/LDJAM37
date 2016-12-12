@@ -1,11 +1,11 @@
 function main(){
-	curTime=Date.now()-startTime;
-	deltaTime=curTime-lastTime;
+	curTime = Date.now()-startTime;
+	deltaTime = curTime-lastTime;
 
 	update();
 	render();
 
-	lastTime=curTime;
+	lastTime = curTime;
 
 	// request another frame to keeps the loop going
 	requestAnimationFrame(main);
@@ -16,12 +16,12 @@ function init(){
 	mouse.init("#display canvas");
 	gamepads.init();
 	keys.init();
-	keys.capture=[keys.LEFT,keys.RIGHT,keys.UP,keys.DOWN,keys.SPACE,keys.ENTER,keys.BACKSPACE,keys.ESCAPE,keys.W,keys.A,keys.S,keys.D,keys.P,keys.M];
+	keys.capture = [keys.LEFT,keys.RIGHT,keys.UP,keys.DOWN,keys.SPACE,keys.ENTER,keys.BACKSPACE,keys.ESCAPE,keys.W,keys.A,keys.S,keys.D,keys.P,keys.M];
 
 
 	// setup screen filter
 	screen_filter = new CustomFilter(PIXI.loader.resources.screen_shader.data);
-	screen_filter.padding=0;
+	screen_filter.padding = 0;
 	renderSprite.filterArea = new PIXI.Rectangle(0,0,size.x,size.y);
 
 	renderSprite.filters = [screen_filter];
@@ -39,8 +39,8 @@ function init(){
 
 function onResize() {
 	_resize();
-	screen_filter.uniforms["screen"]=[size.x,size.y];
-	screen_filter.uniforms["bufferSize"]=[nextPowerOfTwo(size.x),nextPowerOfTwo(size.y)];
+	screen_filter.uniforms["screen"] = [size.x,size.y];
+	screen_filter.uniforms["bufferSize"] = [nextPowerOfTwo(size.x),nextPowerOfTwo(size.y)];
 
 	console.log("Resized",size,scaleMultiplier,[size.x*scaleMultiplier,size.y*scaleMultiplier]);
 }
@@ -66,7 +66,7 @@ function update(){
 
 
 function render(){
-	screen_filter.uniforms["time"]=curTime/1000;
+	screen_filter.uniforms["time"] = curTime/1000;
 
 	if(menu){
 		menu.render();
@@ -98,13 +98,13 @@ function getInput(_playerId){
 	};
 
 	// keyboard input
-	var keyConfig={
-		left:null,
-		right:null,
-		up:null,
-		down:null,
-		jump:null,
-		shoot:null
+	var keyConfig = {
+		left: null,
+		right: null,
+		up: null,
+		down: null,
+		jump: null,
+		shoot: null
 	};
 
 	switch(_playerId){
