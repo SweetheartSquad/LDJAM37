@@ -109,10 +109,8 @@ function init(){
 	powerups.push(p2);
 
 	debugDraw = new PIXI.Graphics();
+	debugDraw.lines=[];
 	scene.addChild(debugDraw);
-
-	rayDebug = new PIXI.Graphics();
-	scene.addChild(rayDebug);
 
 	// setup resize
 	window.onresize = onResize;
@@ -133,6 +131,8 @@ function onResize() {
 function update(){
 	scene.position.x = lerp(scene.position.x, 0, 0.1);
 	scene.position.y = lerp(scene.position.y, 0, 0.1);
+
+	debugDraw.lines=[];
 
 	// update game
 	var input;
@@ -274,11 +274,21 @@ function update(){
 		player.update();
 	}
 
-	rayDebug.clear();
-
 	// update bullets
 	for(var i = bullets.length-1; i >= 0; --i){
 		var b = bullets[i];
+		b.update();
+		if(b.px-b.radius < boundaryPadding){
+			b.px = boundaryPadding+b.radius;
+		}else if(b.px+b.radius > size.x-boundaryPadding){
+			b.px = size.x-boundaryPadding-b.radius;
+		}
+
+		if(b.py-b.radius < boundaryPadding){
+			b.py = boundaryPadding+b.radius;
+		}else if(b.py+b.radius > size.y-boundaryPadding){
+			b.py = size.y-boundaryPadding-b.radius;
+		}
 
 		var a = Math.atan2(b.vy, b.vx)+Math.PI/2;
 
@@ -297,7 +307,7 @@ function update(){
 						///b.px = coll.collision.x + Math.sign(Math.floor(b.vx))*b.radius*2;
 						///b.py = coll.collision.y + Math.sign(Math.floor(b.vy))*b.radius*2;
 
-						b.skip = 2;
+						b.skip = 4;
 
 						for(var p = 0; p < Math.random()*5+5; ++p){
 							var particle = new Particle(
@@ -322,7 +332,6 @@ function update(){
 		collCheck(castRay(b.px + Math.cos(a)*b.radius, b.py + Math.sin(a)*b.radius, b.vx, b.vy, collLines)) ||
 		collCheck(castRay(b.px - Math.cos(a)*b.radius, b.py - Math.sin(a)*b.radius, b.vx, b.vy, collLines));
 		
-		b.update();
 	}
 
 	// update particles
@@ -426,11 +435,11 @@ function drawDebug(){
 			debugDraw.drawCircle(p.px, p.py, p.radius);
 		}
 
-		for( var i = 0; i < boundryLines.length; i++ ){
-			debugDraw.moveTo(boundryLines[i].x1, boundryLines[i].y1);
-			debugDraw.lineTo(boundryLines[i].x2, boundryLines[i].y2);
+		debugDraw.lines = debugDraw.lines.concat(boundryLines);
+		for( var i = 0; i < debugDraw.lines.length; i++ ){
+			debugDraw.moveTo(debugDraw.lines[i].x1, debugDraw.lines[i].y1);
+			debugDraw.lineTo(debugDraw.lines[i].x2, debugDraw.lines[i].y2);
 		}
-
 		debugDraw.endFill();
 	}
 }
@@ -656,11 +665,12 @@ function debugPieces(res){
 function castRay(originX, originY, dirX, dirY, lines){
 	var intersect = rayTestLines(originX, originY, dirX, dirY, lines);
 	if(intersect != null){
-		rayDebug.beginFill(0xFF0000);
-		rayDebug.lineStyle(2, 0x0000FF);
-		rayDebug.moveTo(originX, originY);
-		rayDebug.lineTo( intersect.collision.x, intersect.collision.y);
-		rayDebug.endFill();
+		debugDraw.lines.push({
+			x1:originX,
+			y1:originY,
+			x2:intersect.collision.x,
+			y2:intersect.collision.y
+		});
 	}
 	return intersect;
 }
