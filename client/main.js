@@ -262,6 +262,15 @@ function update(){
 			b.py = player.py;
 			b.vx = player.aimx*20.0 + player.vx*0.25;
 			b.vy = player.aimy*20.0 + player.vy*0.25;
+
+			// prevent bullets from firing too straight
+			if(Math.abs(b.vx) < 0.001){
+				b.vx = (Math.random()-Math.random())*0.1;
+			}
+			if(Math.abs(b.vy) < 0.001){
+				b.vy = (Math.random()-Math.random())*0.1;
+			}
+
 			bullets.push(b);
 			layers.bullets.addChild(b.graphics);
 
