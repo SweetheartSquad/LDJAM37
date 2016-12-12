@@ -78,16 +78,10 @@ function init(){
 
 
 
-	var bg = new PIXI.Graphics();
+	var bg = new PIXI.Sprite(PIXI.loader.resources.bg.texture);
+	bg.width=size.x;
+	bg.height=size.y;
 	layers.bg.addChild(bg);
-
-	bg.beginFill(0xFFFFFF);
-	bg.drawRect(0,0,size.x,size.y);
-	bg.endFill();
-
-	/*bg.beginFill(0x000000);
-	bg.drawCircle(size.x/2, size.y/2, Math.min(size.x,size.y)/3);
-	bg.endFill();*/
 
 	genLevel();
 
