@@ -54,6 +54,24 @@ $(document).ready(function(){
 		loop:true,
 		volume:1
 	});
+	sounds["jump"]=new Howl({
+		urls:["assets/audio/boing.ogg"],
+		autoplay:false,
+		loop:false,
+		volume:1
+	});
+	sounds["shoot"]=new Howl({
+		urls:["assets/audio/blip.ogg"],
+		autoplay:false,
+		loop:false,
+		volume:1
+	});
+	sounds["collision"]=new Howl({
+		urls:["assets/audio/boop.ogg"],
+		autoplay:false,
+		loop:false,
+		volume:1
+	});
 
 	// create a new render texture..
 	renderTexture = PIXI.RenderTexture.create(size.x,size.y,PIXI.SCALE_MODES.NEAREST,1);

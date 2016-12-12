@@ -233,6 +233,8 @@ function update(){
 			game.scale.y+=0.01;
 			game.position.y+=10;
 
+			sounds["jump"].play();
+
 			// particles
 			for(var p = 0; p < Math.random()*5+5; ++p){
 				var particle = new Particle(
@@ -275,6 +277,7 @@ function update(){
 			game.scale.x+=0.05;
 			game.scale.y+=0.05;
 
+			sounds["shoot"].play();
 
 			// pop
 			player.container.scale.x += 1;
@@ -371,8 +374,11 @@ function update(){
 						game.position.y += b.vy;
 						game.scale.x+=0.01;
 						game.scale.y+=0.01;
+
+						sounds["collision"].play();
+
+						return true;
 					}
-					return true;
 				}
 			}
 			return false;
