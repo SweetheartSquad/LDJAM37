@@ -535,7 +535,7 @@ Arena.prototype.update = function(){
 		var p = this.powerups[i];
 		p.update();
 		for(var j = 0; j < this.players.length; ++j){
-			var player = this.players[i];
+			var player = this.players[j];
 
 			var dx = player.px - p.px;
 			var dy = player.py - p.py;
