@@ -73,6 +73,12 @@ Player.prototype.update = function(){
 
 	this.head.x = 0;
 	this.head.y = 0 - 25;
+	var targetRotation = Math.atan2(this.aimy, this.aimx);
+	if(this.flipped){
+		targetRotation += Math.PI;
+	}
+	targetRotation = slerp(0, targetRotation, 0.4);
+	this.head.rotation = slerp(this.head.rotation, targetRotation, 0.2);
 
 	this.footL.x = 0-20;
 	this.footL.y = 0 + 10;
@@ -83,7 +89,7 @@ Player.prototype.update = function(){
 	this.arms.x = 0;
 	this.arms.y = 0 - 30;
 
-	var targetRotation = Math.atan2(this.aimy, this.aimx);
+	targetRotation = Math.atan2(this.aimy, this.aimx);
 	if(this.flipped){
 		targetRotation += Math.PI;
 	}
