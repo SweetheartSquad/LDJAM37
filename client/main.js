@@ -170,17 +170,30 @@ function update(){
 
 			if(player.canWallJump()){
 				// walljump
-				player.ay += -40;
+				player.ay += -30;
 				player.ax += -40 * (player.flipped ? -1 : 1)
 
 				player.container.scale.y += 0.5;
 				player.container.rotation -= Math.PI/4 * (player.flipped ? -1 : 1);
-			}else{
-				// normal jump
-				player.ay += -60;
+
+				player.doubleJump = true;
+			}else if(player.canDoubleJump()){
+				// double jump
+				player.doubleJump = false;
+				player.ay += -30;
 				player.container.scale.x -= 0.5;
 				player.container.scale.y += 0.5;
+			}else{
+				// normal jump
+				player.ay += -40;
+				player.container.scale.x -= 0.5;
+				player.container.scale.y += 0.5;
+
+				player.doubleJump = true;
 			}
+
+			player.touchingWall = false;
+			player.touchingGround = false;
 		}
 
 

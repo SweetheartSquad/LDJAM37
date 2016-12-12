@@ -24,6 +24,8 @@ function Player(){
 
 	this.radius = 40;
 
+	this.doubleJump = false;
+
 	this.container = new PIXI.Container();
 
 	this.head = new PIXI.Graphics();
@@ -157,11 +159,15 @@ Player.prototype.draw = function(){
 };
 
 Player.prototype.canJump = function(){
-	return this.touchingFloor || this.touchingWall;
+	return this.touchingFloor || this.touchingWall || this.doubleJump;
 };
 
 Player.prototype.canWallJump = function(){
 	return this.touchingWall && !this.touchingFloor;
+};
+
+Player.prototype.canDoubleJump = function(){
+	return !this.touchingWall && !this.touchingFloor && this.doubleJump;
 };
 
 
