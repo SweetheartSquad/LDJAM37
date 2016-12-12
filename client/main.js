@@ -192,6 +192,20 @@ function update(){
 				player.doubleJump = true;
 			}
 
+			for(var p = 0; p < Math.random()*5+5; ++p){
+				var particle = new Particle(
+					player.px,
+					player.py,
+					-0.5*player.vx*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*5,
+					-0.5*player.vy*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*5,
+					10+Math.random(5)
+				);
+
+				particles.push(particle);
+
+				layers.bullets.addChild(particle.graphics);
+			}
+
 			player.touchingWall = false;
 			player.touchingGround = false;
 		}
