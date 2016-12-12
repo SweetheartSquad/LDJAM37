@@ -1,4 +1,4 @@
-function Menu(){
+function Menu(_players){
 	this.scene = new PIXI.Container();
 	game.addChild(this.scene);
 
@@ -47,6 +47,11 @@ function Menu(){
 
 	this.joined = [false,false,false,false];
 	this.ready = [false,false,false,false];
+
+	// automatically join passed in players
+	for(var i = 0; i < _players.length; ++i){
+		this.joined[_players[i]] = true;
+	}
 };
 
 Menu.prototype.destroy = function(){

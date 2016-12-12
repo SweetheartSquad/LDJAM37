@@ -575,6 +575,15 @@ Arena.prototype.drawDebug = function(){
 		this.debugDraw.endFill();
 	}
 };
+
+Arena.prototype.getPlayers = function(){
+	var players = [];
+	for(var i = 0; i < this.players.length; ++i){
+		players.push(this.players[i].id);
+	}
+	return players;
+};
+
 Arena.prototype.genWallHorz = function(y, boundaryRadius){
 	var x = 0;
 	var c = 0;

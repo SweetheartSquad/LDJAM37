@@ -30,7 +30,7 @@ function init(){
 	transitionDirection = 1;
 
 
-	menu = new Menu();
+	menu = new Menu([]);
 
 	// setup resize
 	window.onresize = onResize;
@@ -70,17 +70,18 @@ function update(){
 			transition = Math.max(0.0, transition-0.02);
 			transitionDirection = -1;
 			if(transition < 0.0001){
+				menu = new Menu(arena.getPlayers());
+
+				var players = [];
 				arena.destroy();
 				arena = false;
-
-				menu = new Menu();
 			}
 		}else{
 			transition = Math.min(1.0, transition+0.02);
 			transitionDirection = 1;
 		}
 	}else{
-		
+
 	}
 	
 	// update input managers
