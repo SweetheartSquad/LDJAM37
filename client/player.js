@@ -26,6 +26,8 @@ function Player(){
 
 	this.doubleJump = false;
 
+	this.shootDelay = 0;
+
 	this.container = new PIXI.Container();
 
 	this.head = new PIXI.Graphics();
@@ -109,6 +111,10 @@ Player.prototype.update = function(){
 	// reset acceleration for next frame
 	this.ax = 0;
 	this.ay = 0;
+
+	if(this.shootDelay > 0){
+		this.shootDelay -= 1;
+	}
 };
 
 Player.prototype.draw = function(){
@@ -168,6 +174,10 @@ Player.prototype.canWallJump = function(){
 
 Player.prototype.canDoubleJump = function(){
 	return !this.touchingWall && !this.touchingFloor && this.doubleJump;
+};
+
+Player.prototype.canShoot = function(){
+	return this.shootDelay <= 0;
 };
 
 

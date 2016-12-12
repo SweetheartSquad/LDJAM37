@@ -212,7 +212,7 @@ function update(){
 
 
 		// shoot
-		if(input.shoot){
+		if(input.shoot && player.canShoot()){
 			var b = new Bullet();
 			b.owner = player;
 			b.px = player.px;
@@ -248,6 +248,8 @@ function update(){
 
 				layers.bullets.addChild(particle.graphics);
 			}
+
+			player.shootDelay = 100;
 		}
 
 		// gravity
