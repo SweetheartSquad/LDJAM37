@@ -10,7 +10,7 @@ try{
 }
 var resizeTimeout=null;
 
-var size={x:1980,y:1080};
+var size={x:1920,y:1080};
 
 var sounds=[];
 
