@@ -34,6 +34,7 @@ function Arena(_players){
 		bg: new PIXI.Container(),
 		players: new PIXI.Container(),
 		boundaries: new PIXI.Container(),
+		particles: new PIXI.Container(),
 		bullets: new PIXI.Container()
 	};
 
@@ -51,6 +52,7 @@ function Arena(_players){
 
 	this.scene.addChild(this.layers.bg);
 	this.scene.addChild(this.layers.players);
+	this.scene.addChild(this.layers.particles);
 	this.scene.addChild(this.layers.bullets);
 	this.scene.addChild(this.layers.boundaries);
 
@@ -223,7 +225,7 @@ Arena.prototype.update = function(){
 
 					this.particles.push(particle);
 
-					this.layers.bullets.addChild(particle.graphics);
+					this.layers.particles.addChild(particle.graphics);
 				}
 			}
 
@@ -283,7 +285,7 @@ Arena.prototype.update = function(){
 
 					this.particles.push(particle);
 
-					this.layers.bullets.addChild(particle.graphics);
+					this.layers.particles.addChild(particle.graphics);
 				}
 			}
 		}
@@ -307,6 +309,21 @@ Arena.prototype.update = function(){
 	for(var i = this.bullets.length-1; i >= 0; --i){
 		var b = this.bullets[i];
 		b.update();
+
+		// particles
+		for(var p = 0; p < Math.random()*2; ++p){
+			var particle = new Particle(
+				b.px,
+				b.py,
+				b.vx*(Math.random()*0.5)+(Math.random()-Math.random())*3,
+				b.vy*(Math.random()*0.5)+(Math.random()-Math.random())*3,
+				10+Math.random(5)
+			);
+
+			this.particles.push(particle);
+
+			this.layers.particles.addChild(particle.graphics);
+		}
 
 		// keep within boundaries
 		if(b.px-b.radius < boundaryPadding){
@@ -409,7 +426,7 @@ Arena.prototype.update = function(){
 
 				this.particles.push(particle);
 
-				this.layers.bullets.addChild(particle.graphics);
+				this.layers.particles.addChild(particle.graphics);
 			}
 		}
 	}
