@@ -2,6 +2,8 @@ function Menu(){
 	this.scene = new PIXI.Container();
 	game.addChild(this.scene);
 
+	game.position.x = 0;
+	game.position.y = 0;
 
 	this.bg = new PIXI.Sprite(PIXI.loader.resources.bg.texture);
 	this.bg.width = size.x;

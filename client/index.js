@@ -91,7 +91,11 @@ $(document).ready(function(){
 	PIXI.loader
 		.add("screen_shader","assets/screen_shader.frag")
 		.add("bg","assets/bg.png")
-		.add("title","assets/title.png");
+		.add("title","assets/title.png")
+		.add("win_0","assets/win_1.png")
+		.add("win_1","assets/win_2.png")
+		.add("win_2","assets/win_3.png")
+		.add("win_3","assets/win_4.png");
 
 	PIXI.loader
 		.on("progress", loadProgressHandler)

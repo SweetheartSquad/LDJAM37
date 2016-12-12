@@ -5,6 +5,7 @@ function Arena(_players){
 	boundaryForce = 0.1;
 	boundaryPadding = boundaryRadius/8;
 
+	this.doneTimer = 120;
 	this.done = false;
 
 
@@ -453,6 +454,32 @@ Arena.prototype.update = function(){
 		}if(player.py + player.radius > size.y - boundaryPadding){
 			player.ay -= ( (player.py + player.radius) - (size.y - boundaryPadding)) * boundaryForce;
 			player.touchingFloor = true;
+		}
+	}
+
+
+	var alive = this.players.length;
+	var lastAlive = null;
+	for(var i = 0; i < this.players.length; ++i){
+		if(this.players[i].isDead()){
+			alive -= 1;
+		}else{
+			lastAlive = this.players[i];
+		}
+	}
+
+	if(alive == 1){
+		if(this.doneTimer > 0){
+			this.doneTimer -= 1;
+		}else{
+			if(this.doneTimer == 0 && !this.winMessage){
+				this.winMessage = new PIXI.Sprite(PIXI.loader.resources["win_"+lastAlive.id].texture);
+				this.scene.addChild(this.winMessage);
+			}
+
+			if(getInput(lastAlive.id).jump){
+				this.done = true;
+			}
 		}
 	}
 };

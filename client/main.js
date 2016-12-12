@@ -56,6 +56,12 @@ function update(){
 		}
 	}else if(arena){
 		arena.update();
+		if(arena.done){
+			arena.destroy();
+			arena = false;
+
+			menu = new Menu();
+		}
 	}
 	
 	// update input managers
