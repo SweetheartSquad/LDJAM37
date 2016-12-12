@@ -123,20 +123,6 @@ function Arena(_players){
 		this.layers.players.addChild(player.container);
 	}
 
-
-	// powerups
-	var p1 = new Powerup(1);
-	this.scene.addChild(p1.graphics);
-	p1.px = size.x/3;
-	p1.py = size.y/2;
-	this.powerups.push(p1);
-
-	var p2 = new Powerup(0);
-	this.scene.addChild(p2.graphics);
-	p2.px = size.x/3*2;
-	p2.py = size.y/2;
-	this.powerups.push(p2);
-
 	this.debugDraw = new PIXI.Graphics();
 	this.debugDraw.lines = [];
 	this.scene.addChild(this.debugDraw);
@@ -531,6 +517,25 @@ Arena.prototype.update = function(){
 	}
 
 	// update powerups
+	if(this.powerups.length < 2){
+		if(Math.random() < 0.001){
+			// powerups
+			var p = new Powerup(Math.floor(Math.random()*Powerup.types.length));
+			this.scene.addChild(p.graphics);
+			p.px = size.x/3;
+			p.py = size.y/2;
+
+			if(
+				(this.powerups.length == 1 && p.px == this.powerups[0].px)
+				||
+				(this.powerups.length == 0 && Math.random() < 0.5)
+			){
+				p.px*=2;
+			}
+			this.powerups.push(p);
+		}
+	}
+	
 	for(var i = this.powerups.length-1; i >= 0; --i){
 		var p = this.powerups[i];
 		p.update();
