@@ -279,39 +279,49 @@ function update(){
 	// update bullets
 	for(var i = bullets.length-1; i >= 0; --i){
 		var b = bullets[i];
-		var coll = castRay(b.px, b.py, b.vx, b.vy, collLines);
-		if(coll != null){
-			if(coll.length < b.radius ){
-				if( !(b.collisions == 0 && b.owner == coll.line.owner) ){	
-					b.collisions++;
-					var norm = [ coll.line.x2 - coll.line.x1, coll.line.y2 - coll.line.y1];
-					b.vx = norm[1] > 0 ? -b.vx : b.vx;
-					b.vy = norm[0] > 0 ? -b.vy : b.vy;
 
-					b.graphics.scale.x += 1;
-					b.graphics.scale.y += 1;
+		var a = Math.atan2(b.vy, b.vx)+Math.PI/2;
 
-					///b.px = coll.collision.x + Math.sign(Math.floor(b.vx))*b.radius*2;
-					///b.py = coll.collision.y + Math.sign(Math.floor(b.vy))*b.radius*2;
+		var collCheck = function(coll){
+			if(coll != null){
+				if(coll.length < b.radius ){
+					if( !(b.collisions == 0 && b.owner == coll.line.owner) ){	
+						b.collisions++;
+						var norm = [ coll.line.x2 - coll.line.x1, coll.line.y2 - coll.line.y1];
+						b.vx = norm[1] > 0 ? -b.vx : b.vx;
+						b.vy = norm[0] > 0 ? -b.vy : b.vy;
 
-					b.skip = 2;
+						b.graphics.scale.x += 1;
+						b.graphics.scale.y += 1;
 
-					for(var p = 0; p < Math.random()*5+5; ++p){
-						var particle = new Particle(
-							b.px,
-							b.py,
-							b.vx*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*3,
-							b.vy*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*3,
-							20+Math.random(5)
-						);
+						///b.px = coll.collision.x + Math.sign(Math.floor(b.vx))*b.radius*2;
+						///b.py = coll.collision.y + Math.sign(Math.floor(b.vy))*b.radius*2;
 
-						particles.push(particle);
+						b.skip = 2;
 
-						layers.bullets.addChild(particle.graphics);
+						for(var p = 0; p < Math.random()*5+5; ++p){
+							var particle = new Particle(
+								b.px,
+								b.py,
+								b.vx*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*3,
+								b.vy*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*3,
+								20+Math.random(5)
+							);
+
+							particles.push(particle);
+
+							layers.bullets.addChild(particle.graphics);
+						}
 					}
+					return true;
 				}
 			}
+			return false;
 		}
+
+		collCheck(castRay(b.px + Math.cos(a)*b.radius, b.py + Math.sin(a)*b.radius, b.vx, b.vy, collLines)) ||
+		collCheck(castRay(b.px - Math.cos(a)*b.radius, b.py - Math.sin(a)*b.radius, b.vx, b.vy, collLines));
+		
 		b.update();
 	}
 
