@@ -381,7 +381,7 @@ Arena.prototype.update = function(){
 				collision.hit.ay += b.vy;
 				collision.hit.partsContainer.rotation += collision.hit.flipped ? Math.PI*0.75 : -Math.PI*0.75;
 
-				// if alive, take off a life
+				// if alive, take off a life, more particles
 				if(!collision.hit.isDead()){
 					// camera kick/zoom
 					game.scale.x += 0.1;
@@ -392,6 +392,22 @@ Arena.prototype.update = function(){
 					collision.hit.hitDelay = Player.hitDelay;
 					collision.hit.lives -= 1;
 					collision.hit.updateLives();
+
+					// particles
+					for(var p = 0; p < Math.random()*5+5; ++p){
+						var particle = new Particle(
+							b.px,
+							b.py,
+							b.vx*(Math.random()-Math.random())+(Math.random()-Math.random())*9,
+							b.vy*(Math.random()-Math.random())+(Math.random()-Math.random())*9,
+							40+Math.random(5),
+							colors[0]
+						);
+
+						this.particles.push(particle);
+
+						this.layers.particles.addChild(particle.graphics);
+					}
 				}
 			}else{
 				// bullet hit something else
