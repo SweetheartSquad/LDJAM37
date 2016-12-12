@@ -220,7 +220,8 @@ Arena.prototype.update = function(){
 						player.py,
 						-0.5*player.vx*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*5,
 						-0.5*player.vy*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*5,
-						10+Math.random(5)
+						10+Math.random(5),
+						0x7a5e57
 					);
 
 					this.particles.push(particle);
@@ -280,7 +281,8 @@ Arena.prototype.update = function(){
 						b.py,
 						b.vx*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*3,
 						b.vy*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*3,
-						30+Math.random(15)
+						30+Math.random(15),
+						colors[0]
 					);
 
 					this.particles.push(particle);
@@ -315,9 +317,10 @@ Arena.prototype.update = function(){
 			var particle = new Particle(
 				b.px,
 				b.py,
-				b.vx*(Math.random()*0.5)+(Math.random()-Math.random())*3,
-				b.vy*(Math.random()*0.5)+(Math.random()-Math.random())*3,
-				10+Math.random(5)
+				b.vx*(Math.random()*0.5+0.25)+(Math.random()-Math.random())*2,
+				b.vy*(Math.random()*0.5+0.25)+(Math.random()-Math.random())*2,
+				10+Math.random(5),
+				colors[1]
 			);
 
 			this.particles.push(particle);
@@ -421,7 +424,8 @@ Arena.prototype.update = function(){
 					b.py,
 					b.vx*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*3,
 					b.vy*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*3,
-					20+Math.random(5)
+					20+Math.random(5),
+					colors[0]
 				);
 
 				this.particles.push(particle);
