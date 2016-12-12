@@ -11,11 +11,19 @@ uniform float transitionDirection;
 void main(void){
 	// get pixel
 	vec2 uvs = vTextureCoord.xy;
-	vec4 fg = texture2D(uSampler, uvs);
+
+	uvs *= bufferSize;
+	uvs/=4.0;
+	uvs.x = floor(uvs.x+0.5);
+	uvs.y = floor(uvs.y+0.5);
+	uvs*=4.0;
+	uvs/=bufferSize;
+
+	vec4 fg =texture2D(uSampler, uvs);
 	
 	// convert from almost NDC (uvs are based on largest power-of-2 instead of actual texture size) to pixels
-	uvs.x *= bufferSize.x;
-	uvs.y *= bufferSize.y;
+	uvs *= bufferSize;
+
 
 	fg.rgb = mix(fg.rgb, fg.rgb/(vec3(255.0, 149.0, 162.0)/255.0), 1.0*uvs.y/screen.y*0.5);
 
