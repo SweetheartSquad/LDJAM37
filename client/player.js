@@ -185,7 +185,7 @@ Player.prototype.canDoubleJump = function(){
 };
 
 Player.prototype.canShoot = function(){
-	return this.shootDelay <= 0;
+	return this.shootDelay <= 0 && this.hitDelay <= 0;
 };
 
 
