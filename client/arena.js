@@ -184,8 +184,6 @@ Arena.prototype.update = function(){
 			this.layers.particles.addChild(particle.graphics);
 		}
 
-		if(input.fullscreen){ fullscreen.toggleFullscreen(); }
-
 
 		if(player.canAct()){
 			// move

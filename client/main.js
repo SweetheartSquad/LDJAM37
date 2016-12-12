@@ -18,7 +18,6 @@ function init(){
 	keys.init();
 	keys.capture = [keys.LEFT,keys.RIGHT,keys.UP,keys.DOWN,keys.SPACE,keys.ENTER,keys.BACKSPACE,keys.ESCAPE,keys.W,keys.A,keys.S,keys.D,keys.P,keys.M];
 
-
 	// setup screen filter
 	screen_filter = new CustomFilter(PIXI.loader.resources.screen_shader.data);
 	screen_filter.padding = 0;
@@ -85,6 +84,13 @@ function update(){
 	}else{
 
 	}
+
+
+	if(keys.isJustDown(keys.F)){
+		fullscreen.toggleFullscreen();
+	}if(keys.isJustDown(keys.M)){
+		toggleMute();
+	}
 	
 	// update input managers
 	gamepads.update();
@@ -118,8 +124,6 @@ function render(){
 
 function getInput(_playerId){
 	var res = {
-		fullscreen: false,
-
 		x: 0,
 		y: 0,
 
@@ -139,7 +143,6 @@ function getInput(_playerId){
 
 	switch(_playerId){
 		case 0:
-		res.fullscreen = keys.isJustDown(keys.F);
 		keyConfig.left = keys.A;
 		keyConfig.right = keys.D;
 		keyConfig.up = keys.W;
