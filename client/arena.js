@@ -601,19 +601,35 @@ Arena.prototype.update = function(){
 		}else{
 			if(this.doneTimer == 0 && !this.winMessage){
 				this.winMessage = new PIXI.Sprite(PIXI.loader.resources["win_"+(alive == 1 ? lastAlive.id : "tie")].texture);
-				this.scene.addChild(this.winMessage);
+				this.layers.players.addChild(this.winMessage);
 				this.winMessage.anchor.x = 0.5;
 				this.winMessage.anchor.y = 0.5;
 				this.winMessage.position.x = size.x/2;
 				this.winMessage.position.y = size.y/2;
 
 				this.winMessage = new PIXI.Sprite(PIXI.loader.resources["win_"+(alive == 1 ? lastAlive.id : "tie")].texture);
-				this.scene.addChild(this.winMessage);
+				this.layers.players.addChild(this.winMessage);
 				this.winMessage.anchor.x = 0.5;
 				this.winMessage.anchor.y = 0.5;
 				this.winMessage.position.x = size.x/2+5;
 				this.winMessage.position.y = size.y/2+5;
 				this.winMessage.tint = 0x999999;
+
+				// particles
+				for(var p = 0; p < Math.random()*15+25; ++p){
+					var particle = new Particle(
+						size.x/2+(Math.random()-Math.random())*40,
+						size.y/2+(Math.random()-Math.random())*40,
+						(Math.random()-Math.random())*35,
+						(Math.random()-Math.random())*35,
+						50+Math.random(25),
+						alive == 1 ? Player.colors[lastAlive.id][0] : 0x7a5e57
+					);
+
+					this.particles.push(particle);
+
+					this.layers.particles.addChild(particle.graphics);
+				}
 			}
 
 			for(var i = 0; i < this.players.length; ++i){
