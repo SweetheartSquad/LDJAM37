@@ -165,7 +165,7 @@ function update(){
 		if(input.fullscreen){ fullscreen.toggleFullscreen(); }
 
 
-		if(!player.isDead()){
+		if(player.canAct()){
 			// move
 			player.ax += input.x;
 
@@ -203,7 +203,7 @@ function update(){
 
 					// squash/stretch
 					player.container.scale.y += 0.5;
-					player.container.rotation -= Math.PI/4 * (player.flipped ? -1 : 1);
+					player.partsContainer.rotation -= Math.PI/4 * (player.flipped ? -1 : 1);
 
 					player.doubleJump = true;
 				}else if(player.canDoubleJump()){
@@ -283,7 +283,7 @@ function update(){
 				player.ay -= player.aimy * 20.0;
 				
 				// recoil
-				player.container.rotation -= Math.PI/3 * (player.flipped ? -1 : 1);
+				player.partsContainer.rotation -= Math.PI/3 * (player.flipped ? -1 : 1);
 
 				// camera kick/zoom
 				game.position.x += player.aimx*20.0;
@@ -386,7 +386,7 @@ function update(){
 				collision.hit.ax += b.vx;
 				collision.hit.ay += b.vy;
 
-				collision.hit.container.rotation += Math.sign(b.vx ) * Math.PI/2;
+				collision.hit.partsContainer.rotation += collision.hit.flipped ? Math.PI*0.75 : -Math.PI*0.75;
 
 				if(!collision.hit.isDead()){
 					collision.hit.hitDelay = Player.hitDelay;
