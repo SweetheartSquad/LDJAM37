@@ -90,7 +90,8 @@ $(document).ready(function(){
 
 	PIXI.loader
 		.add("screen_shader","assets/screen_shader.frag")
-		.add("bg","assets/bg.png");
+		.add("bg","assets/bg.png")
+		.add("title","assets/title.png");
 
 	PIXI.loader
 		.on("progress", loadProgressHandler)

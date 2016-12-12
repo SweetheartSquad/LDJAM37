@@ -158,7 +158,7 @@ Player.prototype.draw = function(){
 	// head
 	this.head.clear();
 	this.head.beginFill(0xFF0000);
-	this.renderSVG(this.head, "M9.264,2.32c0,0,4.625-43.945-11.404-37.715c-16.028,6.231-9.04,36.543-6.969,38.347C3.679,15.435,9.264,2.32,9.264,2.32");
+	renderSVG(this.head, "M9.264,2.32c0,0,4.625-43.945-11.404-37.715c-16.028,6.231-9.04,36.543-6.969,38.347C3.679,15.435,9.264,2.32,9.264,2.32");
 	this.head.beginFill(0xFFFFFF);
 	this.head.drawEllipse(-5,-20, 3, 6);
 	this.head.drawEllipse(5,-20, 4, 5);
@@ -167,31 +167,31 @@ Player.prototype.draw = function(){
 	// body
 	this.body.clear();
 	this.body.beginFill(0xFF3300);
-	this.renderSVG(this.body, "M21.473,10.333c-0.973,1.167-42.303,0.833-43.138,0S-21.624-36.046,0-36.046S22.446,9.167,21.473,10.333z");
+	renderSVG(this.body, "M21.473,10.333c-0.973,1.167-42.303,0.833-43.138,0S-21.624-36.046,0-36.046S22.446,9.167,21.473,10.333z");
 	this.body.endFill();
 
 
 	// feet
 	this.footL.clear();
 	this.footL.beginFill(0xFF3300);
-	this.renderSVG(this.footL, "M11.858,6.407C12.25,5.625,11.56-6.693-0.078-6.402C-11.715-6.111-12.278,5.876-11.858,6.407S11.858,6.407,11.858,6.407z");
+	renderSVG(this.footL, "M11.858,6.407C12.25,5.625,11.56-6.693-0.078-6.402C-11.715-6.111-12.278,5.876-11.858,6.407S11.858,6.407,11.858,6.407z");
 	this.footL.endFill();
 
 	this.footR.clear();
 	this.footR.beginFill(0xFF3300);
-	this.renderSVG(this.footR, "M11.858,6.407C12.25,5.625,11.56-6.693-0.078-6.402C-11.715-6.111-12.278,5.876-11.858,6.407S11.858,6.407,11.858,6.407z");
+	renderSVG(this.footR, "M11.858,6.407C12.25,5.625,11.56-6.693-0.078-6.402C-11.715-6.111-12.278,5.876-11.858,6.407S11.858,6.407,11.858,6.407z");
 	this.footR.endFill();
 
 	// arms
 	this.arms.clear();
 	this.arms.beginFill(0xFF3300);
-	this.renderSVG(this.arms, "M52.272-1.429l-22.429,5.81L12.71,8.503c0,0-2.934-0.111-3.997-3.051C7.688,2.612,11,1.587,11,1.587L27.763-2.04l23.888-5.738L52.272-1.429z");
+	renderSVG(this.arms, "M52.272-1.429l-22.429,5.81L12.71,8.503c0,0-2.934-0.111-3.997-3.051C7.688,2.612,11,1.587,11,1.587L27.763-2.04l23.888-5.738L52.272-1.429z");
 	this.arms.endFill();
 	this.arms.beginFill(0xFF3300);
-	this.renderSVG(this.arms, "M-10.174-13.653L-46.25-3.484l30.947,10.988c0,0,3.137,2.161,5.496-0.904c2.278-2.96-1.265-5.428-1.265-5.428c-0.903-0.603-19.149-4.619-19.149-4.619l21.888-4.605L-10.174-13.653z");
+	renderSVG(this.arms, "M-10.174-13.653L-46.25-3.484l30.947,10.988c0,0,3.137,2.161,5.496-0.904c2.278-2.96-1.265-5.428-1.265-5.428c-0.903-0.603-19.149-4.619-19.149-4.619l21.888-4.605L-10.174-13.653z");
 	this.arms.endFill();
 	this.arms.beginFill(0xFF3300);
-	this.renderSVG(this.arms, "M46.73-3.297L44.609-13.81l-9-5.978l1.438-2.165l8.775,5.828c0,0,5.263-8.557,5.741-8.757s2.124,1.447,2.124,1.447l-5.925,8.989l2.141,10.509L46.73-3.297z");
+	renderSVG(this.arms, "M46.73-3.297L44.609-13.81l-9-5.978l1.438-2.165l8.775,5.828c0,0,5.263-8.557,5.741-8.757s2.124,1.447,2.124,1.447l-5.925,8.989l2.141,10.509L46.73-3.297z");
 	this.arms.endFill();
 
 	// debug
@@ -210,16 +210,16 @@ Player.prototype.updateLives = function(){
 		
 		if(i < this.lives){
 			// draw full hearts for remaining lives
-			this.renderSVG(heart, "M14.438-5.565C14.438,4.454,0,12.576,0,12.576S-14.438,4.454-14.438-5.565C-14.438-15.585,0-16.013,0-7.329C0-16.013,14.438-15.585,14.438-5.565z");
+			renderSVG(heart, "M14.438-5.565C14.438,4.454,0,12.576,0,12.576S-14.438,4.454-14.438-5.565C-14.438-15.585,0-16.013,0-7.329C0-16.013,14.438-15.585,14.438-5.565z");
 		}else if(i == this.lives){
 			// draw broken heart for previously lost life
-			this.renderSVG(heart, "M3.345-14.762C1.413-13.842,0-12.037,0-9.329c0-6.262-7.507-7.784-11.695-4.389C-10.18-11.586-2.486-3.359-0.189-1.342C2.313-3.24,4.718-5.307,7.048-7.486C5.767-9.912,4.604-12.337,3.345-14.762z");
-			this.renderSVG(heart, "M16.507-16.942c-2.341-2.593-6.319-3.174-9.162-1.82c1.259,2.425,2.422,4.851,3.704,7.276C12.917-13.234,14.742-15.05,16.507-16.942z");
-			this.renderSVG(heart, "M16.507-10.942C14.742-9.05,6.313-1.24,3.811,0.658c1.236,1.086,6.37,5.308,7.682,6.35c3.516-3.261,6.946-7.69,6.946-12.573C18.438-7.861,17.675-9.647,16.507-10.942z");
-			this.renderSVG(heart, "M9.582,9.855c-0.629,2.565-1.358,4.916-1.426,7.36c1.432-0.966,3.395-2.406,5.337-4.208C12.181,11.966,10.874,10.917,9.582,9.855z");
-			this.renderSVG(heart, "M-0.189,2.658C-2.834,4.665-5.576,6.497-8.43,8.107C-4.466,12.062,0,14.576,0,14.576s0.861-0.487,2.156-1.361c0.068-2.444,0.797-4.795,1.426-7.36C2.308,4.807,1.047,3.744-0.189,2.658z");
-			this.renderSVG(heart, "M-15.695-11.718c-1.619,1.313-2.743,3.358-2.743,6.152c0,1.229,0.224,2.428,0.605,3.588c2.452-1.005,4.572-2.424,7.063-3.726C-12.523-7.597-14.18-9.586-15.695-11.718z");
-			this.renderSVG(heart, "M-6.189,4.658c-2.297-2.017-4.507-4.121-6.582-6.361c-2.491,1.302-4.611,2.721-7.063,3.726c0.998,3.038,3.114,5.801,5.403,8.084C-11.576,8.497-8.834,6.665-6.189,4.658z");
+			renderSVG(heart, "M3.345-14.762C1.413-13.842,0-12.037,0-9.329c0-6.262-7.507-7.784-11.695-4.389C-10.18-11.586-2.486-3.359-0.189-1.342C2.313-3.24,4.718-5.307,7.048-7.486C5.767-9.912,4.604-12.337,3.345-14.762z");
+			renderSVG(heart, "M16.507-16.942c-2.341-2.593-6.319-3.174-9.162-1.82c1.259,2.425,2.422,4.851,3.704,7.276C12.917-13.234,14.742-15.05,16.507-16.942z");
+			renderSVG(heart, "M16.507-10.942C14.742-9.05,6.313-1.24,3.811,0.658c1.236,1.086,6.37,5.308,7.682,6.35c3.516-3.261,6.946-7.69,6.946-12.573C18.438-7.861,17.675-9.647,16.507-10.942z");
+			renderSVG(heart, "M9.582,9.855c-0.629,2.565-1.358,4.916-1.426,7.36c1.432-0.966,3.395-2.406,5.337-4.208C12.181,11.966,10.874,10.917,9.582,9.855z");
+			renderSVG(heart, "M-0.189,2.658C-2.834,4.665-5.576,6.497-8.43,8.107C-4.466,12.062,0,14.576,0,14.576s0.861-0.487,2.156-1.361c0.068-2.444,0.797-4.795,1.426-7.36C2.308,4.807,1.047,3.744-0.189,2.658z");
+			renderSVG(heart, "M-15.695-11.718c-1.619,1.313-2.743,3.358-2.743,6.152c0,1.229,0.224,2.428,0.605,3.588c2.452-1.005,4.572-2.424,7.063-3.726C-12.523-7.597-14.18-9.586-15.695-11.718z");
+			renderSVG(heart, "M-6.189,4.658c-2.297-2.017-4.507-4.121-6.582-6.361c-2.491,1.302-4.611,2.721-7.063,3.726c0.998,3.038,3.114,5.801,5.403,8.084C-11.576,8.497-8.834,6.665-6.189,4.658z");
 		}else{
 			// don't draw the rest of the lost lives
 		}
@@ -227,7 +227,7 @@ Player.prototype.updateLives = function(){
 		heart.endFill();
 
 	}
-}
+};
 
 Player.prototype.canJump = function(){
 	return this.touchingFloor || this.touchingWall || this.doubleJump;
@@ -253,149 +253,6 @@ Player.prototype.canAct = function(){
 	return !this.isDead() && this.hitDelay < Player.hitDelay/2;
 };
 
-
-Player.prototype.renderSVG = function(g, input){
-	input = input.replace(/[-]/g,",-");
-
-	var instructions = input.match(/[A-z]/g);
-	var inputs = input.split(/[A-z]/g);
-	inputs.shift();
-
-	//console.log(inputs);
-	//console.log(instructions);
-
-	var start = {x: 0, y: 0};
-	var current = {x: 0, y: 0};
-	var lastCurve = {x: 0, y: 0};
-	for(var i = 0; i < instructions.length; ++i){
-
-		if(inputs[i].substr(0,1) == ","){
-			inputs[i] = inputs[i].substr(1);
-		}
-		var data = inputs[i].split(",");
-
-		var relative = false;
-		//console.log(instructions[i]);
-		switch(instructions[i]){
-			case "m":
-			case "M":
-			// move
-			start.x = parseFloat(data[0]);
-			start.y = parseFloat(data[1]);
-			g.moveTo(start.x, start.y);
-			current.x = start.x;
-			current.y = start.y;
-			break;
-
-			case "l":
-			// line (relative)
-				current.x += parseFloat(data[0]);
-				current.y += parseFloat(data[1]);
-				g.lineTo(current.x, current.y);
-			break;
-			case "L":
-			// line (absolute)
-				current.x = parseFloat(data[0]);
-				current.y = parseFloat(data[1]);
-				g.lineTo(current.x, current.y);
-			break;
-
-			case "h":
-			// horizontal line (relative)
-				current.x += parseFloat(data[0]);
-				g.lineTo(current.x, current.y);
-			case "H":
-			// horizontal line (absolute)
-				current.x = parseFloat(data[0]);
-				g.lineTo(current.x, current.y);
-			break;
-
-			case "v":
-			// vertical line (relative)
-				current.y += parseFloat(data[0]);
-				g.lineTo(current.x, current.y);
-			case "V":
-			// vertical line (absolute)
-				current.y = parseFloat(data[0]);
-				g.lineTo(current.x, current.y);
-			break;
-
-			case "z":
-			case "Z":
-			// close
-			g.lineTo(start.x, start.y);
-			break;
-
-			case "c":
-			// curve (relative)
-				g.bezierCurveTo(
-					current.x + parseFloat(data[0]),
-					current.y + parseFloat(data[1]),
-					current.x + parseFloat(data[2]),
-					current.y + parseFloat(data[3]),
-					current.x + parseFloat(data[4]),
-					current.y + parseFloat(data[5])
-				);
-				lastCurve.x = 2*(current.x+parseFloat(data[4])) - (current.x+parseFloat(data[2]));
-				lastCurve.y = 2*(current.y+parseFloat(data[5])) - (current.y+parseFloat(data[3]));
-
-				current.x += parseFloat(data[4]);
-				current.y += parseFloat(data[5]);
-			break;
-
-			case "C":
-			// curve (absolute)
-				g.bezierCurveTo(
-					parseFloat(data[0]),
-					parseFloat(data[1]),
-					parseFloat(data[2]),
-					parseFloat(data[3]),
-					parseFloat(data[4]),
-					parseFloat(data[5])
-				);
-				lastCurve.x = 2*parseFloat(data[4]) - parseFloat(data[2]);
-				lastCurve.y = 2*parseFloat(data[5]) - parseFloat(data[3]);
-
-				current.x = parseFloat(data[4]);
-				current.y = parseFloat(data[5]);
-			break;
-
-			case "s":
-			// curve with reflection (relative)
-				g.bezierCurveTo(
-					current.x + lastCurve.x,
-					current.y + lastCurve.y,
-					current.x + parseFloat(data[0]),
-					current.y + parseFloat(data[1]),
-					current.x + parseFloat(data[2]),
-					current.y + parseFloat(data[3])
-				);
-				lastCurve.x = 2*parseFloat(data[2]) - parseFloat(data[0]);
-				lastCurve.y = 2*parseFloat(data[3]) - parseFloat(data[1]);
-
-				current.x += parseFloat(data[2]);
-				current.y += parseFloat(data[3]);
-			break;
-			case "S":
-			// curve with reflection (absolute)
-				g.bezierCurveTo(
-					lastCurve.x,
-					lastCurve.y,
-					parseFloat(data[0]),
-					parseFloat(data[1]),
-					parseFloat(data[2]),
-					parseFloat(data[3])
-				);
-				lastCurve.x = 2*parseFloat(data[2]) - parseFloat(data[0]);
-				lastCurve.y = 2*parseFloat(data[3]) - parseFloat(data[1]);
-
-				current.x = parseFloat(data[2]);
-				current.y = parseFloat(data[3]);
-			break;
-		}
-	}
-}
-
 Player.prototype.calcColliderLines = function(){
 	var halfWidth = this.width * 0.5;
 	var halfHeight = this.height * 0.5;
@@ -406,4 +263,4 @@ Player.prototype.calcColliderLines = function(){
 		{x1: this.px + 0 - halfWidth, y1: this.py + this.height - halfHeight, x2: this.px + 0 - halfWidth, y2: this.py + 0 - halfHeight, owner:this, enabled:(this.hitDelay <= 0)},
 		{x1: this.px, y1: this.py, x2: this.px + this.vx, y2: this.py + this.vy, owner:this, enabled:(this.hitDelay <= 0)}
 	];
-}
+};

@@ -72,3 +72,146 @@ function getFrames(_texture){
 
 	return res;
 }
+
+
+function renderSVG(g, input){
+	input = input.replace(/[-]/g,",-");
+
+	var instructions = input.match(/[A-z]/g);
+	var inputs = input.split(/[A-z]/g);
+	inputs.shift();
+
+	//console.log(inputs);
+	//console.log(instructions);
+
+	var start = {x: 0, y: 0};
+	var current = {x: 0, y: 0};
+	var lastCurve = {x: 0, y: 0};
+	for(var i = 0; i < instructions.length; ++i){
+
+		if(inputs[i].substr(0,1) == ","){
+			inputs[i] = inputs[i].substr(1);
+		}
+		var data = inputs[i].split(",");
+
+		var relative = false;
+		//console.log(instructions[i]);
+		switch(instructions[i]){
+			case "m":
+			case "M":
+			// move
+			start.x = parseFloat(data[0]);
+			start.y = parseFloat(data[1]);
+			g.moveTo(start.x, start.y);
+			current.x = start.x;
+			current.y = start.y;
+			break;
+
+			case "l":
+			// line (relative)
+				current.x += parseFloat(data[0]);
+				current.y += parseFloat(data[1]);
+				g.lineTo(current.x, current.y);
+			break;
+			case "L":
+			// line (absolute)
+				current.x = parseFloat(data[0]);
+				current.y = parseFloat(data[1]);
+				g.lineTo(current.x, current.y);
+			break;
+
+			case "h":
+			// horizontal line (relative)
+				current.x += parseFloat(data[0]);
+				g.lineTo(current.x, current.y);
+			case "H":
+			// horizontal line (absolute)
+				current.x = parseFloat(data[0]);
+				g.lineTo(current.x, current.y);
+			break;
+
+			case "v":
+			// vertical line (relative)
+				current.y += parseFloat(data[0]);
+				g.lineTo(current.x, current.y);
+			case "V":
+			// vertical line (absolute)
+				current.y = parseFloat(data[0]);
+				g.lineTo(current.x, current.y);
+			break;
+
+			case "z":
+			case "Z":
+			// close
+			g.lineTo(start.x, start.y);
+			break;
+
+			case "c":
+			// curve (relative)
+				g.bezierCurveTo(
+					current.x + parseFloat(data[0]),
+					current.y + parseFloat(data[1]),
+					current.x + parseFloat(data[2]),
+					current.y + parseFloat(data[3]),
+					current.x + parseFloat(data[4]),
+					current.y + parseFloat(data[5])
+				);
+				lastCurve.x = 2*(current.x+parseFloat(data[4])) - (current.x+parseFloat(data[2]));
+				lastCurve.y = 2*(current.y+parseFloat(data[5])) - (current.y+parseFloat(data[3]));
+
+				current.x += parseFloat(data[4]);
+				current.y += parseFloat(data[5]);
+			break;
+
+			case "C":
+			// curve (absolute)
+				g.bezierCurveTo(
+					parseFloat(data[0]),
+					parseFloat(data[1]),
+					parseFloat(data[2]),
+					parseFloat(data[3]),
+					parseFloat(data[4]),
+					parseFloat(data[5])
+				);
+				lastCurve.x = 2*parseFloat(data[4]) - parseFloat(data[2]);
+				lastCurve.y = 2*parseFloat(data[5]) - parseFloat(data[3]);
+
+				current.x = parseFloat(data[4]);
+				current.y = parseFloat(data[5]);
+			break;
+
+			case "s":
+			// curve with reflection (relative)
+				g.bezierCurveTo(
+					current.x + lastCurve.x,
+					current.y + lastCurve.y,
+					current.x + parseFloat(data[0]),
+					current.y + parseFloat(data[1]),
+					current.x + parseFloat(data[2]),
+					current.y + parseFloat(data[3])
+				);
+				lastCurve.x = 2*parseFloat(data[2]) - parseFloat(data[0]);
+				lastCurve.y = 2*parseFloat(data[3]) - parseFloat(data[1]);
+
+				current.x += parseFloat(data[2]);
+				current.y += parseFloat(data[3]);
+			break;
+			case "S":
+			// curve with reflection (absolute)
+				g.bezierCurveTo(
+					lastCurve.x,
+					lastCurve.y,
+					parseFloat(data[0]),
+					parseFloat(data[1]),
+					parseFloat(data[2]),
+					parseFloat(data[3])
+				);
+				lastCurve.x = 2*parseFloat(data[2]) - parseFloat(data[0]);
+				lastCurve.y = 2*parseFloat(data[3]) - parseFloat(data[1]);
+
+				current.x = parseFloat(data[2]);
+				current.y = parseFloat(data[3]);
+			break;
+		}
+	}
+}
