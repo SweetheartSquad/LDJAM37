@@ -1,4 +1,3 @@
-
 function main(){
 	curTime=Date.now()-startTime;
 	deltaTime=curTime-lastTime;
@@ -27,8 +26,8 @@ function init(){
 
 	renderSprite.filters = [screen_filter];
 
-	
-	arena = new Arena();
+
+	menu = new Menu();
 
 	// setup resize
 	window.onresize = onResize;
@@ -47,8 +46,18 @@ function onResize() {
 }
 
 function update(){
-	arena.update();
 
+	if(menu){
+		menu.update();
+		if(menu.isDone()){
+			arena = new Arena(menu.getPlayers());
+			menu.destroy();
+			menu = false;
+		}
+	}else if(arena){
+		arena.update();
+	}
+	
 	// update input managers
 	gamepads.update();
 	keys.update();
@@ -59,8 +68,11 @@ function update(){
 function render(){
 	screen_filter.uniforms["time"]=curTime/1000;
 
-	arena.render();
-
+	if(menu){
+		menu.render();
+	}else if(arena){
+		arena.render();
+	}
 
 	renderer.render(game,renderTexture);
 	try{

@@ -1,4 +1,6 @@
-function Player(){
+function Player(_id){
+	this.id = _id;
+
 	this.vx = 0;
 	this.vy = 0;
 	this.ax = 0;

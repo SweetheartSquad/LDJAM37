@@ -1,16 +1,18 @@
-function Arena(){
+function Arena(_players){
 
 	boundaryRadius = 150;
 
 	boundaryForce = 0.1;
 	boundaryPadding = boundaryRadius/8;
 
+	this.done = false;
 
 
 
 	this.players=[];
-	this.players.push(player1 = new Player());
-	this.players.push(player2 = new Player());
+	for(var i = 0; i < _players.length; ++i){
+		this.players.push(new Player(_players[i]));
+	}
 
 	this.powerups=[];
 	
@@ -96,7 +98,7 @@ function Arena(){
 Arena.prototype.destroy = function(){
 	game.removeChild(this.scene);
 	this.scene.destroy();
-}
+};
 
 Arena.prototype.update = function(){
 	// always try to center camera
@@ -128,7 +130,7 @@ Arena.prototype.update = function(){
 
 	for(var i = 0; i < this.players.length; ++i){
 		var player = this.players[i];
-		var input = getInput(i);
+		var input = getInput(player.id);
 
 		if(input.fullscreen){ fullscreen.toggleFullscreen(); }
 
@@ -499,7 +501,7 @@ Arena.prototype.drawDebug = function(){
 		}
 		this.debugDraw.endFill();
 	}
-}
+};
 Arena.prototype.genWallHorz = function(y, boundaryRadius){
 	var x = 0;
 	var c = 0;
@@ -521,7 +523,7 @@ Arena.prototype.genWallHorz = function(y, boundaryRadius){
 		this.layers.boundaries.addChild(pieces[i].graphics);
 		pieces.splice(i,1);
 	}
-}
+};
 
 Arena.prototype.genWallVert = function(x, boundaryRadius){
 	var y = 0;
@@ -544,7 +546,7 @@ Arena.prototype.genWallVert = function(x, boundaryRadius){
 		this.layers.boundaries.addChild(pieces[i].graphics);
 		pieces.splice(i,1);
 	}
-}
+};
 
 Arena.prototype.updateLevel = function(){
 
@@ -578,14 +580,14 @@ Arena.prototype.updateLevel = function(){
 		}
 	}
 
-}
+};
 
 Arena.prototype.genLevel = function(){
 	this.genWallVert(0, boundaryRadius);
 	this.genWallVert(size.x, boundaryRadius);
 	this.genWallHorz(0, boundaryRadius);
 	this.genWallHorz(size.y, boundaryRadius);
-}
+};
 
 Arena.prototype.getPieceForEntity = function(entity){
 	var px = entity.px;
@@ -605,7 +607,7 @@ Arena.prototype.getPieceForEntity = function(entity){
 	}
 
 	return res;
-}
+};
 
 Arena.prototype.getPiecesForArr = function(arr, playerAxisVal, roundFunc){
 	var idx1 = Math.ceil(playerAxisVal/boundaryRadius);
@@ -623,7 +625,7 @@ Arena.prototype.getPiecesForArr = function(arr, playerAxisVal, roundFunc){
 		idx2 = idx1 - 1;
 	}
 	return [arr[idx1], arr[idx2]];
-}
+};
 
 
 Arena.prototype.debugPieces = function(res){
@@ -642,7 +644,7 @@ Arena.prototype.debugPieces = function(res){
 	res.x[1].color = 0x00ff00;
 	res.y[0].color = 0x00ff00;
 	res.y[1].color = 0x00ff00;
-}
+};
 
 Arena.prototype.castRay = function(originX, originY, dirX, dirY, lines){
 	var intersect = this.rayTestLines(originX, originY, dirX, dirY, lines);
@@ -655,7 +657,7 @@ Arena.prototype.castRay = function(originX, originY, dirX, dirY, lines){
 		});
 	}
 	return intersect;
-}
+};
 
 Arena.prototype.rayTestLines = function(originX, originY, dirX, dirY, lines){
 	var vecLen = 999999999;
@@ -675,7 +677,7 @@ Arena.prototype.rayTestLines = function(originX, originY, dirX, dirY, lines){
 		}
 	}
 	return nearest;
-}
+};
 
 // Ported from http://paulbourke.net/geometry/pointlineplane/pdb.c
 Arena.prototype.lineIntersect = function(x1,  y1, x2,  y2, x3,  y3, x4,  y4){
@@ -707,4 +709,4 @@ Arena.prototype.lineIntersect = function(x1,  y1, x2,  y2, x3,  y3, x4,  y4){
    x = x1 + mua * (x2 - x1);
    y = y1 + mua * (y2 - y1);
    return {x:x, y:y};
-}
+};
