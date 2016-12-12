@@ -40,7 +40,8 @@ function Arena(_players){
 		players: new PIXI.Container(),
 		boundaries: new PIXI.Container(),
 		particles: new PIXI.Container(),
-		bullets: new PIXI.Container()
+		bullets: new PIXI.Container(),
+		ui: new PIXI.Container()
 	};
 
 	this.particles = [];
@@ -62,6 +63,42 @@ function Arena(_players){
 	this.scene.addChild(this.layers.particles);
 	this.scene.addChild(this.layers.bullets);
 	this.scene.addChild(this.layers.boundaries);
+	this.scene.addChild(this.layers.ui);
+
+
+	this.lives=[[],[],[],[]];
+	for(var i = 0; i < this.players.length; ++i){
+		var player = this.players[i];
+		var basex=30;
+		var basey=30;
+		var dir = 1;
+		switch(i){
+			case 0:
+			break;
+			case 1:
+			basex = size.x-30;
+			dir = -1;
+			break;
+			case 3:
+			dir = -1;
+			basex = size.x-30;
+			case 2:
+			basey = size.y-30;
+			break;
+		}
+		for(var l = 0; l < player.lives; ++l){
+			var heart = new PIXI.Graphics();
+			heart.beginFill(Player.colors[player.id][0]);
+			renderSVG(heart, "M14.438-5.565C14.438,4.454,0,12.576,0,12.576S-14.438,4.454-14.438-5.565C-14.438-15.585,0-16.013,0-7.329C0-16.013,14.438-15.585,14.438-5.565z");
+			heart.endFill();
+
+			heart.x = basex+30*l*dir;
+			heart.y = basey;
+
+			this.layers.ui.addChild(heart);
+			this.lives[player.id].push(heart);
+		}
+	}
 
 
 
@@ -131,6 +168,9 @@ Arena.prototype.update = function(){
 	game.position.y = lerp(game.position.y, camy, 0.1);
 
 	game.scale.x = game.scale.y = lerp(game.scale.x, 1.0, 0.1);
+
+	this.layers.ui.x = size.x/2-game.position.x;
+	this.layers.ui.y = size.y/2-game.position.y;
 
 	this.debugDraw.lines = [];
 
@@ -418,6 +458,7 @@ Arena.prototype.update = function(){
 
 					collision.hit.hitDelay = Player.hitDelay;
 					collision.hit.lives -= 1;
+					this.lives[collision.hit.id][collision.hit.lives].visible = false;
 					collision.hit.updateLives();
 
 					// particles
