@@ -112,7 +112,10 @@ $(document).ready(function(){
 		.add("port_1", "assets/port_1.png")
 		.add("port_2", "assets/port_2.png")
 		.add("port_3", "assets/port_3.png")
-		.add("port_4", "assets/port_4.png");
+		.add("port_4", "assets/port_4.png")
+		.add("powerup_jump", "assets/powerup_jump.png")
+		.add("powerup_speed", "assets/powerup_speed.png")
+		.add("powerup_shoot", "assets/powerup_shoot.png");
 
 	PIXI.loader
 		.on("progress", loadProgressHandler)
