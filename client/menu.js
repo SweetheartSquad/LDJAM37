@@ -2,10 +2,8 @@ function Menu(_players){
 	this.scene = new PIXI.Container();
 	game.addChild(this.scene);
 
-	this.bg = new PIXI.Sprite(PIXI.loader.resources.bg.texture);
-	this.bg.width = size.x;
-	this.bg.height = size.y;
-	this.scene.addChild(this.bg);
+	this.scene.addChild(makeBg());
+
 
 	game.scale.x = game.scale.y = 3.5;
 

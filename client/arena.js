@@ -36,7 +36,7 @@ function Arena(_players){
 
 
 	this.layers = {
-		bg: new PIXI.Container(),
+		bg: makeBg(),
 		players: new PIXI.Container(),
 		boundaries: new PIXI.Container(),
 		particles: new PIXI.Container(),
@@ -99,13 +99,6 @@ function Arena(_players){
 			this.lives[player.id].push(heart);
 		}
 	}
-
-
-
-	var bg = new PIXI.Sprite(PIXI.loader.resources.bg.texture);
-	bg.width = size.x;
-	bg.height = size.y;
-	this.layers.bg.addChild(bg);
 
 	this.genLevel();
 
