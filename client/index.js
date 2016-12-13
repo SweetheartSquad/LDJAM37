@@ -110,7 +110,6 @@ $(document).ready(function(){
 		.add("win_3","assets/win_4.png")
 		.add("jumpToReady","assets/jump_to_ready.png")
 		.add("jumpToJoin","assets/jump_to_join.png")
-		.add("shootToCancel","assets/shoot_to_cancel.png")
 		.add("win_tie","assets/win_tie.png")
 		.add("port_1", "assets/port_1.png")
 		.add("port_2", "assets/port_2.png")

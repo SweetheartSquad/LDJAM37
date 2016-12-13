@@ -30,34 +30,27 @@ function Menu(_players){
 		gjtr.anchor.y = 0.5;
 		gjtr.visible = false;
 
-		var gstc = new PIXI.Sprite(PIXI.loader.resources.shootToCancel.texture);
-		this.scene.addChild(gstc);
-		gstc.anchor.x = 0.5;
-		gstc.anchor.y = 0.5;
-		gstc.visible = false;
-
 		this.playerText.push(
 			{
 				jtj:gjtj,
-				jtr:gjtr,
-				stc:gstc
+				jtr:gjtr
 			}
 		);
 	}
 
-	this.playerGraphics[0].x = this.playerText[0].jtr.x = this.playerText[0].jtj.x = this.playerText[0].stc.x = size.x * 0.25;
-	this.playerGraphics[0].y = this.playerText[0].jtr.y = this.playerText[0].jtj.y = this.playerText[0].stc.y = size.y * 0.3;
+	this.playerGraphics[0].x = this.playerText[0].jtr.x = this.playerText[0].jtj.x = size.x * 0.25;
+	this.playerGraphics[0].y = this.playerText[0].jtr.y = this.playerText[0].jtj.y = size.y * 0.3;
 
-	this.playerGraphics[1].x = this.playerText[1].jtr.x = this.playerText[1].jtj.x = this.playerText[1].stc.x = size.x * 0.75;
-	this.playerGraphics[1].y = this.playerText[1].jtr.y = this.playerText[1].jtj.y = this.playerText[1].stc.y= size.y * 0.3;
-
-
-	this.playerGraphics[2].x = this.playerText[2].jtr.x = this.playerText[2].jtj.x = this.playerText[2].stc.x = size.x * 0.25;
-	this.playerGraphics[2].y = this.playerText[2].jtr.y = this.playerText[2].jtj.y = this.playerText[2].stc.y= size.y * 0.7;
+	this.playerGraphics[1].x = this.playerText[1].jtr.x = this.playerText[1].jtj.x = size.x * 0.75;
+	this.playerGraphics[1].y = this.playerText[1].jtr.y = this.playerText[1].jtj.y = size.y * 0.3;
 
 
-	this.playerGraphics[3].x = this.playerText[3].jtr.x = this.playerText[3].jtj.x = this.playerText[3].stc.x = size.x * 0.75;
-	this.playerGraphics[3].y = this.playerText[3].jtr.y = this.playerText[3].jtj.y = this.playerText[3].stc.y= size.y * 0.7;
+	this.playerGraphics[2].x = this.playerText[2].jtr.x = this.playerText[2].jtj.x = size.x * 0.25;
+	this.playerGraphics[2].y = this.playerText[2].jtr.y = this.playerText[2].jtj.y = size.y * 0.7;
+
+
+	this.playerGraphics[3].x = this.playerText[3].jtr.x = this.playerText[3].jtj.x = size.x * 0.75;
+	this.playerGraphics[3].y = this.playerText[3].jtr.y = this.playerText[3].jtj.y = size.y * 0.7;
 
 	this.title = new PIXI.Sprite(PIXI.loader.resources.title.texture);
 	this.title.anchor.x = 0.5;
@@ -140,18 +133,15 @@ Menu.prototype.update = function(){
 
 
 			if(this.ready[i]){
-				this.playerText[i].stc.visible = true;
 				this.playerText[i].jtj.visible = false;
 				this.playerText[i].jtr.visible = false;
 				this.playerGraphics[i].tint = 0xFFFFFF;
 			}else if(this.joined[i]){
 				this.playerGraphics[i].tint = 0x999999;
-				this.playerText[i].stc.visible = false;
 				this.playerText[i].jtj.visible = false;
 				this.playerText[i].jtr.visible = true;
 			}else{
 				this.playerGraphics[i].tint = 0x000000;
-				this.playerText[i].stc.visible = false;
 				this.playerText[i].jtj.visible = true;
 				this.playerText[i].jtr.visible = false;
 			}
