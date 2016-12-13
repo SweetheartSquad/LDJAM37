@@ -196,7 +196,7 @@ function makeBg(){
 	var bgcolors=[0xfff9c2,0xb4e2f6,0xff959c];
 	var y = 0;
 	var i = 0;
-	while(y < size.y){
+	while(y < size.y+150){
 		var bg = new PIXI.Graphics();
 		res.addChild(bg);
 		bg.beginFill(i%2 == 1 ? 0xd6a598 : bgcolors[(i/2)%3]);
