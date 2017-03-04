@@ -275,8 +275,7 @@ Arena.prototype.update = function(){
 			if(input.shoot){
 				if(player.canShoot()){
 					// bullet
-					var b = new Bullet();
-					b.owner = player;
+					var b = new Bullet(player);
 					b.px = player.px;
 					b.py = player.py;
 					b.vx = Math.sign(player.aimx)*20.0 + Math.sign(player.vx)*0.25;
@@ -323,7 +322,7 @@ Arena.prototype.update = function(){
 							b.vx*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*3,
 							b.vy*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*3,
 							30+Math.random(15),
-							colors[0]
+							Player.colors[b.owner.id][1]
 						);
 
 						this.particles.push(particle);
@@ -364,7 +363,7 @@ Arena.prototype.update = function(){
 				b.vx*(Math.random()*0.5+0.25)+(Math.random()-Math.random())*2,
 				b.vy*(Math.random()*0.5+0.25)+(Math.random()-Math.random())*2,
 				10+Math.random(5),
-				colors[1]
+				Player.colors[b.owner.id][1]
 			);
 
 			this.particles.push(particle);
@@ -446,7 +445,7 @@ Arena.prototype.update = function(){
 							b.vx*(Math.random()-Math.random())+(Math.random()-Math.random())*9,
 							b.vy*(Math.random()-Math.random())+(Math.random()-Math.random())*9,
 							40+Math.random(5),
-							colors[0]
+							Player.colors[b.owner.id][1]
 						);
 
 						this.particles.push(particle);
@@ -486,7 +485,7 @@ Arena.prototype.update = function(){
 					b.vx*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*3,
 					b.vy*(Math.random()-Math.random()*0.5)+(Math.random()-Math.random())*3,
 					20+Math.random(5),
-					colors[0]
+					Player.colors[b.owner.id][1]
 				);
 
 				this.particles.push(particle);

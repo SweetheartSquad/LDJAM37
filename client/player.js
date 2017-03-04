@@ -54,7 +54,7 @@ function Player(_id){
 	this.partsContainer.addChild(this.footR);
 	this.partsContainer.addChild(this.arms);
 
-	this.bulletPreview = new Bullet();
+	this.bulletPreview = new Bullet(this);
 	this.bulletPreview.px = -20;
 	this.bulletPreview.py = -10;
 	this.arms.addChild(this.bulletPreview.graphics);

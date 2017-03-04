@@ -1,5 +1,5 @@
-function Bullet(){
-
+function Bullet(_owner){
+	this.owner = _owner;
 	this.debug = new PIXI.Graphics();
 
 	this.px = 0;
@@ -9,7 +9,6 @@ function Bullet(){
 	this.vy = 0;
 
 	this.collisions = 0;
-	this.owner = null;
 
 	this.radius = 20;
 
@@ -44,17 +43,17 @@ Bullet.prototype.update = function(){
 
 Bullet.prototype.draw = function(){
 	this.graphics.clear();
-	this.graphics.beginFill(colors[0]);
+	this.graphics.beginFill(Player.colors[this.owner.id][0]);
 	this.graphics.drawCircle(
 		(Math.random()-Math.random())*3,
 		(Math.random()-Math.random())*3,
 		this.radius+Math.random()*5);
-	this.graphics.beginFill(colors[1]);
+	this.graphics.beginFill(Player.colors[this.owner.id][1]);
 	this.graphics.drawCircle(
 		(Math.random()-Math.random())*3,
 		(Math.random()-Math.random())*3,
 		this.radius-Math.random()*3-3);
-	this.graphics.beginFill(colors[2]);
+	this.graphics.beginFill(Player.colors[this.owner.id][0]);
 	this.graphics.drawCircle(
 		(Math.random()-Math.random())*3,
 		(Math.random()-Math.random())*3,
